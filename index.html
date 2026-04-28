@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Gastrowalk — Your Tour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root{--bg:#EDE6DC;--card:#FFFDF8;--pr:#DB4A2B;--prl:#F5DDD7;--prd:#B33A21;--tx:#1C1917;--tx2:#78716C;--tx3:#A8A29E;--bd:#D6D3CD;--ok:#16A34A;--okbg:#DCFCE7;--star:#F59E0B;--sh:0 2px 16px rgba(0,0,0,.06);--shl:0 8px 32px rgba(0,0,0,.1);--r:14px;--rs:8px;--mw:430px;--fd:'Archivo Black',sans-serif;--fs:'Newsreader',Georgia,serif;--fb:'DM Sans',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justify-content:center;min-height:100vh;-webkit-font-smoothing:antialiased}
+.f{width:100%;max-width:var(--mw);min-height:100vh;background:var(--bg);position:relative;overflow:hidden}
+.s{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;transition:transform .4s cubic-bezier(.4,0,.2,1),opacity .4s;will-change:transform,opacity;-webkit-overflow-scrolling:touch}
+.s::-webkit-scrollbar{width:0}
+.s.h{transform:translateX(100%);opacity:0;pointer-events:none}
+.s.hl{transform:translateX(-30%);opacity:0;pointer-events:none}
+.s.a{transform:translateX(0);opacity:1;pointer-events:all}
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.an{animation:fu .5s ease forwards}.d1{animation-delay:.1s;opacity:0}.d2{animation-delay:.2s;opacity:0}.d3{animation-delay:.3s;opacity:0}.d4{animation-delay:.4s;opacity:0}.d5{animation-delay:.5s;opacity:0}
+.wel{display:flex;flex-direction:column;min-height:100vh;background:linear-gradient(168deg,#1A0D08 0%,#2A150B 35%,#DB4A2B 100%);color:#fff}
+.wel-h{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px 28px 20px;text-align:center}
+.wel-logo{font-family:var(--fd);font-size:34px;letter-spacing:-.5px;margin-bottom:3px}
+.wel-tag{font-family:var(--fs);font-style:italic;font-size:14px;opacity:.5;margin-bottom:40px;letter-spacing:.5px}
+.wel-fork{margin-bottom:40px;opacity:.18}
+.wel-fork svg{width:70px;height:110px}
+.wel-t{font-family:var(--fs);font-size:26px;line-height:1.3;margin-bottom:8px;font-weight:500}
+.wel-s{font-size:13px;opacity:.55;line-height:1.6;max-width:290px}
+.wel-b{padding:18px 24px 40px;display:flex;flex-direction:column;gap:9px}
+.bg{display:flex;align-items:center;justify-content:center;gap:9px;background:#fff;color:var(--tx);border:none;border-radius:60px;padding:14px 20px;font-size:15px;font-weight:600;font-family:var(--fb);cursor:pointer;transition:all .2s;box-shadow:var(--shl)}
+.bg:active{transform:scale(.97)}
+.bg svg{width:18px;height:18px;flex-shrink:0}
+.bsk{background:rgba(255,255,255,.1);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.12);border-radius:60px;padding:12px;font-size:13px;font-family:var(--fb);cursor:pointer;text-align:center}
+.wel-p{text-align:center;font-size:10px;opacity:.3;margin-top:3px}
+.ls{display:flex;flex-direction:column;min-height:100vh;background:var(--bg);padding:52px 22px 32px}
+.ls-hi{font-family:var(--fd);font-size:26px;margin-bottom:3px}
+.ls-sub{font-size:13px;color:var(--tx2);margin-bottom:28px;line-height:1.5}
+.lo{display:flex;align-items:center;gap:12px;padding:16px;background:var(--card);border:2px solid var(--bd);border-radius:var(--r);margin-bottom:9px;cursor:pointer;transition:all .2s;font-size:14px;font-family:var(--fb)}
+.lo:hover{border-color:var(--pr)}.lo.sel{border-color:var(--pr);background:var(--prl)}
+.lf{font-size:24px}.ln{font-weight:600}.lna{color:var(--tx3);font-size:12px;margin-left:auto}
+.bc{margin-top:auto;padding:14px;background:var(--pr);color:#fff;border:none;border-radius:60px;font-size:14px;font-weight:600;font-family:var(--fb);cursor:pointer;width:100%;box-shadow:0 4px 14px rgba(219,74,43,.3);transition:all .2s}
+.bc:disabled{background:var(--bd);color:var(--tx3);box-shadow:none;cursor:not-allowed}
+.bs{display:flex;flex-direction:column;min-height:100vh;background:var(--bg);padding:52px 22px 32px}
+.bs-t{font-family:var(--fd);font-size:24px;margin-bottom:5px}
+.bs-s{font-size:13px;color:var(--tx2);margin-bottom:24px;line-height:1.5}
+.bs-c{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:var(--sh);margin-bottom:14px}
+.bs-l{font-size:11px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;display:block}
+.bs-i{width:100%;padding:13px;border:2px solid var(--bd);border-radius:var(--rs);font-family:var(--fd);font-size:17px;letter-spacing:2px;text-align:center;text-transform:uppercase;color:var(--tx);background:var(--bg);transition:border .2s}
+.bs-i:focus{outline:none;border-color:var(--pr)}
+.bs-i::placeholder{font-family:var(--fb);font-weight:400;font-size:13px;letter-spacing:0;color:var(--tx3)}
+.bfo{display:none;background:var(--okbg);border-radius:var(--r);padding:14px;margin-bottom:14px;border:1.5px solid #86EFAC}
+.bfo.show{display:block}
+.bfo-h{display:flex;align-items:center;gap:7px;margin-bottom:5px;font-weight:600;font-size:13px;color:var(--ok)}
+.bfo-d{font-size:12px;color:var(--tx2);line-height:1.5}
+.bfo-d strong{color:var(--tx)}
+.bs-tip{display:flex;gap:9px;background:var(--prl);border-radius:var(--rs);padding:12px;margin-bottom:18px;font-size:11px;color:var(--prd);line-height:1.5}
+.bs-or{display:flex;align-items:center;gap:12px;margin:5px 0 14px;color:var(--tx3);font-size:11px}
+.bs-or::before,.bs-or::after{content:'';flex:1;height:1px;background:var(--bd)}
+.bnb{width:100%;padding:11px;background:none;color:var(--tx2);border:1.5px solid var(--bd);border-radius:60px;font-size:12px;font-family:var(--fb);cursor:pointer}
+.ts{background:var(--bg);padding-bottom:140px}
+.th{position:relative;height:210px;background:linear-gradient(168deg,#2A150B 0%,#DB4A2B 100%);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
+.th::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(255,255,255,.04) 1px,transparent 1px),radial-gradient(circle at 80% 20%,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px,60px 60px}
+.tb{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border-radius:18px;padding:4px 10px;font-size:10px;color:#fff;font-weight:500;width:fit-content;margin-bottom:8px;position:relative}
+.th1{font-family:var(--fd);font-size:22px;color:#fff;line-height:1.2;position:relative}
+.tc{font-family:var(--fs);font-style:italic;font-size:13px;color:rgba(255,255,255,.55);margin-top:2px;position:relative}
+.ti{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;padding:0 14px;margin-top:-22px;position:relative;z-index:2}
+.tic{background:var(--card);border-radius:var(--rs);padding:12px 8px;text-align:center;box-shadow:var(--sh)}
+.tic .ic{font-size:18px;margin-bottom:3px}.tic .lb{font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px}.tic .vl{font-size:13px;font-weight:700}
+.tst{font-family:var(--fd);font-size:16px;padding:20px 16px 0}
+.vt{display:flex;background:var(--bd);border-radius:var(--rs);padding:3px;margin:9px 14px 12px}
+.vtb{flex:1;padding:8px 0;border:none;border-radius:5px;background:none;font-family:var(--fb);font-size:12px;font-weight:600;color:var(--tx3);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:4px}
+.vtb.on{background:var(--card);color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.sl{padding:0 14px}.sl.hd{display:none}
+.sc{display:flex;gap:12px;background:var(--card);border-radius:var(--r);padding:13px;margin-bottom:9px;box-shadow:var(--sh);cursor:pointer;transition:all .15s;overflow:hidden}
+.sc:active{transform:scale(.98)}
+.sn{width:30px;height:30px;background:var(--pr);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.si{flex:1;min-width:0}
+.snm{font-family:var(--fs);font-weight:600;font-size:15px;margin-bottom:2px}
+.stp{font-size:11px;color:var(--tx2);margin-bottom:3px;line-height:1.4}
+.sad{font-size:10px;color:var(--tx3)}
+.sar{display:flex;align-items:center;color:var(--pr);font-size:16px}
+.mw{display:none;margin:0 14px;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);background:var(--card)}
+.mw.show{display:block}
+#lm{width:100%;height:360px}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.4}50%{transform:scale(1.8);opacity:0}}
+.gw-popup .leaflet-popup-content-wrapper{border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.12);border:none}
+.gw-popup .leaflet-popup-tip{box-shadow:none}
+.leaflet-control-zoom a{background:var(--card)!important;color:var(--tx)!important;border-color:var(--bd)!important;font-size:16px!important;width:32px!important;height:32px!important;line-height:32px!important;border-radius:8px!important}
+.leaflet-control-zoom{border:none!important;box-shadow:var(--sh)!important;border-radius:8px!important;overflow:hidden}
+.ml{display:flex;align-items:center;gap:12px;padding:9px 12px;border-top:1px solid var(--bd);font-size:10px;color:var(--tx3)}
+.mli{display:flex;align-items:center;gap:3px}
+.mld{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.gp{background:var(--pr);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;font-family:var(--fb);box-shadow:0 2px 6px rgba(219,74,43,.35);border:2px solid #fff}
+.ds{background:var(--bg);padding-bottom:150px}
+.db{position:absolute;top:12px;left:12px;z-index:10;width:36px;height:36px;background:rgba(255,255,255,.88);backdrop-filter:blur(8px);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--sh);font-size:15px}
+.dh{height:210px;background:linear-gradient(135deg,#2A150B,#5C3315);position:relative;display:flex;align-items:flex-end;padding:20px}
+.dh::after{content:'';position:absolute;bottom:0;left:0;right:0;height:70px;background:linear-gradient(transparent,rgba(42,21,11,.45))}
+.de{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:64px;opacity:.2}
+.dbg{background:var(--pr);color:#fff;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;position:relative;z-index:2;margin-right:12px;flex-shrink:0}
+.dht{position:relative;z-index:2}
+.dht h2{font-family:var(--fd);font-size:20px;color:#fff;line-height:1.2}
+.dht .da{font-family:var(--fs);font-style:italic;font-size:11px;color:rgba(255,255,255,.5);margin-top:2px}
+.dby{padding:18px 18px 0}
+.dsc{margin-bottom:22px}
+.dsct{font-family:var(--fd);font-size:15px;margin-bottom:8px}
+.dsc p{font-family:var(--fs);font-size:13px;line-height:1.7;color:var(--tx2)}
+.tcp{background:var(--card);border-radius:var(--r);padding:16px;box-shadow:var(--sh)}
+.tr{display:flex;gap:12px;align-items:flex-start;margin-bottom:8px}.tr:last-of-type{margin-bottom:0}
+.tem{font-size:32px;flex-shrink:0}
+.tnm{font-family:var(--fs);font-weight:600;font-size:14px;margin-bottom:2px}
+.tds{font-size:11px;color:var(--tx2);line-height:1.5}
+.tpa-img{width:100%;height:120px;border-radius:var(--rs);background:linear-gradient(135deg,#E8E3DC,#D6D3CD);display:flex;align-items:center;justify-content:center;margin:8px 0;font-size:11px;color:var(--tx3);overflow:hidden;position:relative}
+.tpa-img::after{content:'Photo from Airtable';position:absolute;font-family:var(--fb);font-size:10px;color:var(--tx3);background:rgba(255,255,255,.7);padding:3px 8px;border-radius:4px}
+.tor{text-align:center;font-size:10px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;padding:5px 0}
+.tdr{display:inline-flex;align-items:center;gap:3px;margin-top:5px;font-size:11px;color:var(--pr);font-weight:600}
+.ttg{display:inline-flex;align-items:center;gap:2px;font-size:9px;padding:2px 7px;border-radius:16px;margin-top:5px;margin-right:3px}
+.tv{background:#DCFCE7;color:#166534}.tgf{background:#FEF9C3;color:#854D0E}
+.qb{background:var(--card);border-radius:var(--r);padding:18px;text-align:center;box-shadow:var(--sh)}
+.qpl{width:130px;height:130px;margin:0 auto 10px;background:#fff;border-radius:var(--rs);border:2px solid var(--bd);display:flex;align-items:center;justify-content:center}
+.qt{font-size:12px;color:var(--tx2);line-height:1.4}
+.dbt{display:flex;align-items:center;justify-content:center;gap:6px;width:calc(100% - 36px);max-width:calc(var(--mw) - 36px);padding:13px;background:var(--pr);color:#fff;border:none;border-radius:60px;font-size:14px;font-weight:600;font-family:var(--fb);cursor:pointer;position:fixed;bottom:76px;left:50%;transform:translateX(-50%);box-shadow:0 4px 14px rgba(219,74,43,.3);z-index:100}
+.rs{display:flex;flex-direction:column;min-height:100vh;background:var(--bg);padding:52px 22px 90px}
+.rt{font-family:var(--fd);font-size:22px;margin-bottom:5px}
+.rsu{font-size:13px;color:var(--tx2);margin-bottom:24px}
+.ri{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:9px;box-shadow:var(--sh)}
+.rh{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.rn{width:24px;height:24px;border-radius:50%;background:var(--prl);color:var(--pr);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0}
+.rnm{font-family:var(--fs);font-weight:600;font-size:13px}
+.st{display:flex;gap:4px}
+.str{width:32px;height:32px;background:none;border:2px solid var(--bd);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all .1s}
+.str:hover{border-color:var(--star);background:#FFF8E1}
+.str.fl{border-color:var(--star);background:#FFF8E1}
+.rov{margin-top:18px;padding-top:18px;border-top:1px solid var(--bd)}
+.rol{font-family:var(--fd);font-size:14px;margin-bottom:9px}
+.rcm{width:100%;border:2px solid var(--bd);border-radius:var(--rs);padding:12px;font-family:var(--fb);font-size:13px;resize:none;height:80px;margin-top:12px;background:var(--card)}
+.rcm:focus{outline:none;border-color:var(--pr)}
+.rcm::placeholder{color:var(--tx3)}
+.bsb{margin-top:18px;width:100%;padding:14px;background:var(--pr);color:#fff;border:none;border-radius:60px;font-size:14px;font-weight:600;font-family:var(--fb);cursor:pointer;box-shadow:0 4px 14px rgba(219,74,43,.3)}
+.txs{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px 24px;background:var(--bg);text-align:center}
+.txi{width:68px;height:68px;background:var(--okbg);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:18px}
+.txt{font-family:var(--fd);font-size:24px;margin-bottom:8px}
+.txsu{font-family:var(--fs);font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:32px;max-width:280px}
+.txo{width:100%;display:flex;flex-direction:column;gap:9px;margin-bottom:24px}
+.txof{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:var(--r);padding:14px;box-shadow:var(--sh);text-align:left;cursor:pointer;border:none;width:100%;font-family:var(--fb)}
+.txof:active{transform:scale(.98)}
+.txic{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.txot{font-weight:600;font-size:13px;color:var(--tx);margin-bottom:1px}
+.txod{font-size:11px;color:var(--tx2)}
+
+/* === SLIDE PANEL === */
+.spanel{position:fixed;bottom:-100%;left:50%;transform:translateX(-50%);width:100%;max-width:var(--mw);background:var(--card);border-radius:16px 16px 0 0;box-shadow:0 -4px 24px rgba(0,0,0,.12);z-index:150;max-height:75vh;overflow-y:auto;transition:bottom .35s cubic-bezier(.4,0,.2,1);-webkit-overflow-scrolling:touch}
+.spanel.open{bottom:60px}
+.spanel::-webkit-scrollbar{width:0}
+.sp-handle{width:36px;height:4px;background:var(--bd);border-radius:2px;margin:10px auto 4px;cursor:grab}
+.sp-head{display:flex;align-items:center;gap:12px;padding:4px 18px 12px}
+.sp-num{width:36px;height:36px;border-radius:50%;background:var(--pr);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0}
+.sp-name{font-family:var(--fs);font-size:17px;font-weight:600;color:var(--tx)}
+.sp-addr{font-size:11px;color:var(--tx3);margin-top:1px}
+.sp-dist{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--tx2);margin-top:3px}
+.sp-sec{padding:0 18px;margin-bottom:14px}
+.sp-sec-t{font-family:var(--fd);font-size:13px;margin-bottom:8px}
+.sp-tapa{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:var(--bg);border-radius:10px;margin-bottom:5px}
+.sp-tapa-em{font-size:24px;flex-shrink:0}
+.sp-tapa-nm{font-size:13px;font-weight:600;color:var(--tx)}
+.sp-tapa-ds{font-size:11px;color:var(--tx2);line-height:1.5}
+.sp-or{text-align:center;font-size:9px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;padding:2px 0}
+.sp-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.sp-tag{font-size:9px;padding:2px 8px;border-radius:12px}
+.sp-drink{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--pr);font-weight:600;margin-top:8px}
+.sp-photo{width:100%;height:110px;background:linear-gradient(135deg,#E8E3DC,#D6D3CD);border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--tx3);margin-bottom:8px}
+.sp-hist{font-family:var(--fs);font-style:italic;font-size:12px;color:var(--tx2);line-height:1.7}
+.sp-qr{display:flex;align-items:center;gap:12px;background:var(--bg);border-radius:10px;padding:12px 14px}
+.sp-qr-box{width:50px;height:50px;background:#fff;border-radius:6px;border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9px;color:var(--tx3)}
+.sp-qr-txt{font-size:11px;color:var(--tx2);line-height:1.4}
+.sp-btns{display:flex;gap:8px;padding:14px 18px 20px}
+.sp-btn{flex:1;padding:12px;border-radius:60px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
+.sp-btn-dir{background:var(--pr);color:#fff;border:none;box-shadow:0 2px 10px rgba(219,74,43,.25)}
+.sp-btn-close{background:var(--bg);color:var(--tx2);border:1.5px solid var(--bd)}
+.sp-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.15);z-index:140}
+.sp-overlay.show{display:block}
+
+/* === NAVBAR === */
+.nav{display:none;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:var(--mw);background:var(--card);border-top:1px solid var(--bd);padding:6px 0 env(safe-area-inset-bottom,8px);z-index:200;box-shadow:0 -2px 12px rgba(0,0,0,.06)}
+.nav.show{display:flex}
+.nav-items{display:flex;width:100%;justify-content:space-around;align-items:center}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;border:none;background:none;cursor:pointer;font-family:var(--fb);transition:all .15s;border-radius:8px;min-width:56px}
+.nav-item svg{width:22px;height:22px;stroke:var(--tx3);fill:none;stroke-width:1.8;transition:all .15s}
+.nav-item span{font-size:10px;font-weight:500;color:var(--tx3);transition:all .15s}
+.nav-item.on svg{stroke:var(--pr)}
+.nav-item.on span{color:var(--pr);font-weight:700}
+.nav-item:active{transform:scale(.92)}
+.nav-dot{position:absolute;top:2px;right:14px;width:7px;height:7px;background:#16A34A;border-radius:50%;border:1.5px solid var(--card)}
+
+/* === SUPPORT === */
+.sup-scr{background:var(--bg);padding:24px 20px 110px}
+.sup-head{text-align:center;padding:28px 0 24px}
+.sup-title{font-family:var(--fd);font-size:22px;margin-bottom:4px}
+.sup-sub{font-family:var(--fs);font-size:13px;color:var(--tx2)}
+.sup-card{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:var(--sh);margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s;border:none;width:100%;text-align:left;font-family:var(--fb)}
+.sup-card:active{transform:scale(.98)}
+.sup-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.sup-card-t{font-weight:600;font-size:14px;color:var(--tx);margin-bottom:1px}
+.sup-card-d{font-size:11px;color:var(--tx2);line-height:1.4}
+.sup-card-arr{color:var(--tx3);font-size:16px;margin-left:auto}
+.sup-sec{font-family:var(--fd);font-size:14px;margin:20px 0 10px}
+.sup-faq{background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.sup-faq-item{padding:14px 18px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .15s}
+.sup-faq-item:last-child{border-bottom:none}
+.sup-faq-item:active{background:var(--prl)}
+.sup-faq-q{font-weight:600;font-size:13px;color:var(--tx);display:flex;justify-content:space-between;align-items:center}
+.sup-faq-a{font-size:12px;color:var(--tx2);line-height:1.6;margin-top:8px;display:none}
+.sup-faq-item.open .sup-faq-a{display:block}
+.sup-faq-item.open .sup-faq-arr{transform:rotate(180deg)}
+.sup-faq-arr{transition:transform .2s;font-size:12px;color:var(--tx3)}
+</style>
+</head>
+<body>
+<div class="f" id="app">
+
+<div class="s a" id="sw">
+<div class="wel">
+<div class="wel-h">
+<div class="wel-logo an d1">gastrowalk</div>
+<div class="wel-tag an d2">self-guided food tours</div>
+<div class="wel-fork an d3"><svg viewBox="0 0 80 120" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"><line x1="12" y1="0" x2="12" y2="55"/><line x1="40" y1="0" x2="40" y2="55"/><line x1="68" y1="0" x2="68" y2="55"/><path d="M40 55 Q12 75 12 110"/></svg></div>
+<div class="wel-t an d4">Discover the flavour of every stop</div>
+<div class="wel-s an d5">Sign in to access your tour, interactive map, tapa details and exclusive rewards</div>
+</div>
+<div class="wel-b">
+<button class="bg an d5" onclick="go('sl')"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 001 12c0 1.77.42 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continue with Google</button>
+<button class="bsk an d5" onclick="go('sl')">Continue without an account</button>
+<div class="wel-p">By signing in you accept our Terms &amp; Privacy Policy</div>
+</div>
+</div>
+</div>
+
+<div class="s h" id="sl"><div class="ls">
+<div class="ls-hi an d1">Hola, Sarah! 👋</div>
+<div class="ls-sub an d2">Choose your language for the tour</div>
+<div class="lo an d2" onclick="sL(this)"><span class="lf">🇬🇧</span><span class="ln">English</span><span class="lna">English</span></div>
+<div class="lo an d3" onclick="sL(this)"><span class="lf">🇪🇸</span><span class="ln">Español</span><span class="lna">Spanish</span></div>
+<div class="lo an d4" onclick="sL(this)"><span class="lf">🇩🇪</span><span class="ln">Deutsch</span><span class="lna">German</span></div>
+<button class="bc an d5" id="blc" disabled onclick="go('sb')">Continue</button>
+</div></div>
+
+<div class="s h" id="sb"><div class="bs">
+<button class="db" onclick="go('sl')" style="position:relative;top:0;left:0;margin-bottom:14px">←</button>
+<div class="bs-t an d1">Link your booking</div>
+<div class="bs-s an d2">Enter your booking ID to access your tour</div>
+<div class="bs-c an d2"><label class="bs-l">Booking ID</label><input type="text" class="bs-i" id="bid" placeholder="e.g. FH-28491" maxlength="20" oninput="cB(this.value)"></div>
+<div class="bfo" id="bf"><div class="bfo-h">✓ Booking found!</div><div class="bfo-d"><strong>Gourmet Tapas Tour</strong><br>Palma de Mallorca · 28 Apr 2026<br>2 guests · Sarah Miller</div></div>
+<div class="bs-tip an d3"><span>💡</span><span>Find your booking ID in the confirmation email from GetYourGuide, Viator or Gastrowalk</span></div>
+<button class="bc an d4" id="bbc" disabled onclick="go('st');iM()">Access my tour</button>
+<div class="bs-or an d5">or</div>
+<button class="bnb an d5">I don't have my booking ID</button>
+</div></div>
+
+<div class="s h" id="st"><div class="ts">
+<div class="th"><div class="tb">📍 Self-guided</div><div class="th1">Gourmet Tapas Tour</div><div class="tc">Palma de Mallorca</div></div>
+<div class="ti">
+<div class="tic an d1"><div class="ic">🕐</div><div class="lb">Duration</div><div class="vl">3–4h</div></div>
+<div class="tic an d2"><div class="ic">📍</div><div class="lb">Stops</div><div class="vl">5</div></div>
+<div class="tic an d3"><div class="ic">⏰</div><div class="lb">Deadline</div><div class="vl">10 PM</div></div>
+</div>
+<div class="tst">Your stops</div>
+<div class="vt">
+<button class="vtb on" id="vl" onclick="tV('l')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>List</button>
+<button class="vtb" id="vm" onclick="tV('m')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5c0-2.5-2-4.5-4.5-4.5z" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>Map</button>
+</div>
+<div class="sl" id="lv">
+<div class="sc an d2" onclick="sD(0)"><div class="sn">1</div><div class="si"><div class="snm">Fervor Tapas</div><div class="stp">Ham croquette or Kataifi shrimp</div><div class="sad">📍 Carrer dels Hostals, 4</div></div><div class="sar">›</div></div>
+<div class="sc an d3" onclick="sD(1)"><div class="sn">2</div><div class="si"><div class="snm">Casa s'Oli</div><div class="stp">Sobrasada with honey or Russian salad</div><div class="sad">📍 Plaça Banc de l'Oli, 13</div></div><div class="sar">›</div></div>
+<div class="sc an d3" onclick="sD(2)"><div class="sn">3</div><div class="si"><div class="snm">Bodega Mayor</div><div class="stp">Pintxo de tortilla or Padrón peppers</div><div class="sad">📍 Pl. Major, 11</div></div><div class="sar">›</div></div>
+<div class="sc an d4" onclick="sD(3)"><div class="sn">4</div><div class="si"><div class="snm">Bocalto</div><div class="stp">Goat cheese toast or Meatballs</div><div class="sad">📍 Plaça de Weyler, 8</div></div><div class="sar">›</div></div>
+<div class="sc an d5" onclick="sD(4)"><div class="sn">5</div><div class="si"><div class="snm">Maura</div><div class="stp">Patatas bravas or Calamari yuzu aioli</div><div class="sad">📍 Av. d'Antoni Maura, 6</div></div><div class="sar">›</div></div>
+</div>
+<div class="mw" id="mv"><div id="lm"></div>
+<div class="ml"><div class="mli"><div class="mld" style="background:#DB4A2B"></div>Stops</div><div class="mli"><div class="mld" style="background:#4285F4"></div>You</div><div class="mli"><svg width="12" height="2"><line x1="0" y1="1" x2="12" y2="1" stroke="#DB4A2B" stroke-width="1.5" stroke-dasharray="3 2"/></svg>Route</div></div>
+</div>
+<div style="padding:14px;margin-top:6px"><button class="bsb" onclick="go('sr')" style="background:var(--ok)">✅ I've finished — Rate my experience</button></div>
+</div></div>
+
+<div class="s h" id="sd"></div>
+
+<!-- SLIDE PANEL OVERLAY -->
+<div class="sp-overlay" id="spo" onclick="closePanel()"></div>
+
+<!-- SLIDE PANEL -->
+<div class="spanel" id="spanel">
+<div class="sp-handle" onclick="closePanel()"></div>
+<div class="sp-head">
+<div class="sp-num" id="sp-num">1</div>
+<div>
+<div class="sp-name" id="sp-name">Fervor Tapas</div>
+<div class="sp-addr" id="sp-addr">Carrer dels Hostals, 4</div>
+<div class="sp-dist" id="sp-dist"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#78716C" stroke-width="1.5"><path d="M2 14l4-12 3 6 5-2-12 8z"/></svg><span>3 min · 240m</span></div>
+</div>
+</div>
+<div id="sp-body"></div>
+</div>
+
+<div class="s h" id="sr"><div class="rs">
+<button class="db" onclick="go('st')" style="position:relative;top:0;left:0;margin-bottom:14px">←</button>
+<div class="rt an d1">Rate your experience</div>
+<div class="rsu an d2">Help us improve and help future foodies</div>
+<div class="ri an d2"><div class="rh"><div class="rn">1</div><div class="rnm">Fervor Tapas</div></div><div class="st"><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button></div></div>
+<div class="ri an d3"><div class="rh"><div class="rn">2</div><div class="rnm">Casa s'Oli</div></div><div class="st"><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button></div></div>
+<div class="ri an d3"><div class="rh"><div class="rn">3</div><div class="rnm">Bodega Mayor</div></div><div class="st"><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button></div></div>
+<div class="ri an d4"><div class="rh"><div class="rn">4</div><div class="rnm">Bocalto</div></div><div class="st"><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button></div></div>
+<div class="ri an d4"><div class="rh"><div class="rn">5</div><div class="rnm">Maura</div></div><div class="st"><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button></div></div>
+<div class="rov an d5"><div class="rol">Overall experience</div><div class="st"><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button></div><textarea class="rcm" placeholder="Tell us what you loved..."></textarea></div>
+<button class="bsb an d5" onclick="go('sx')">Submit rating</button>
+</div></div>
+
+<div class="s h" id="sx"><div class="txs">
+<div class="txi an d1">🎉</div>
+<div class="txt an d2">Thank you, Sarah!</div>
+<div class="txsu an d3">We hope you enjoyed the flavours of Palma. Here are a few things for you:</div>
+<div class="txo">
+<button class="txof an d3"><div class="txic" style="background:#FEF3E2">🎫</div><div style="flex:1"><div class="txot">10% off your next tour</div><div class="txod">Use code VUELVE10 on any city</div></div><span style="color:var(--tx3)">›</span></button>
+<button class="txof an d4"><div class="txic" style="background:#DCFCE7">⭐</div><div style="flex:1"><div class="txot">Leave us a review</div><div class="txod">Share on Google</div></div><span style="color:var(--tx3)">›</span></button>
+<button class="txof an d5"><div class="txic" style="background:#EDE7F6">📸</div><div style="flex:1"><div class="txot">Share on Instagram</div><div class="txod">Tag @gastrowalk</div></div><span style="color:var(--tx3)">›</span></button>
+</div>
+<div style="font-size:11px;color:var(--tx3);line-height:1.5" class="an d5">We've sent these to your email. See you next time! 🍷</div>
+</div></div>
+
+<!-- SUPPORT -->
+<div class="s h" id="ss"><div class="sup-scr">
+<div class="sup-head">
+<div class="sup-title an d1">Need help?</div>
+<div class="sup-sub an d2">We're here for you during your tour</div>
+</div>
+
+<button class="sup-card an d2" onclick="window.open('https://wa.me/34666666666','_blank')">
+<div class="sup-ic" style="background:#DCFCE7">💬</div>
+<div><div class="sup-card-t">WhatsApp support</div><div class="sup-card-d">Chat with Vero — usually replies in minutes</div></div>
+<div class="sup-card-arr">›</div>
+</button>
+
+<button class="sup-card an d3" onclick="window.open('tel:+34666666666')">
+<div class="sup-ic" style="background:#E0F2FE">📞</div>
+<div><div class="sup-card-t">Call us</div><div class="sup-card-d">Available during tour hours</div></div>
+<div class="sup-card-arr">›</div>
+</button>
+
+<button class="sup-card an d3" onclick="window.open('mailto:hello@gastrowalk.com')">
+<div class="sup-ic" style="background:#F5DDD7">✉️</div>
+<div><div class="sup-card-t">Email</div><div class="sup-card-d">hello@gastrowalk.com</div></div>
+<div class="sup-card-arr">›</div>
+</button>
+
+<div class="sup-sec an d4">Frequently asked questions</div>
+<div class="sup-faq an d4">
+
+<div class="sup-faq-item" onclick="togFaq(this)">
+<div class="sup-faq-q">What if a restaurant is full?<span class="sup-faq-arr">▾</span></div>
+<div class="sup-faq-a">No table is reserved. If a restaurant is busy, simply continue to the next stop and return later. You have until 10:00 PM to complete all stops.</div>
+</div>
+
+<div class="sup-faq-item" onclick="togFaq(this)">
+<div class="sup-faq-q">Can I do the stops in any order?<span class="sup-faq-arr">▾</span></div>
+<div class="sup-faq-a">We recommend starting at stop 1 (Fervor Tapas) at your booked time. After that, you can visit the remaining stops in any order you prefer.</div>
+</div>
+
+<div class="sup-faq-item" onclick="togFaq(this)">
+<div class="sup-faq-q">What about food allergies?<span class="sup-faq-arr">▾</span></div>
+<div class="sup-faq-a">Please inform each restaurant about any allergies or intolerances when you arrive. Vegetarian and gluten-free options are marked in each stop's details.</div>
+</div>
+
+<div class="sup-faq-item" onclick="togFaq(this)">
+<div class="sup-faq-q">What drinks are included?<span class="sup-faq-arr">▾</span></div>
+<div class="sup-faq-a">At each stop you get one drink: choose from local wine, sangría, beer, soft drink, water, or coffee.</div>
+</div>
+
+<div class="sup-faq-item" onclick="togFaq(this)">
+<div class="sup-faq-q">What if I have a problem with a restaurant?<span class="sup-faq-arr">▾</span></div>
+<div class="sup-faq-a">Contact us on WhatsApp immediately and we'll help sort it out. We're available throughout your tour.</div>
+</div>
+
+</div>
+</div></div>
+
+<!-- BOTTOM NAVBAR -->
+<nav class="nav" id="navbar">
+<div class="nav-items">
+<button class="nav-item on" id="nav-tour" onclick="navTo('st','nav-tour')">
+<svg viewBox="0 0 24 24"><path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3V7z" stroke-linejoin="round"/><path d="M9 4v13M15 7v13"/></svg>
+<span>Tour</span>
+</button>
+<button class="nav-item" id="nav-map" onclick="navTo('st','nav-map');setTimeout(()=>tV('m'),100)">
+<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+<span>Map</span>
+</button>
+<button class="nav-item" id="nav-rate" onclick="navTo('sr','nav-rate')">
+<svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+<span>Rate</span>
+</button>
+<button class="nav-item" id="nav-support" onclick="navTo('ss','nav-support')" style="position:relative">
+<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+<span>Support</span>
+<div class="nav-dot"></div>
+</button>
+</div>
+</nav>
+
+</div>
+<script>
+const S=[
+{n:1,nm:"Fervor Tapas",ad:"Carrer dels Hostals, 4, Centre, 07002 Palma",em:"🥘",lt:39.57270,ln:2.65070,
+tp:[{nm:"Ham croquette",em:"🍳",ds:"Crispy on the outside, creamy ham filling inside. A Spanish classic."},{nm:"Kataifi shrimp",em:"🦐",ds:"Shrimp wrapped in crispy kataifi pastry, fried to golden perfection."}],
+vg:"Camembert cheese with red fruits",gf:"Iberic ham with gluten free toast",
+dr:"Local wine, sangría, beer, soft drink, water or coffee",
+hi:"Located in the heart of Palma's old town, Fervor brings a modern twist to traditional Mallorcan tapas. The narrow street has been a hub for artisans since the 17th century."},
+{n:2,nm:"Casa s'Oli",ad:"Plaça Banc de l'Oli, 13, Distrito Centro, 07002 Palma",em:"🫒",lt:39.57200,ln:2.65200,
+tp:[{nm:"Sobrasada with honey",em:"🍯",ds:"Warm, spreadable Mallorcan sobrasada drizzled with local honey on toasted bread."},{nm:"Russian salad with tuna",em:"🥗",ds:"The Mediterranean ensaladilla rusa — potatoes, tuna, olives, and creamy mayo."}],
+vg:"Potato salad with aioli and coriander",gf:null,
+dr:"Local wine, sangría, beer, soft drink, water or coffee",
+hi:"Plaça Banc de l'Oli — 'Oil Bench Square' — was historically where olive oil was traded. Casa s'Oli honours that heritage with its dedication to local ingredients."},
+{n:3,nm:"Bodega Mayor",ad:"Pl. Major, 11, Centre, 07002 Palma",em:"🍷",lt:39.57140,ln:2.64960,
+tp:[{nm:"Pintxo de tortilla",em:"🥚",ds:"A thick slice of traditional Spanish omelette, golden and perfectly set, served on a skewer."},{nm:"Padrón peppers",em:"🌶️",ds:"Blistered green peppers — most are mild, but one in ten packs a spicy surprise!"}],
+vg:"Padrón peppers",gf:"Padrón peppers",
+dr:"Local wine, sangría, beer, soft drink, water or coffee",
+hi:"Right on Plaça Major, Palma's grand square built over the old Inquisition headquarters. The arcades have hosted markets and festivals since the 19th century."},
+{n:4,nm:"Bocalto",ad:"Plaça de Weyler, 8, Centre, 07001 Palma",em:"🧀",lt:39.57310,ln:2.64780,
+tp:[{nm:"Toast with gratinated goat cheese",em:"🧀",ds:"Warm goat cheese melted over sourdough, topped with sweet onion-mango chutney."},{nm:"Meatballs with mashed potatoes",em:"🍖",ds:"Homestyle meatballs in a rich sauce over creamy mashed potatoes."}],
+vg:null,gf:"Vegetable skewer",
+dr:"Local wine, sangría, beer, soft drink, water or coffee",
+hi:"Plaça de Weyler sits where Palma's old and new town meet, next to the Art Nouveau Gran Hotel — one of the first luxury hotels on the island."},
+{n:5,nm:"Maura",ad:"Av. d'Antoni Maura, 6, Centre, 07012 Palma",em:"🦑",lt:39.56920,ln:2.64880,
+tp:[{nm:"Patatas bravas",em:"🥔",ds:"Crispy fried potatoes with spicy bravas sauce and garlic aioli — the ultimate Spanish bar snack."},{nm:"Calamari with yuzu aioli",em:"🦑",ds:"Tender fried calamari rings with a zesty Japanese-inspired yuzu aioli."}],
+vg:"Patatas bravas",gf:null,
+dr:"Local wine, sangría, beer, soft drink, water or coffee",
+hi:"Near the iconic Passeig del Born and steps from the cathedral. The nearby Royal Palace of La Almudaina dates back to the 14th century."}
+];
+// Screens where navbar is visible
+const NAV_SCREENS=['st','sd','sr','ss','sx'];
+function go(id){document.querySelectorAll('.s').forEach(s=>{if(s.classList.contains('a')){s.classList.remove('a');s.classList.add('hl')}else if(!s.classList.contains('h')&&!s.classList.contains('hl'))s.classList.add('h')});setTimeout(()=>{document.querySelectorAll('.s').forEach(s=>{if(s.id!==id){s.classList.remove('hl');s.classList.add('h')}});const t=document.getElementById(id);t.classList.remove('h','hl');t.classList.add('a');t.scrollTop=0;
+// Show/hide navbar
+const nb=document.getElementById('navbar');if(NAV_SCREENS.includes(id)){nb.classList.add('show')}else{nb.classList.remove('show')}
+// Update active nav item
+if(id==='st'){setNav('nav-tour')}else if(id==='sr'){setNav('nav-rate')}else if(id==='ss'){setNav('nav-support')}
+},50)}
+function setNav(activeId){document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));const el=document.getElementById(activeId);if(el)el.classList.add('on')}
+function navTo(screenId,navId){setNav(navId);go(screenId);if(screenId==='st'){iM()}}
+function togFaq(el){el.classList.toggle('open')}
+function sL(e){document.querySelectorAll('.lo').forEach(o=>o.classList.remove('sel'));e.classList.add('sel');document.getElementById('blc').disabled=false}
+function cB(v){const f=document.getElementById('bf'),b=document.getElementById('bbc');if(v.trim().length>=5){f.classList.add('show');b.disabled=false}else{f.classList.remove('show');b.disabled=true}}
+function ra(s){const p=s.parentElement;Array.from(p.children).forEach((c,i)=>{i<=Array.from(p.children).indexOf(s)?c.classList.add('fl'):c.classList.remove('fl')})}
+function tV(v){const lv=document.getElementById('lv'),mv=document.getElementById('mv'),vl=document.getElementById('vl'),vm=document.getElementById('vm');if(v==='m'){lv.classList.add('hd');mv.classList.add('show');vl.classList.remove('on');vm.classList.add('on');if(window._m)window._m.invalidateSize()}else{lv.classList.remove('hd');mv.classList.remove('show');vl.classList.add('on');vm.classList.remove('on')}}
+function iM(){if(window._m)return;setTimeout(()=>{
+const m=L.map('lm',{zoomControl:false,attributionControl:false}).setView([39.5718,2.6498],16);
+L.control.zoom({position:'topright'}).addTo(m);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,crossOrigin:true}).addTo(m);
+// Fetch walking route from OSRM (free routing service)
+const coords=S.map(s=>s.ln+','+s.lt).join(';');
+fetch('https://router.project-osrm.org/route/v1/foot/'+coords+'?overview=full&geometries=geojson')
+.then(r=>r.json()).then(data=>{
+  if(data.routes&&data.routes[0]){
+    const routeCoords=data.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
+    L.polyline(routeCoords,{color:'#DB4A2B',weight:5,opacity:.6,dashArray:'12 8',lineCap:'round'}).addTo(m);
+  }
+}).catch(()=>{
+  // Fallback: straight lines if OSRM unavailable
+  L.polyline(S.map(s=>[s.lt,s.ln]),{color:'#DB4A2B',weight:4,opacity:.5,dashArray:'10 8'}).addTo(m);
+});
+S.forEach((s,i)=>{
+const ic=L.divIcon({className:'',html:'<div class="gp" style="width:32px;height:32px;font-size:14px;border:3px solid #fff;box-shadow:0 2px 12px rgba(219,74,43,.5)">'+s.n+'</div>',iconSize:[32,32],iconAnchor:[16,16]});
+const mk=L.marker([s.lt,s.ln],{icon:ic}).addTo(m);
+mk.bindPopup('<div style="font-family:DM Sans,sans-serif;min-width:150px;padding:2px"><b style="font-size:14px;color:#1C1917">'+s.nm+'</b><br><span style="font-size:11px;color:#78716C;line-height:1.4;display:block;margin:4px 0">'+s.tp[0].nm+' or '+s.tp[1].nm+'</span><button onclick="sD('+i+')" style="margin-top:6px;padding:6px 16px;background:#DB4A2B;color:#fff;border:none;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:DM Sans,sans-serif">View details</button></div>',{closeButton:true,className:'gw-popup'});
+});
+const ui=L.divIcon({className:'',html:'<div style="position:relative"><div style="width:14px;height:14px;background:#4285F4;border:3px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(66,133,244,.4);position:relative;z-index:2"></div><div style="position:absolute;top:-5px;left:-5px;width:24px;height:24px;background:rgba(66,133,244,.12);border-radius:50%;animation:pulse 2s ease-in-out infinite"></div></div>',iconSize:[14,14],iconAnchor:[7,7]});
+L.marker([39.5726,2.6512],{icon:ui,interactive:false}).addTo(m);
+const bounds=L.latLngBounds(S.map(s=>[s.lt,s.ln]));
+m.fitBounds(bounds.pad(0.12));
+window._m=m},150)}
+function sD(i){const s=S[i];window._cs=s;
+document.getElementById('sp-num').textContent=s.n;
+document.getElementById('sp-name').textContent=s.nm;
+document.getElementById('sp-addr').textContent=s.ad;
+let h='';
+h+='<div class="sp-sec"><div class="sp-sec-t">Your tapa & drink</div>';
+h+='<div class="sp-tapa"><div class="sp-tapa-em">'+s.tp[0].em+'</div><div><div class="sp-tapa-nm">a) '+s.tp[0].nm+'</div><div class="sp-tapa-ds">'+s.tp[0].ds+'</div></div></div>';
+h+='<div class="sp-or">— or —</div>';
+h+='<div class="sp-tapa"><div class="sp-tapa-em">'+s.tp[1].em+'</div><div><div class="sp-tapa-nm">b) '+s.tp[1].nm+'</div><div class="sp-tapa-ds">'+s.tp[1].ds+'</div></div></div>';
+let tg='';if(s.vg)tg+='<span class="sp-tag tv">🌿 Veg: '+s.vg+'</span>';if(s.gf)tg+='<span class="sp-tag tgf">🌾 GF: '+s.gf+'</span>';
+if(tg)h+='<div class="sp-tags">'+tg+'</div>';
+h+='<div class="sp-drink">🍷 '+s.dr+'</div></div>';
+h+='<div class="sp-sec"><div class="sp-sec-t">About this place</div><div class="sp-photo">'+s.em+' Photo from Airtable</div><div class="sp-hist">'+s.hi+'</div></div>';
+h+='<div class="sp-sec"><div class="sp-sec-t">Show at the bar</div><div class="sp-qr"><div class="sp-qr-box">QR</div><div class="sp-qr-txt">Show this code to the waiter to receive your tapa and drink</div></div></div>';
+h+='<div class="sp-btns"><button class="sp-btn sp-btn-dir" onclick="oD()">📍 Directions</button><button class="sp-btn sp-btn-close" onclick="closePanel()">Close</button></div>';
+document.getElementById('sp-body').innerHTML=h;
+document.getElementById('spanel').scrollTop=0;
+document.getElementById('spanel').classList.add('open');
+document.getElementById('spo').classList.add('show');
+}
+function closePanel(){document.getElementById('spanel').classList.remove('open');document.getElementById('spo').classList.remove('show')}
+function oD(){const s=window._cs;if(s)window.open('https://www.google.com/maps/dir/?api=1&destination='+s.lt+','+s.ln+'&travelmode=walking','_blank')}
+</script>
+</body>
+</html>
