@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 :root{--bg:#EDE6DC;--card:#FFFDF8;--pr:#DB4A2B;--prl:#F5DDD7;--prd:#B33A21;--tx:#1C1917;--tx2:#78716C;--tx3:#A8A29E;--bd:#D6D3CD;--ok:#16A34A;--okbg:#DCFCE7;--star:#F59E0B;--sh:0 2px 16px rgba(0,0,0,.06);--shl:0 8px 32px rgba(0,0,0,.1);--r:14px;--rs:8px;--mw:430px;--fd:'Archivo Black',sans-serif;--fs:'Newsreader',Georgia,serif;--fb:'DM Sans',sans-serif}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -229,8 +230,8 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <div class="wel-s an d5">Sign in to access your tour, interactive map, tapa details and exclusive rewards</div>
 </div>
 <div class="wel-b">
-<button class="bg an d5" onclick="go('sl')"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 001 12c0 1.77.42 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continue with Google</button>
-<button class="bsk an d5" onclick="go('sl')">Continue without an account</button>
+<button class="bg an d5" onclick="loginGoogle()"><svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 001 12c0 1.77.42 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continue with Google</button>
+<button class="bsk an d5" onclick="loginAnonymous()">Continue without an account</button>
 <div class="wel-p">By signing in you accept our Terms &amp; Privacy Policy</div>
 </div>
 </div>
@@ -242,7 +243,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <div class="lo an d2" onclick="sL(this)"><span class="lf">🇬🇧</span><span class="ln">English</span><span class="lna">English</span></div>
 <div class="lo an d3" onclick="sL(this)"><span class="lf">🇪🇸</span><span class="ln">Español</span><span class="lna">Spanish</span></div>
 <div class="lo an d4" onclick="sL(this)"><span class="lf">🇩🇪</span><span class="ln">Deutsch</span><span class="lna">German</span></div>
-<button class="bc an d5" id="blc" disabled onclick="go('sb')">Continue</button>
+<button class="bc an d5" id="blc" disabled onclick="registerUser();go('sb')">Continue</button>
 </div></div>
 
 <div class="s h" id="sb"><div class="bs">
@@ -252,7 +253,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <div class="bs-c an d2"><label class="bs-l">Booking ID</label><input type="text" class="bs-i" id="bid" placeholder="e.g. FH-28491" maxlength="20" oninput="cB(this.value)"></div>
 <div class="bfo" id="bf"><div class="bfo-h">✓ Booking found!</div><div class="bfo-d"><strong>Gourmet Tapas Tour</strong><br>Palma de Mallorca · 28 Apr 2026<br>2 guests · Sarah Miller</div></div>
 <div class="bs-tip an d3"><span>💡</span><span>Find your booking ID in the confirmation email from GetYourGuide, Viator or Gastrowalk</span></div>
-<button class="bc an d4" id="bbc" disabled onclick="go('st');iM()">Access my tour</button>
+<button class="bc an d4" id="bbc" disabled onclick="linkBooking()">Access my tour</button>
 <div class="bs-or an d5">or</div>
 <button class="bnb an d5">I don't have my booking ID</button>
 </div></div>
@@ -445,7 +446,6 @@ if(id==='st'){setNav('nav-tour')}else if(id==='sr'){setNav('nav-rate')}else if(i
 function setNav(activeId){document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));const el=document.getElementById(activeId);if(el)el.classList.add('on')}
 function navTo(screenId,navId){setNav(navId);go(screenId);if(screenId==='st'){iM()}}
 function togFaq(el){el.classList.toggle('open')}
-function sL(e){document.querySelectorAll('.lo').forEach(o=>o.classList.remove('sel'));e.classList.add('sel');document.getElementById('blc').disabled=false}
 function cB(v){const f=document.getElementById('bf'),b=document.getElementById('bbc');if(v.trim().length>=5){f.classList.add('show');b.disabled=false}else{f.classList.remove('show');b.disabled=true}}
 function ra(s){const p=s.parentElement;Array.from(p.children).forEach((c,i)=>{i<=Array.from(p.children).indexOf(s)?c.classList.add('fl'):c.classList.remove('fl')})}
 function tV(v){const lv=document.getElementById('lv'),mv=document.getElementById('mv'),vl=document.getElementById('vl'),vm=document.getElementById('vm');if(v==='m'){lv.classList.add('hd');mv.classList.add('show');vl.classList.remove('on');vm.classList.add('on');if(window._m)window._m.invalidateSize()}else{lv.classList.remove('hd');mv.classList.remove('show');vl.classList.add('on');vm.classList.remove('on')}}
@@ -497,6 +497,102 @@ document.getElementById('spo').classList.add('show');
 }
 function closePanel(){document.getElementById('spanel').classList.remove('open');document.getElementById('spo').classList.remove('show')}
 function oD(){const s=window._cs;if(s)window.open('https://www.google.com/maps/dir/?api=1&destination='+s.lt+','+s.ln+'&travelmode=walking','_blank')}
+
+// ===== WEBHOOK CONFIG =====
+const WEBHOOK_URL='https://gastrowalk.app.n8n.cloud/webhook/app-users';
+const GOOGLE_CLIENT_ID='454941758134-901psai6286sfgugl7gifqn6cubmbmcn.apps.googleusercontent.com';
+
+// ===== USER STATE =====
+window._user={email:null,name:null,source:null,language:null,status:'anonymous'};
+
+// ===== GOOGLE LOGIN (REAL) =====
+function loginGoogle(){
+  google.accounts.id.initialize({
+    client_id:GOOGLE_CLIENT_ID,
+    callback:handleGoogleResponse,
+    ux_mode:'popup'
+  });
+  google.accounts.id.prompt();
+}
+
+function handleGoogleResponse(response){
+  // Decode the JWT token from Google
+  const token=response.credential;
+  const payload=JSON.parse(atob(token.split('.')[1]));
+  // Extract user info
+  const email=payload.email;
+  const name=payload.name;
+  const picture=payload.picture;
+  console.log('Google Login OK:',email,name);
+  // Store user data
+  window._user={email:email,name:name,picture:picture,source:'google_login',language:null,status:'registered'};
+  // Update greeting screen with real name
+  document.querySelector('.ls-hi').textContent='Hola, '+name.split(' ')[0]+'! 👋';
+  go('sl');
+}
+
+function loginAnonymous(){
+  window._user={email:null,name:null,source:'anonymous',language:null,status:'anonymous'};
+  document.querySelector('.ls-hi').textContent='Welcome! 👋';
+  go('sl');
+}
+
+// ===== LANGUAGE SELECTION =====
+function sL(e){
+  document.querySelectorAll('.lo').forEach(o=>o.classList.remove('sel'));
+  e.classList.add('sel');
+  document.getElementById('blc').disabled=false;
+  const lang=e.querySelector('.ln').textContent;
+  if(lang==='English')window._user.language='EN';
+  else if(lang==='Español')window._user.language='ES';
+  else if(lang==='Deutsch')window._user.language='DE';
+}
+
+// ===== REGISTER USER =====
+function registerUser(){
+  console.log('Sending REGISTER to webhook...',window._user);
+  fetch(WEBHOOK_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      action:'register',
+      email:window._user.email,
+      name:window._user.name,
+      source:window._user.source,
+      language:window._user.language,
+      status:window._user.status
+    })
+  })
+  .then(r=>r.json())
+  .then(data=>{console.log('Register response:',data)})
+  .catch(err=>{console.log('Register webhook:',err)});
+}
+
+// ===== LINK BOOKING =====
+function linkBooking(){
+  const bookingId=document.getElementById('bid').value.trim();
+  console.log('Sending LINK_BOOKING to webhook...',bookingId);
+  fetch(WEBHOOK_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      action:'link_booking',
+      booking_id:bookingId,
+      email:window._user.email,
+      name:window._user.name,
+      language:window._user.language
+    })
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    console.log('Booking response:',data);
+    go('st');iM();
+  })
+  .catch(err=>{
+    console.log('Booking webhook:',err);
+    go('st');iM();
+  });
+}
 </script>
 </body>
 </html>
