@@ -86,6 +86,8 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .stp{font-size:11px;color:var(--tx2);margin-bottom:3px;line-height:1.4}
 .sad{font-size:10px;color:var(--tx3)}
 .sar{display:flex;align-items:center;color:var(--pr);font-size:16px}
+@keyframes hlflash{0%{background:var(--prl);box-shadow:0 0 0 3px var(--pr),var(--shl)}100%{background:var(--card);box-shadow:var(--sh)}}
+.sc.hl-flash{animation:hlflash 1.5s ease-out}
 .mw{display:none;margin:0 14px;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);background:var(--card);flex:1}
 .mw.show{display:flex;flex-direction:column}
 #lm{width:100%;height:70vh;min-height:420px;flex:1}
@@ -219,6 +221,13 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sup-faq-item.open .sup-faq-a{display:block}
 .sup-faq-item.open .sup-faq-arr{transform:rotate(180deg)}
 .sup-faq-arr{transition:transform .2s;font-size:12px;color:var(--tx3)}
+.sup-account{background:var(--card);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh)}
+.sup-acc-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bd);font-size:12px}
+.sup-acc-row:last-of-type{border-bottom:none}
+.sup-acc-lb{color:var(--tx2);font-weight:500}
+.sup-acc-vl{color:var(--tx);font-weight:600;text-align:right;max-width:60%;overflow-wrap:anywhere;word-break:break-word}
+.sup-logout{margin-top:12px;width:100%;padding:11px;background:none;color:var(--pr);border:1.5px solid var(--pr);border-radius:60px;font-size:13px;font-weight:600;font-family:var(--fb);cursor:pointer;transition:all .15s}
+.sup-logout:active{background:var(--prl)}
 </style>
 </head>
 <body>
@@ -374,6 +383,14 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 </div>
 
 </div>
+
+<div class="sup-sec an d4">Your session</div>
+<div class="sup-account an d4" id="sup-account">
+<div class="sup-acc-row"><span class="sup-acc-lb">Signed in as</span><span class="sup-acc-vl" id="sup-acc-email">—</span></div>
+<div class="sup-acc-row"><span class="sup-acc-lb">Booking</span><span class="sup-acc-vl" id="sup-acc-booking">—</span></div>
+<button class="sup-logout" onclick="confirmLogout()">Log out</button>
+</div>
+
 </div></div>
 
 <!-- BOTTOM NAVBAR -->
@@ -649,6 +666,7 @@ function renderTourScreen(){
     S.forEach((s,i)=>{
       const card=document.createElement('div');
       card.className='sc an d'+Math.min(i+2,5);
+      card.id='stop-card-'+i;
       card.onclick=()=>sD(i);
       const teaser=s.tp[0].nm+(s.tp[1].nm?' or '+s.tp[1].nm:'');
       const addr=s.ad?'📍 '+s.ad:(s.mu?'📍 View on map':'');
@@ -737,8 +755,27 @@ function go(id){
     if(id==='st'){setNav('nav-tour')}
     else if(id==='sm'){setNav('nav-map');iM();setTimeout(()=>{if(window._m){try{window._m.invalidateSize()}catch(e){}}},420)}
     else if(id==='sr'){setNav('nav-rate')}
-    else if(id==='ss'){setNav('nav-support')}
+    else if(id==='ss'){setNav('nav-support');renderAccountInfo()}
   },50);
+}
+
+function renderAccountInfo(){
+  const e=document.getElementById('sup-acc-email');
+  const b=document.getElementById('sup-acc-booking');
+  if(e){
+    if(window._user&&window._user.email)e.textContent=window._user.email;
+    else if(window._user&&window._user.status==='anonymous')e.textContent='Guest (no account)';
+    else e.textContent='—';
+  }
+  if(b){
+    if(window._booking&&window._booking.booking_id)b.textContent=window._booking.booking_id;
+    else b.textContent='—';
+  }
+}
+
+function confirmLogout(){
+  const ok=confirm('Log out and clear your tour?\n\nYou\'ll need to enter your booking ID again to access it.');
+  if(ok)gwLogout();
 }
 function setNav(activeId){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
@@ -761,8 +798,27 @@ function ra(s){
 }
 
 // ========================================================================
-// MAPA — usa coordenadas reales de Airtable
+// NAVEGAR DEL PIN DEL MAPA A LA CARD DE TOUR
 // ========================================================================
+function focusStopInTour(idx){
+  // Cambiar a la pestaña Tour
+  setNav('nav-tour');
+  go('st');
+  // Después de la transición, hacer scroll a la card y destello
+  setTimeout(()=>{
+    const card=document.getElementById('stop-card-'+idx);
+    if(!card)return;
+    const screen=document.getElementById('st');
+    // Calcular posición relativa dentro del scroll del screen
+    const cardRect=card.getBoundingClientRect();
+    const screenRect=screen.getBoundingClientRect();
+    const target=screen.scrollTop+(cardRect.top-screenRect.top)-90;
+    screen.scrollTo({top:target,behavior:'smooth'});
+    // Destello: borde naranja + sombra durante 1.5s
+    card.classList.add('hl-flash');
+    setTimeout(()=>card.classList.remove('hl-flash'),1500);
+  },480);
+}
 function iM(){
   // Si ya existe el mapa: solo asegurar que se redibuje al cambiar de pantalla
   if(window._m){
@@ -795,13 +851,12 @@ function iM(){
       color:'#DB4A2B',weight:3,opacity:.4,dashArray:'8 6',lineCap:'round'
     }).addTo(m);
 
-    // 2) MARCADORES
+    // 2) MARCADORES — click va directo a la pestaña Tour con scroll a la card
     validStops.forEach((s,i)=>{
       const idx=S.indexOf(s);
-      const ic=L.divIcon({className:'',html:'<div class="gp" style="width:32px;height:32px;font-size:14px;border:3px solid #fff;box-shadow:0 2px 12px rgba(219,74,43,.5)">'+s.n+'</div>',iconSize:[32,32],iconAnchor:[16,16]});
+      const ic=L.divIcon({className:'',html:'<div class="gp" style="width:32px;height:32px;font-size:14px;border:3px solid #fff;box-shadow:0 2px 12px rgba(219,74,43,.5);cursor:pointer">'+s.n+'</div>',iconSize:[32,32],iconAnchor:[16,16]});
       const mk=L.marker([s.lt,s.ln],{icon:ic}).addTo(m);
-      const teaser=s.tp[0].nm+(s.tp[1].nm?' or '+s.tp[1].nm:'');
-      mk.bindPopup('<div style="font-family:DM Sans,sans-serif;min-width:150px;padding:2px"><b style="font-size:14px;color:#1C1917">'+escapeHtml(s.nm)+'</b><br><span style="font-size:11px;color:#78716C;line-height:1.4;display:block;margin:4px 0">'+escapeHtml(teaser)+'</span><button onclick="sD('+idx+')" style="margin-top:6px;padding:6px 16px;background:#DB4A2B;color:#fff;border:none;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:DM Sans,sans-serif">View details</button></div>',{closeButton:true,className:'gw-popup'});
+      mk.on('click',()=>focusStopInTour(idx));
     });
 
     // 3) Geolocalización (opcional, no bloqueante)
@@ -831,8 +886,12 @@ function iM(){
 
 function fetchOsrmRoute(stops,map,straightLine,attempt){
   if(stops.length<2)return;
+  // Pedir UNA SOLA petición OSRM con todos los waypoints (eficiente).
+  // Luego "coser" la geometría a las coords reales de los pines insertando cada
+  // pin al inicio del tramo correspondiente, para que la ruta SIEMPRE toque cada parada.
   const coords=stops.map(s=>s.ln+','+s.lt).join(';');
-  const url='https://router.project-osrm.org/route/v1/foot/'+coords+'?overview=full&geometries=geojson';
+  // steps=true → la respuesta separa la ruta en "legs" (tramos entre waypoints)
+  const url='https://router.project-osrm.org/route/v1/foot/'+coords+'?overview=full&geometries=geojson&steps=false';
   console.log('[osrm] Requesting route, attempt',attempt+1);
   const ctrl=new AbortController();
   const timer=setTimeout(()=>ctrl.abort(),8000);
@@ -847,20 +906,57 @@ function fetchOsrmRoute(stops,map,straightLine,attempt){
         console.warn('[osrm] Returned code:',data.code,'— keeping straight line');
         return;
       }
-      if(!data.routes||!data.routes[0]||!data.routes[0].geometry){
+      const route=data.routes&&data.routes[0];
+      if(!route||!route.geometry){
         console.warn('[osrm] No route in response — keeping straight line');
         return;
       }
-      const routeCoords=data.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
-      console.log('[osrm] Route OK with',routeCoords.length,'points');
-      // Pintar la ruta real y eliminar la línea recta
-      L.polyline(routeCoords,{color:'#DB4A2B',weight:5,opacity:.7,lineCap:'round',lineJoin:'round'}).addTo(map);
+      // Geometría de OSRM (lng,lat) → leaflet (lat,lng)
+      let routeCoords=route.geometry.coordinates.map(c=>[c[1],c[0]]);
+      console.log('[osrm] Route OK with',routeCoords.length,'points across',(route.legs||[]).length,'legs');
+
+      // ESTRATEGIA: coser conectores entre cada pin y su punto más cercano de la ruta.
+      // Si OSRM devuelve waypoints[].location (que son los snap points), los usamos
+      // como referencia para insertar segmentos rectos cortos pin↔ruta.
+      const wp=data.waypoints||[];
+      const connectorCoords=[]; // pares [pin, snapPoint] para dibujar conectores
+      for(let i=0;i<stops.length;i++){
+        const pin=[stops[i].lt,stops[i].ln];
+        let snap=null;
+        if(wp[i]&&Array.isArray(wp[i].location)){
+          snap=[wp[i].location[1],wp[i].location[0]]; // lng,lat → lat,lng
+        }
+        if(snap){
+          // Solo dibujar conector si la distancia es perceptible (> ~5 metros aprox)
+          const dLat=Math.abs(snap[0]-pin[0]);
+          const dLng=Math.abs(snap[1]-pin[1]);
+          if(dLat>0.00004||dLng>0.00004){
+            connectorCoords.push([pin,snap]);
+          }
+        }
+      }
+
+      // Forzar que la ruta principal empiece y termine en los pines exactos
+      // (insertar primer y último pin al inicio/fin de la geometría)
+      if(routeCoords.length){
+        const first=[stops[0].lt,stops[0].ln];
+        const last=[stops[stops.length-1].lt,stops[stops.length-1].ln];
+        routeCoords=[first,...routeCoords,last];
+      }
+
+      // Pintar ruta principal
+      L.polyline(routeCoords,{color:'#DB4A2B',weight:5,opacity:.75,lineCap:'round',lineJoin:'round'}).addTo(map);
+      // Pintar conectores cortos punteados (pin → calle)
+      connectorCoords.forEach(pair=>{
+        L.polyline(pair,{color:'#DB4A2B',weight:2.5,opacity:.55,dashArray:'4 4',lineCap:'round'}).addTo(map);
+      });
+
+      // Quitar la línea recta provisional
       try{map.removeLayer(straightLine)}catch(e){}
     })
     .catch(err=>{
       clearTimeout(timer);
       console.warn('[osrm] Request failed (attempt',attempt+1,'):',err.name,err.message);
-      // Reintentar una vez
       if(attempt<1){
         setTimeout(()=>fetchOsrmRoute(stops,map,straightLine,attempt+1),1500);
       }else{
