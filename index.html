@@ -238,7 +238,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 </div>
 
 <div class="s h" id="sl"><div class="ls">
-<div class="ls-hi an d1">Hola, Sarah! 👋</div>
+<div class="ls-hi an d1">Welcome! 👋</div>
 <div class="ls-sub an d2">Choose your language for the tour</div>
 <div class="lo an d2" onclick="sL(this)"><span class="lf">🇬🇧</span><span class="ln">English</span><span class="lna">English</span></div>
 <div class="lo an d3" onclick="sL(this)"><span class="lf">🇪🇸</span><span class="ln">Español</span><span class="lna">Spanish</span></div>
@@ -251,7 +251,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <div class="bs-t an d1">Link your booking</div>
 <div class="bs-s an d2">Enter your booking ID to access your tour</div>
 <div class="bs-c an d2"><label class="bs-l">Booking ID</label><input type="text" class="bs-i" id="bid" placeholder="e.g. FH-28491" maxlength="20" oninput="cB(this.value)"></div>
-<div class="bfo" id="bf"><div class="bfo-h">✓ Booking found!</div><div class="bfo-d"><strong>Gourmet Tapas Tour</strong><br>Palma de Mallorca · 28 Apr 2026<br>2 guests · Sarah Miller</div></div>
+<div class="bfo" id="bf"><div class="bfo-h">✓ Booking ID looks valid</div><div class="bfo-d">Tap "Access my tour" to confirm and load your stops.</div></div>
 <div class="bs-tip an d3"><span>💡</span><span>Find your booking ID in the confirmation email from GetYourGuide, Viator or Gastrowalk</span></div>
 <button class="bc an d4" id="bbc" disabled onclick="linkBooking()">Access my tour</button>
 <div class="bs-or an d5">or</div>
@@ -270,13 +270,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <button class="vtb on" id="vl" onclick="tV('l')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>List</button>
 <button class="vtb" id="vm" onclick="tV('m')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5c0-2.5-2-4.5-4.5-4.5z" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>Map</button>
 </div>
-<div class="sl" id="lv">
-<div class="sc an d2" onclick="sD(0)"><div class="sn">1</div><div class="si"><div class="snm">Fervor Tapas</div><div class="stp">Ham croquette or Kataifi shrimp</div><div class="sad">📍 Carrer dels Hostals, 4</div></div><div class="sar">›</div></div>
-<div class="sc an d3" onclick="sD(1)"><div class="sn">2</div><div class="si"><div class="snm">Casa s'Oli</div><div class="stp">Sobrasada with honey or Russian salad</div><div class="sad">📍 Plaça Banc de l'Oli, 13</div></div><div class="sar">›</div></div>
-<div class="sc an d3" onclick="sD(2)"><div class="sn">3</div><div class="si"><div class="snm">Bodega Mayor</div><div class="stp">Pintxo de tortilla or Padrón peppers</div><div class="sad">📍 Pl. Major, 11</div></div><div class="sar">›</div></div>
-<div class="sc an d4" onclick="sD(3)"><div class="sn">4</div><div class="si"><div class="snm">Bocalto</div><div class="stp">Goat cheese toast or Meatballs</div><div class="sad">📍 Plaça de Weyler, 8</div></div><div class="sar">›</div></div>
-<div class="sc an d5" onclick="sD(4)"><div class="sn">5</div><div class="si"><div class="snm">Maura</div><div class="stp">Patatas bravas or Calamari yuzu aioli</div><div class="sad">📍 Av. d'Antoni Maura, 6</div></div><div class="sar">›</div></div>
-</div>
+<div class="sl" id="lv"></div>
 <div class="mw" id="mv"><div id="lm"></div>
 <div class="ml"><div class="mli"><div class="mld" style="background:#DB4A2B"></div>Stops</div><div class="mli"><div class="mld" style="background:#4285F4"></div>You</div><div class="mli"><svg width="12" height="2"><line x1="0" y1="1" x2="12" y2="1" stroke="#DB4A2B" stroke-width="1.5" stroke-dasharray="3 2"/></svg>Route</div></div>
 </div>
@@ -294,8 +288,8 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <div class="sp-head">
 <div class="sp-num" id="sp-num">1</div>
 <div>
-<div class="sp-name" id="sp-name">Fervor Tapas</div>
-<div class="sp-addr" id="sp-addr">Carrer dels Hostals, 4</div>
+<div class="sp-name" id="sp-name">—</div>
+<div class="sp-addr" id="sp-addr"></div>
 <div class="sp-dist" id="sp-dist"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#78716C" stroke-width="1.5"><path d="M2 14l4-12 3 6 5-2-12 8z"/></svg><span>3 min · 240m</span></div>
 </div>
 </div>
@@ -306,18 +300,13 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <button class="db" onclick="go('st')" style="position:relative;top:0;left:0;margin-bottom:14px">←</button>
 <div class="rt an d1">Rate your experience</div>
 <div class="rsu an d2">Help us improve and help future foodies</div>
-<div class="ri an d2"><div class="rh"><div class="rn">1</div><div class="rnm">Fervor Tapas</div></div><div class="st"><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button></div></div>
-<div class="ri an d3"><div class="rh"><div class="rn">2</div><div class="rnm">Casa s'Oli</div></div><div class="st"><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button></div></div>
-<div class="ri an d3"><div class="rh"><div class="rn">3</div><div class="rnm">Bodega Mayor</div></div><div class="st"><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button></div></div>
-<div class="ri an d4"><div class="rh"><div class="rn">4</div><div class="rnm">Bocalto</div></div><div class="st"><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button></div></div>
-<div class="ri an d4"><div class="rh"><div class="rn">5</div><div class="rnm">Maura</div></div><div class="st"><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button></div></div>
 <div class="rov an d5"><div class="rol">Overall experience</div><div class="st"><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button><button class="str" onclick="ra(this)">★</button></div><textarea class="rcm" placeholder="Tell us what you loved..."></textarea></div>
 <button class="bsb an d5" onclick="go('sx')">Submit rating</button>
 </div></div>
 
 <div class="s h" id="sx"><div class="txs">
 <div class="txi an d1">🎉</div>
-<div class="txt an d2">Thank you, Sarah!</div>
+<div class="txt an d2">Thank you!</div>
 <div class="txsu an d3">We hope you enjoyed the flavours of Palma. Here are a few things for you:</div>
 <div class="txo">
 <button class="txof an d3"><div class="txic" style="background:#FEF3E2">🎫</div><div style="flex:1"><div class="txot">10% off your next tour</div><div class="txod">Use code VUELVE10 on any city</div></div><span style="color:var(--tx3)">›</span></button>
@@ -362,7 +351,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 
 <div class="sup-faq-item" onclick="togFaq(this)">
 <div class="sup-faq-q">Can I do the stops in any order?<span class="sup-faq-arr">▾</span></div>
-<div class="sup-faq-a">We recommend starting at stop 1 (Fervor Tapas) at your booked time. After that, you can visit the remaining stops in any order you prefer.</div>
+<div class="sup-faq-a">We recommend starting at stop 1 at your booked time. After that, you can visit the remaining stops in any order you prefer.</div>
 </div>
 
 <div class="sup-faq-item" onclick="togFaq(this)">
@@ -408,104 +397,471 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 
 </div>
 <script>
-const S=[
-{n:1,nm:"Fervor Tapas",ad:"Carrer dels Hostals, 4, Centre, 07002 Palma",em:"🥘",lt:39.57270,ln:2.65070,
-tp:[{nm:"Ham croquette",em:"🍳",ds:"Crispy on the outside, creamy ham filling inside. A Spanish classic."},{nm:"Kataifi shrimp",em:"🦐",ds:"Shrimp wrapped in crispy kataifi pastry, fried to golden perfection."}],
-vg:"Camembert cheese with red fruits",gf:"Iberic ham with gluten free toast",
-dr:"Local wine, sangría, beer, soft drink, water or coffee",
-hi:"Located in the heart of Palma's old town, Fervor brings a modern twist to traditional Mallorcan tapas. The narrow street has been a hub for artisans since the 17th century."},
-{n:2,nm:"Casa s'Oli",ad:"Plaça Banc de l'Oli, 13, Distrito Centro, 07002 Palma",em:"🫒",lt:39.57200,ln:2.65200,
-tp:[{nm:"Sobrasada with honey",em:"🍯",ds:"Warm, spreadable Mallorcan sobrasada drizzled with local honey on toasted bread."},{nm:"Russian salad with tuna",em:"🥗",ds:"The Mediterranean ensaladilla rusa — potatoes, tuna, olives, and creamy mayo."}],
-vg:"Potato salad with aioli and coriander",gf:null,
-dr:"Local wine, sangría, beer, soft drink, water or coffee",
-hi:"Plaça Banc de l'Oli — 'Oil Bench Square' — was historically where olive oil was traded. Casa s'Oli honours that heritage with its dedication to local ingredients."},
-{n:3,nm:"Bodega Mayor",ad:"Pl. Major, 11, Centre, 07002 Palma",em:"🍷",lt:39.57140,ln:2.64960,
-tp:[{nm:"Pintxo de tortilla",em:"🥚",ds:"A thick slice of traditional Spanish omelette, golden and perfectly set, served on a skewer."},{nm:"Padrón peppers",em:"🌶️",ds:"Blistered green peppers — most are mild, but one in ten packs a spicy surprise!"}],
-vg:"Padrón peppers",gf:"Padrón peppers",
-dr:"Local wine, sangría, beer, soft drink, water or coffee",
-hi:"Right on Plaça Major, Palma's grand square built over the old Inquisition headquarters. The arcades have hosted markets and festivals since the 19th century."},
-{n:4,nm:"Bocalto",ad:"Plaça de Weyler, 8, Centre, 07001 Palma",em:"🧀",lt:39.57310,ln:2.64780,
-tp:[{nm:"Toast with gratinated goat cheese",em:"🧀",ds:"Warm goat cheese melted over sourdough, topped with sweet onion-mango chutney."},{nm:"Meatballs with mashed potatoes",em:"🍖",ds:"Homestyle meatballs in a rich sauce over creamy mashed potatoes."}],
-vg:null,gf:"Vegetable skewer",
-dr:"Local wine, sangría, beer, soft drink, water or coffee",
-hi:"Plaça de Weyler sits where Palma's old and new town meet, next to the Art Nouveau Gran Hotel — one of the first luxury hotels on the island."},
-{n:5,nm:"Maura",ad:"Av. d'Antoni Maura, 6, Centre, 07012 Palma",em:"🦑",lt:39.56920,ln:2.64880,
-tp:[{nm:"Patatas bravas",em:"🥔",ds:"Crispy fried potatoes with spicy bravas sauce and garlic aioli — the ultimate Spanish bar snack."},{nm:"Calamari with yuzu aioli",em:"🦑",ds:"Tender fried calamari rings with a zesty Japanese-inspired yuzu aioli."}],
-vg:"Patatas bravas",gf:null,
-dr:"Local wine, sangría, beer, soft drink, water or coffee",
-hi:"Near the iconic Passeig del Born and steps from the cathedral. The nearby Royal Palace of La Almudaina dates back to the 14th century."}
-];
-// Screens where navbar is visible
-const NAV_SCREENS=['st','sd','sr','ss','sx'];
-function go(id){document.querySelectorAll('.s').forEach(s=>{if(s.classList.contains('a')){s.classList.remove('a');s.classList.add('hl')}else if(!s.classList.contains('h')&&!s.classList.contains('hl'))s.classList.add('h')});setTimeout(()=>{document.querySelectorAll('.s').forEach(s=>{if(s.id!==id){s.classList.remove('hl');s.classList.add('h')}});const t=document.getElementById(id);t.classList.remove('h','hl');t.classList.add('a');t.scrollTop=0;
-// Show/hide navbar
-const nb=document.getElementById('navbar');if(NAV_SCREENS.includes(id)){nb.classList.add('show')}else{nb.classList.remove('show')}
-// Update active nav item
-if(id==='st'){setNav('nav-tour')}else if(id==='sr'){setNav('nav-rate')}else if(id==='ss'){setNav('nav-support')}
-},50)}
-function setNav(activeId){document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));const el=document.getElementById(activeId);if(el)el.classList.add('on')}
-function navTo(screenId,navId){setNav(navId);go(screenId);if(screenId==='st'){iM()}}
-function togFaq(el){el.classList.toggle('open')}
-function cB(v){const f=document.getElementById('bf'),b=document.getElementById('bbc');if(v.trim().length>=5){f.classList.add('show');b.disabled=false}else{f.classList.remove('show');b.disabled=true}}
-function ra(s){const p=s.parentElement;Array.from(p.children).forEach((c,i)=>{i<=Array.from(p.children).indexOf(s)?c.classList.add('fl'):c.classList.remove('fl')})}
-function tV(v){const lv=document.getElementById('lv'),mv=document.getElementById('mv'),vl=document.getElementById('vl'),vm=document.getElementById('vm');if(v==='m'){lv.classList.add('hd');mv.classList.add('show');vl.classList.remove('on');vm.classList.add('on');if(window._m)window._m.invalidateSize()}else{lv.classList.remove('hd');mv.classList.remove('show');vl.classList.add('on');vm.classList.remove('on')}}
-function iM(){if(window._m)return;setTimeout(()=>{
-const m=L.map('lm',{zoomControl:false,attributionControl:false}).setView([39.5718,2.6498],16);
-L.control.zoom({position:'topright'}).addTo(m);
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,crossOrigin:true}).addTo(m);
-// Fetch walking route from OSRM (free routing service)
-const coords=S.map(s=>s.ln+','+s.lt).join(';');
-fetch('https://router.project-osrm.org/route/v1/foot/'+coords+'?overview=full&geometries=geojson')
-.then(r=>r.json()).then(data=>{
-  if(data.routes&&data.routes[0]){
-    const routeCoords=data.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
-    L.polyline(routeCoords,{color:'#DB4A2B',weight:5,opacity:.6,dashArray:'12 8',lineCap:'round'}).addTo(m);
-  }
-}).catch(()=>{
-  // Fallback: straight lines if OSRM unavailable
-  L.polyline(S.map(s=>[s.lt,s.ln]),{color:'#DB4A2B',weight:4,opacity:.5,dashArray:'10 8'}).addTo(m);
-});
-S.forEach((s,i)=>{
-const ic=L.divIcon({className:'',html:'<div class="gp" style="width:32px;height:32px;font-size:14px;border:3px solid #fff;box-shadow:0 2px 12px rgba(219,74,43,.5)">'+s.n+'</div>',iconSize:[32,32],iconAnchor:[16,16]});
-const mk=L.marker([s.lt,s.ln],{icon:ic}).addTo(m);
-mk.bindPopup('<div style="font-family:DM Sans,sans-serif;min-width:150px;padding:2px"><b style="font-size:14px;color:#1C1917">'+s.nm+'</b><br><span style="font-size:11px;color:#78716C;line-height:1.4;display:block;margin:4px 0">'+s.tp[0].nm+' or '+s.tp[1].nm+'</span><button onclick="sD('+i+')" style="margin-top:6px;padding:6px 16px;background:#DB4A2B;color:#fff;border:none;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:DM Sans,sans-serif">View details</button></div>',{closeButton:true,className:'gw-popup'});
-});
-const ui=L.divIcon({className:'',html:'<div style="position:relative"><div style="width:14px;height:14px;background:#4285F4;border:3px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(66,133,244,.4);position:relative;z-index:2"></div><div style="position:absolute;top:-5px;left:-5px;width:24px;height:24px;background:rgba(66,133,244,.12);border-radius:50%;animation:pulse 2s ease-in-out infinite"></div></div>',iconSize:[14,14],iconAnchor:[7,7]});
-L.marker([39.5726,2.6512],{icon:ui,interactive:false}).addTo(m);
-const bounds=L.latLngBounds(S.map(s=>[s.lt,s.ln]));
-m.fitBounds(bounds.pad(0.12));
-window._m=m},150)}
-function sD(i){const s=S[i];window._cs=s;
-document.getElementById('sp-num').textContent=s.n;
-document.getElementById('sp-name').textContent=s.nm;
-document.getElementById('sp-addr').textContent=s.ad;
-let h='';
-h+='<div class="sp-sec"><div class="sp-sec-t">Your tapa & drink</div>';
-h+='<div class="sp-tapa"><div class="sp-tapa-em">'+s.tp[0].em+'</div><div><div class="sp-tapa-nm">a) '+s.tp[0].nm+'</div><div class="sp-tapa-ds">'+s.tp[0].ds+'</div></div></div>';
-h+='<div class="sp-or">— or —</div>';
-h+='<div class="sp-tapa"><div class="sp-tapa-em">'+s.tp[1].em+'</div><div><div class="sp-tapa-nm">b) '+s.tp[1].nm+'</div><div class="sp-tapa-ds">'+s.tp[1].ds+'</div></div></div>';
-let tg='';if(s.vg)tg+='<span class="sp-tag tv">🌿 Veg: '+s.vg+'</span>';if(s.gf)tg+='<span class="sp-tag tgf">🌾 GF: '+s.gf+'</span>';
-if(tg)h+='<div class="sp-tags">'+tg+'</div>';
-h+='<div class="sp-drink">🍷 '+s.dr+'</div></div>';
-h+='<div class="sp-sec"><div class="sp-sec-t">About this place</div><div class="sp-photo">'+s.em+' Photo from Airtable</div><div class="sp-hist">'+s.hi+'</div></div>';
-h+='<div class="sp-sec"><div class="sp-sec-t">Show at the bar</div><div class="sp-qr"><div class="sp-qr-box">QR</div><div class="sp-qr-txt">Show this code to the waiter to receive your tapa and drink</div></div></div>';
-h+='<div class="sp-btns"><button class="sp-btn sp-btn-dir" onclick="oD()">📍 Directions</button><button class="sp-btn sp-btn-close" onclick="closePanel()">Close</button></div>';
-document.getElementById('sp-body').innerHTML=h;
-document.getElementById('spanel').scrollTop=0;
-document.getElementById('spanel').classList.add('open');
-document.getElementById('spo').classList.add('show');
-}
-function closePanel(){document.getElementById('spanel').classList.remove('open');document.getElementById('spo').classList.remove('show')}
-function oD(){const s=window._cs;if(s)window.open('https://www.google.com/maps/dir/?api=1&destination='+s.lt+','+s.ln+'&travelmode=walking','_blank')}
+// ========================================================================
+// GASTROWALK APP — datos reales desde n8n + Airtable
+// ========================================================================
 
-// ===== WEBHOOK CONFIG =====
+// ===== CONFIG =====
 const WEBHOOK_URL='https://gastrowalk.app.n8n.cloud/webhook/app-users';
 const GOOGLE_CLIENT_ID='454941758134-901psai6286sfgugl7gifqn6cubmbmcn.apps.googleusercontent.com';
+const SESSION_TTL_MS=7*24*60*60*1000; // 7 días
+const SESSION_KEY='gw_session_v1';
 
-// ===== USER STATE =====
-window._user={email:null,name:null,source:null,language:null,status:'anonymous'};
+// ===== STATE =====
+// S: array de paradas (se rellena con datos de n8n). Mientras no haya datos, queda vacío.
+let S=[];
+// _booking: datos de la reserva actual
+window._booking=null;
+window._user={email:null,name:null,picture:null,source:null,language:null,status:'anonymous'};
 
-// ===== GOOGLE LOGIN (REAL) =====
+// Pantallas donde el navbar debe mostrarse
+const NAV_SCREENS=['st','sd','sr','ss','sx'];
+
+// ========================================================================
+// SESIÓN PERSISTENTE (localStorage) — 7 días
+// ========================================================================
+function saveSession(){
+  try{
+    const data={
+      user:window._user,
+      booking:window._booking,
+      stops:S,
+      savedAt:Date.now()
+    };
+    localStorage.setItem(SESSION_KEY,JSON.stringify(data));
+  }catch(e){console.warn('Could not save session:',e)}
+}
+
+function loadSession(){
+  try{
+    const raw=localStorage.getItem(SESSION_KEY);
+    if(!raw)return null;
+    const data=JSON.parse(raw);
+    if(!data||!data.savedAt)return null;
+    // Expirado?
+    if(Date.now()-data.savedAt>SESSION_TTL_MS){
+      localStorage.removeItem(SESSION_KEY);
+      return null;
+    }
+    return data;
+  }catch(e){
+    console.warn('Could not load session:',e);
+    return null;
+  }
+}
+
+function clearSession(){
+  try{localStorage.removeItem(SESSION_KEY)}catch(e){}
+}
+
+// ========================================================================
+// PARSEO de Tapas (texto Airtable → estructura)
+// ========================================================================
+// Formato esperado en el campo "Tapas":
+//   Option A: <nombre>
+//   Option B: <nombre>
+//
+//   Vegetarian option: <texto opcional>
+//   Gluten free option: <texto opcional>
+// (también acepta variantes: "Vegetarian & Gluten free option:", "Both options are vegetarian...", etc.)
+function parseTapas(text){
+  const result={optA:null,optB:null,veg:null,gf:null,note:null};
+  if(!text||typeof text!=='string')return result;
+  const lines=text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  let extraNote=[];
+  for(const line of lines){
+    const lower=line.toLowerCase();
+    // Option A / Option B
+    const mA=line.match(/^option\s*a\s*[:\-]\s*(.+)$/i);
+    const mB=line.match(/^option\s*b\s*[:\-]\s*(.+)$/i);
+    if(mA){result.optA=mA[1].trim();continue}
+    if(mB){result.optB=mB[1].trim();continue}
+    // Vegetarian & gluten free combinado
+    const mVgGf=line.match(/^(vegetarian\s*(?:&|and)\s*gluten\s*free|gluten\s*free\s*(?:&|and)\s*vegetarian)\s*option\s*[:\-]\s*(.+)$/i);
+    if(mVgGf){result.veg=mVgGf[2].trim();result.gf=mVgGf[2].trim();continue}
+    // Vegetarian option
+    const mVg=line.match(/^vegetarian\s*option\s*[:\-]\s*(.+)$/i);
+    if(mVg){result.veg=mVg[1].trim();continue}
+    // Gluten free option
+    const mGf=line.match(/^gluten\s*free\s*option\s*[:\-]\s*(.+)$/i);
+    if(mGf){result.gf=mGf[1].trim();continue}
+    // Notas tipo "Both options are vegetarian and option b is also gluten free"
+    if(lower.includes('vegetarian')||lower.includes('gluten')){
+      extraNote.push(line);
+      continue;
+    }
+  }
+  if(extraNote.length)result.note=extraNote.join(' ');
+  // Si la nota da info adicional sobre opción vegetariana o gluten free,
+  // rellenar campos vacíos (sin sobrescribir los explícitos)
+  if(result.note){
+    const segments=result.note.split(/[.\n]|\sand\s/i).map(s=>s.trim()).filter(Boolean);
+    for(const seg of segments){
+      const segLower=seg.toLowerCase();
+      const isA=/\boption\s*a\b/i.test(seg);
+      const isB=/\boption\s*b\b/i.test(seg);
+      const both=/\bboth\s*options?\b/i.test(seg);
+      const ref=both?'Both options':(isA?result.optA:(isB?result.optB:null));
+      const hasVeg=/vegetarian/i.test(segLower);
+      const hasGf=/gluten\s*free/i.test(segLower);
+      // El segmento puede ser solo "is also gluten free" — entonces hereda el sujeto del anterior
+      if(ref){
+        if(hasVeg&&!result.veg)result.veg=ref;
+        if(hasGf&&!result.gf)result.gf=ref;
+      }
+    }
+    // Caso "option b is also gluten free" sin que haya quedado capturado, y
+    // caso "Option A is gluten free and vegetarian" (dos atributos al mismo tiempo)
+    const matches=result.note.matchAll(/option\s*([ab])\b([^.]*)/gi);
+    for(const m of matches){
+      const opt=m[1].toLowerCase()==='a'?result.optA:result.optB;
+      const tail=m[2]||'';
+      if(/vegetarian/i.test(tail)&&!result.veg)result.veg=opt;
+      if(/gluten\s*free/i.test(tail)&&!result.gf)result.gf=opt;
+    }
+  }
+  return result;
+}
+
+// ========================================================================
+// PARSEO de Bebidas (lista con guiones → array de strings)
+// ========================================================================
+function parseDrinks(text){
+  if(!text||typeof text!=='string')return [];
+  return text.split(/\r?\n/)
+    .map(l=>l.replace(/^[-•·*]\s*/,'').trim())
+    .filter(Boolean);
+}
+
+// ========================================================================
+// EMOJI por nombre (fallback simpático sin imagen)
+// ========================================================================
+function pickEmoji(name,tapasText){
+  const n=(name||'').toLowerCase();
+  const t=(tapasText||'').toLowerCase();
+  if(t.includes('croquette')||t.includes('shrimp'))return '🥘';
+  if(t.includes('sobrasada')||t.includes('honey'))return '🫒';
+  if(t.includes('tortilla')||t.includes('padr'))return '🍷';
+  if(t.includes('goat cheese')||t.includes('meatball'))return '🧀';
+  if(t.includes('bravas')||t.includes('calamari'))return '🦑';
+  if(n.includes('cafe')||n.includes('café')||n.includes('coffee'))return '☕';
+  if(n.includes('bodega')||n.includes('vino')||n.includes('wine'))return '🍷';
+  return '🍽️';
+}
+
+function pickTapaEmoji(name){
+  const n=(name||'').toLowerCase();
+  if(n.includes('croquette'))return '🍳';
+  if(n.includes('shrimp')||n.includes('prawn')||n.includes('calamari')||n.includes('squid'))return '🦑';
+  if(n.includes('sobrasada')||n.includes('honey'))return '🍯';
+  if(n.includes('salad'))return '🥗';
+  if(n.includes('tortilla')||n.includes('omelette')||n.includes('egg'))return '🥚';
+  if(n.includes('pepper'))return '🌶️';
+  if(n.includes('cheese'))return '🧀';
+  if(n.includes('meatball')||n.includes('beef')||n.includes('pork'))return '🍖';
+  if(n.includes('potato')||n.includes('bravas'))return '🥔';
+  if(n.includes('toast')||n.includes('bread'))return '🍞';
+  return '🍴';
+}
+
+// ========================================================================
+// NORMALIZAR la respuesta de n8n → array S de paradas + booking
+// ========================================================================
+// Acepta: objeto directo {status,booking,stops} o array [{status,booking,stops}]
+function normalizeResponse(data){
+  if(!data)return null;
+  const obj=Array.isArray(data)?(data[0]||null):data;
+  if(!obj)return null;
+  return obj;
+}
+
+function applyTourData(payload){
+  // payload = {status:'ok', booking:{...}, stops:[...]}
+  if(!payload||payload.status!=='ok'||!Array.isArray(payload.stops)||payload.stops.length===0){
+    return false;
+  }
+  window._booking=payload.booking||null;
+  S=payload.stops.map((s,idx)=>{
+    const tapas=parseTapas(s.tapas);
+    const drinks=parseDrinks(s.drinks);
+    const order=Number(s.order)||(idx+1);
+    return {
+      n:order,
+      nm:s.name||('Stop '+order),
+      ad:s.maps_url?extractAddrFromMapsUrl(s.maps_url):'',
+      em:pickEmoji(s.name,s.tapas),
+      lt:Number(s.lat)||0,
+      ln:Number(s.lng)||0,
+      mu:s.maps_url||'',
+      tp:[
+        {nm:tapas.optA||'Chef\'s pick',em:pickTapaEmoji(tapas.optA),ds:''},
+        {nm:tapas.optB||'Alternative tapa',em:pickTapaEmoji(tapas.optB),ds:''}
+      ],
+      vg:tapas.veg,
+      gf:tapas.gf,
+      nt:tapas.note,
+      dr:drinks.length?drinks.join(', '):'Local wine, sangría, beer, soft drink, water or coffee',
+      drList:drinks,
+      hi:'',
+      pid:s.parada_id||('stop_'+order)
+    };
+  }).sort((a,b)=>a.n-b.n);
+  return true;
+}
+
+function extractAddrFromMapsUrl(url){
+  // Muy básico: extraer el nombre del lugar de la URL de Google Maps
+  // https://www.google.com/maps/place/<NAME>/@...
+  try{
+    const m=url.match(/\/maps\/place\/([^\/@]+)/);
+    if(m){return decodeURIComponent(m[1]).replace(/\+/g,' ').replace(/\s*-\s*Cafe\s*&\s*Bar/i,'')}
+  }catch(e){}
+  return '';
+}
+
+// ========================================================================
+// PINTAR la pantalla del tour con datos reales
+// ========================================================================
+function renderTourScreen(){
+  // Header del tour
+  if(window._booking){
+    const tourTitle=window._booking.item_name||'Your tour';
+    // Limpia: "Gourmet Tapas & Wine Tour - Palma de Mallorca" → titulo + ciudad
+    const parts=tourTitle.split(/\s*-\s*/);
+    const titleEl=document.querySelector('#st .th1');
+    const cityEl=document.querySelector('#st .tc');
+    if(titleEl)titleEl.textContent=parts[0]||tourTitle;
+    if(cityEl)cityEl.textContent=parts[1]||'';
+  }
+
+  // Stats: nº de paradas
+  const stats=document.querySelectorAll('#st .tic .vl');
+  if(stats[1])stats[1].textContent=S.length;
+
+  // Lista de paradas
+  const lv=document.getElementById('lv');
+  if(lv){
+    lv.innerHTML='';
+    S.forEach((s,i)=>{
+      const card=document.createElement('div');
+      card.className='sc an d'+Math.min(i+2,5);
+      card.onclick=()=>sD(i);
+      const teaser=s.tp[0].nm+(s.tp[1].nm?' or '+s.tp[1].nm:'');
+      const addr=s.ad?'📍 '+s.ad:(s.mu?'📍 View on map':'');
+      card.innerHTML='<div class="sn">'+s.n+'</div>'+
+        '<div class="si"><div class="snm">'+escapeHtml(s.nm)+'</div>'+
+        '<div class="stp">'+escapeHtml(teaser)+'</div>'+
+        '<div class="sad">'+escapeHtml(addr)+'</div></div>'+
+        '<div class="sar">›</div>';
+      lv.appendChild(card);
+    });
+  }
+
+  // Lista de calificaciones (pantalla sr)
+  renderRatingScreen();
+
+  // Saludo en pantalla final con el nombre real
+  const txt=document.querySelector('#sx .txt');
+  if(txt&&window._user.name){
+    txt.textContent='Thank you, '+window._user.name.split(' ')[0]+'!';
+  }
+}
+
+function renderRatingScreen(){
+  const rs=document.querySelector('#sr .rs');
+  if(!rs)return;
+  // Borrar las cards .ri existentes (pero no .rt, .rsu, .db, .rov, .bsb)
+  rs.querySelectorAll('.ri').forEach(el=>el.remove());
+  const rov=rs.querySelector('.rov');
+  S.forEach((s,i)=>{
+    const card=document.createElement('div');
+    card.className='ri an d'+Math.min(i+2,5);
+    card.innerHTML='<div class="rh"><div class="rn">'+s.n+'</div><div class="rnm">'+escapeHtml(s.nm)+'</div></div>'+
+      '<div class="st">'+
+      [1,2,3,4,5].map(()=>'<button class="str" onclick="ra(this)">★</button>').join('')+
+      '</div>';
+    rs.insertBefore(card,rov);
+  });
+}
+
+function escapeHtml(s){
+  if(!s)return '';
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+// ========================================================================
+// PANTALLA DE ERROR (para booking_not_found, red, etc.)
+// ========================================================================
+function showBookingError(msg){
+  // Muestra el mensaje de error en la pantalla de booking, sin cambiar de screen
+  let err=document.getElementById('bf-error');
+  if(!err){
+    err=document.createElement('div');
+    err.id='bf-error';
+    err.style.cssText='background:#FEE2E2;border:1.5px solid #FCA5A5;color:#991B1B;border-radius:14px;padding:14px;margin-bottom:14px;font-size:13px;line-height:1.5';
+    const target=document.querySelector('#sb .bs-tip');
+    if(target)target.parentNode.insertBefore(err,target);
+  }
+  err.innerHTML='<div style="font-weight:600;margin-bottom:4px">⚠️ '+escapeHtml(msg.title||'We couldn\'t find your booking')+'</div>'+
+    '<div style="font-size:12px;opacity:.85">'+escapeHtml(msg.body||'Please double-check your booking ID and try again.')+'</div>';
+  // Re-habilitar el botón
+  const btn=document.getElementById('bbc');
+  if(btn){btn.disabled=false;btn.textContent='Try again'}
+}
+
+function clearBookingError(){
+  const err=document.getElementById('bf-error');
+  if(err)err.remove();
+}
+
+// ========================================================================
+// NAVEGACIÓN ENTRE PANTALLAS (igual que antes)
+// ========================================================================
+function go(id){
+  document.querySelectorAll('.s').forEach(s=>{
+    if(s.classList.contains('a')){s.classList.remove('a');s.classList.add('hl')}
+    else if(!s.classList.contains('h')&&!s.classList.contains('hl'))s.classList.add('h')
+  });
+  setTimeout(()=>{
+    document.querySelectorAll('.s').forEach(s=>{
+      if(s.id!==id){s.classList.remove('hl');s.classList.add('h')}
+    });
+    const t=document.getElementById(id);
+    t.classList.remove('h','hl');t.classList.add('a');t.scrollTop=0;
+    const nb=document.getElementById('navbar');
+    if(NAV_SCREENS.includes(id)){nb.classList.add('show')}else{nb.classList.remove('show')}
+    if(id==='st'){setNav('nav-tour')}
+    else if(id==='sr'){setNav('nav-rate')}
+    else if(id==='ss'){setNav('nav-support')}
+  },50);
+}
+function setNav(activeId){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
+  const el=document.getElementById(activeId);
+  if(el)el.classList.add('on');
+}
+function navTo(screenId,navId){setNav(navId);go(screenId);if(screenId==='st'){iM()}}
+function togFaq(el){el.classList.toggle('open')}
+function cB(v){
+  const f=document.getElementById('bf'),b=document.getElementById('bbc');
+  if(v.trim().length>=5){f.classList.add('show');b.disabled=false}
+  else{f.classList.remove('show');b.disabled=true}
+  clearBookingError();
+}
+function ra(s){
+  const p=s.parentElement;
+  Array.from(p.children).forEach((c,i)=>{
+    i<=Array.from(p.children).indexOf(s)?c.classList.add('fl'):c.classList.remove('fl')
+  });
+}
+function tV(v){
+  const lv=document.getElementById('lv'),mv=document.getElementById('mv'),vl=document.getElementById('vl'),vm=document.getElementById('vm');
+  if(v==='m'){lv.classList.add('hd');mv.classList.add('show');vl.classList.remove('on');vm.classList.add('on');if(window._m)window._m.invalidateSize()}
+  else{lv.classList.remove('hd');mv.classList.remove('show');vl.classList.add('on');vm.classList.remove('on')}
+}
+
+// ========================================================================
+// MAPA — usa coordenadas reales de Airtable
+// ========================================================================
+function iM(){
+  if(window._m||!S.length)return;
+  setTimeout(()=>{
+    if(!document.getElementById('lm'))return;
+    // Centro inicial: media de las coords
+    const avgLat=S.reduce((a,s)=>a+s.lt,0)/S.length;
+    const avgLng=S.reduce((a,s)=>a+s.ln,0)/S.length;
+    const m=L.map('lm',{zoomControl:false,attributionControl:false}).setView([avgLat,avgLng],16);
+    L.control.zoom({position:'topright'}).addTo(m);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,crossOrigin:true}).addTo(m);
+    // Ruta a pie con OSRM
+    const coords=S.map(s=>s.ln+','+s.lt).join(';');
+    fetch('https://router.project-osrm.org/route/v1/foot/'+coords+'?overview=full&geometries=geojson')
+      .then(r=>r.json()).then(data=>{
+        if(data.routes&&data.routes[0]){
+          const routeCoords=data.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
+          L.polyline(routeCoords,{color:'#DB4A2B',weight:5,opacity:.6,dashArray:'12 8',lineCap:'round'}).addTo(m);
+        }
+      }).catch(()=>{
+        L.polyline(S.map(s=>[s.lt,s.ln]),{color:'#DB4A2B',weight:4,opacity:.5,dashArray:'10 8'}).addTo(m);
+      });
+    // Marcadores
+    S.forEach((s,i)=>{
+      const ic=L.divIcon({className:'',html:'<div class="gp" style="width:32px;height:32px;font-size:14px;border:3px solid #fff;box-shadow:0 2px 12px rgba(219,74,43,.5)">'+s.n+'</div>',iconSize:[32,32],iconAnchor:[16,16]});
+      const mk=L.marker([s.lt,s.ln],{icon:ic}).addTo(m);
+      const teaser=s.tp[0].nm+(s.tp[1].nm?' or '+s.tp[1].nm:'');
+      mk.bindPopup('<div style="font-family:DM Sans,sans-serif;min-width:150px;padding:2px"><b style="font-size:14px;color:#1C1917">'+escapeHtml(s.nm)+'</b><br><span style="font-size:11px;color:#78716C;line-height:1.4;display:block;margin:4px 0">'+escapeHtml(teaser)+'</span><button onclick="sD('+i+')" style="margin-top:6px;padding:6px 16px;background:#DB4A2B;color:#fff;border:none;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:DM Sans,sans-serif">View details</button></div>',{closeButton:true,className:'gw-popup'});
+    });
+    // "You are here" — solo si conseguimos geolocalización; si no, no pintamos punto azul falso
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(pos=>{
+        const ui=L.divIcon({className:'',html:'<div style="position:relative"><div style="width:14px;height:14px;background:#4285F4;border:3px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(66,133,244,.4);position:relative;z-index:2"></div><div style="position:absolute;top:-5px;left:-5px;width:24px;height:24px;background:rgba(66,133,244,.12);border-radius:50%;animation:pulse 2s ease-in-out infinite"></div></div>',iconSize:[14,14],iconAnchor:[7,7]});
+        L.marker([pos.coords.latitude,pos.coords.longitude],{icon:ui,interactive:false}).addTo(m);
+      },()=>{},{timeout:5000,maximumAge:60000});
+    }
+    const bounds=L.latLngBounds(S.map(s=>[s.lt,s.ln]));
+    m.fitBounds(bounds.pad(0.12));
+    window._m=m;
+  },150);
+}
+
+// ========================================================================
+// PANEL DE DETALLE de cada parada — usa datos reales
+// ========================================================================
+function sD(i){
+  const s=S[i];
+  if(!s)return;
+  window._cs=s;
+  document.getElementById('sp-num').textContent=s.n;
+  document.getElementById('sp-name').textContent=s.nm;
+  document.getElementById('sp-addr').textContent=s.ad||'';
+  // Distancia: ocultamos si no la tenemos
+  const distEl=document.getElementById('sp-dist');
+  if(distEl)distEl.style.display='none';
+
+  let h='';
+  h+='<div class="sp-sec"><div class="sp-sec-t">Your tapa &amp; drink</div>';
+  h+='<div class="sp-tapa"><div class="sp-tapa-em">'+s.tp[0].em+'</div><div><div class="sp-tapa-nm">a) '+escapeHtml(s.tp[0].nm)+'</div></div></div>';
+  if(s.tp[1]&&s.tp[1].nm&&s.tp[1].nm!=='Alternative tapa'){
+    h+='<div class="sp-or">— or —</div>';
+    h+='<div class="sp-tapa"><div class="sp-tapa-em">'+s.tp[1].em+'</div><div><div class="sp-tapa-nm">b) '+escapeHtml(s.tp[1].nm)+'</div></div></div>';
+  }
+  let tg='';
+  if(s.vg)tg+='<span class="sp-tag tv">🌿 Veg: '+escapeHtml(s.vg)+'</span>';
+  if(s.gf)tg+='<span class="sp-tag tgf">🌾 GF: '+escapeHtml(s.gf)+'</span>';
+  if(tg)h+='<div class="sp-tags">'+tg+'</div>';
+  if(s.nt&&!s.vg&&!s.gf){
+    h+='<div style="font-size:11px;color:var(--tx2);margin-top:8px;font-style:italic">'+escapeHtml(s.nt)+'</div>';
+  }
+  // Lista de bebidas
+  const drinkText=s.drList&&s.drList.length?s.drList.join(', '):s.dr;
+  h+='<div class="sp-drink">🍷 '+escapeHtml(drinkText)+'</div></div>';
+
+  h+='<div class="sp-sec"><div class="sp-sec-t">Show at the bar</div><div class="sp-qr"><div class="sp-qr-box">QR</div><div class="sp-qr-txt">Show this code to the waiter to receive your tapa and drink</div></div></div>';
+
+  h+='<div class="sp-btns"><button class="sp-btn sp-btn-dir" onclick="oD()">📍 Directions</button><button class="sp-btn sp-btn-close" onclick="closePanel()">Close</button></div>';
+
+  document.getElementById('sp-body').innerHTML=h;
+  document.getElementById('spanel').scrollTop=0;
+  document.getElementById('spanel').classList.add('open');
+  document.getElementById('spo').classList.add('show');
+}
+
+function closePanel(){
+  document.getElementById('spanel').classList.remove('open');
+  document.getElementById('spo').classList.remove('show');
+}
+
+function oD(){
+  const s=window._cs;
+  if(!s)return;
+  // Si tenemos URL de Google Maps original, abrirla; si no, generar una de "directions"
+  if(s.mu)window.open(s.mu,'_blank');
+  else window.open('https://www.google.com/maps/dir/?api=1&destination='+s.lt+','+s.ln+'&travelmode=walking','_blank');
+}
+
+// ========================================================================
+// GOOGLE LOGIN (real)
+// ========================================================================
 function loginGoogle(){
   google.accounts.id.initialize({
     client_id:GOOGLE_CLIENT_ID,
@@ -516,18 +872,18 @@ function loginGoogle(){
 }
 
 function handleGoogleResponse(response){
-  // Decode the JWT token from Google
   const token=response.credential;
   const payload=JSON.parse(atob(token.split('.')[1]));
-  // Extract user info
-  const email=payload.email;
-  const name=payload.name;
-  const picture=payload.picture;
-  console.log('Google Login OK:',email,name);
-  // Store user data
-  window._user={email:email,name:name,picture:picture,source:'google_login',language:null,status:'registered'};
-  // Update greeting screen with real name
-  document.querySelector('.ls-hi').textContent='Hola, '+name.split(' ')[0]+'! 👋';
+  window._user={
+    email:payload.email,
+    name:payload.name,
+    picture:payload.picture,
+    source:'google_login',
+    language:null,
+    status:'registered'
+  };
+  console.log('Google Login OK:',payload.email);
+  document.querySelector('.ls-hi').textContent='Hola, '+(payload.name||'').split(' ')[0]+'! 👋';
   go('sl');
 }
 
@@ -537,7 +893,9 @@ function loginAnonymous(){
   go('sl');
 }
 
-// ===== LANGUAGE SELECTION =====
+// ========================================================================
+// LANGUAGE
+// ========================================================================
 function sL(e){
   document.querySelectorAll('.lo').forEach(o=>o.classList.remove('sel'));
   e.classList.add('sel');
@@ -548,7 +906,9 @@ function sL(e){
   else if(lang==='Deutsch')window._user.language='DE';
 }
 
-// ===== REGISTER USER =====
+// ========================================================================
+// REGISTER USER
+// ========================================================================
 function registerUser(){
   console.log('Sending REGISTER to webhook...',window._user);
   fetch(WEBHOOK_URL,{
@@ -565,13 +925,19 @@ function registerUser(){
   })
   .then(r=>r.json())
   .then(data=>{console.log('Register response:',data)})
-  .catch(err=>{console.log('Register webhook:',err)});
+  .catch(err=>{console.warn('Register webhook err:',err)});
 }
 
-// ===== LINK BOOKING =====
+// ========================================================================
+// LINK BOOKING — recibe paradas reales y las pinta
+// ========================================================================
 function linkBooking(){
   const bookingId=document.getElementById('bid').value.trim();
-  console.log('Sending LINK_BOOKING to webhook...',bookingId);
+  if(!bookingId)return;
+  clearBookingError();
+  const btn=document.getElementById('bbc');
+  if(btn){btn.disabled=true;btn.textContent='Loading…'}
+
   fetch(WEBHOOK_URL,{
     method:'POST',
     headers:{'Content-Type':'application/json'},
@@ -583,15 +949,96 @@ function linkBooking(){
       language:window._user.language
     })
   })
-  .then(r=>r.json())
-  .then(data=>{
-    console.log('Booking response:',data);
-    go('st');iM();
+  .then(r=>{
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return r.json();
+  })
+  .then(raw=>{
+    console.log('Booking response (raw):',raw);
+    const data=normalizeResponse(raw);
+    if(!data){
+      showBookingError({title:'Empty response',body:'The server returned no data. Please try again in a moment.'});
+      return;
+    }
+    if(data.status==='error'){
+      const msg=data.message||'unknown_error';
+      if(msg==='booking_not_found'){
+        showBookingError({title:'Booking not found',body:'We couldn\'t find a booking with that ID. Please check the confirmation email and try again.'});
+      }else{
+        showBookingError({title:'Something went wrong',body:'Error: '+msg});
+      }
+      return;
+    }
+    const ok=applyTourData(data);
+    if(!ok){
+      showBookingError({title:'No stops available',body:'Your booking was found but no stops are configured yet. Please contact support.'});
+      return;
+    }
+    // Éxito
+    saveSession();
+    renderTourScreen();
+    // Reset de mapa por si vino de una sesión anterior
+    if(window._m){try{window._m.remove()}catch(e){}window._m=null}
+    if(btn){btn.disabled=false;btn.textContent='Access my tour'}
+    go('st');
+    iM();
   })
   .catch(err=>{
-    console.log('Booking webhook:',err);
-    go('st');iM();
+    console.error('Booking webhook error:',err);
+    showBookingError({title:'Connection error',body:'Could not reach the server. Check your internet connection and try again.'});
   });
+}
+
+// ========================================================================
+// LOGOUT (utilidad — opcional, exponemos por consola)
+// ========================================================================
+window.gwLogout=function(){
+  clearSession();
+  window._user={email:null,name:null,source:null,language:null,status:'anonymous'};
+  window._booking=null;
+  S=[];
+  if(window._m){try{window._m.remove()}catch(e){}window._m=null}
+  location.reload();
+};
+
+// ========================================================================
+// AUTO-LOGIN al cargar la app: si hay sesión válida, saltar al tour
+// ========================================================================
+(function autoResume(){
+  const sess=loadSession();
+  if(!sess||!sess.user||!sess.booking||!Array.isArray(sess.stops)||!sess.stops.length){
+    return; // sin sesión → flujo normal (welcome screen)
+  }
+  // Restaurar estado en memoria
+  window._user=sess.user;
+  window._booking=sess.booking;
+  S=sess.stops;
+  // Esperar a que el DOM esté listo para pintar
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',resumeToTour);
+  }else{
+    resumeToTour();
+  }
+})();
+
+function resumeToTour(){
+  // Saludo
+  if(window._user&&window._user.name){
+    const hi=document.querySelector('.ls-hi');
+    if(hi)hi.textContent='Hola, '+window._user.name.split(' ')[0]+'! 👋';
+  }
+  renderTourScreen();
+  // Activar la pantalla de tour sin animación de "go" (para que sea instantáneo)
+  document.querySelectorAll('.s').forEach(s=>{
+    s.classList.remove('a','hl');
+    s.classList.add('h');
+  });
+  const t=document.getElementById('st');
+  t.classList.remove('h','hl');
+  t.classList.add('a');
+  document.getElementById('navbar').classList.add('show');
+  setNav('nav-tour');
+  iM();
 }
 </script>
 </body>
