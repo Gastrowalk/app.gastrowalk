@@ -61,6 +61,10 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .bs-or::before,.bs-or::after{content:'';flex:1;height:1px;background:var(--bd)}
 .bnb{width:100%;padding:11px;background:none;color:var(--tx2);border:1.5px solid var(--bd);border-radius:60px;font-size:12px;font-family:var(--fb);cursor:pointer}
 .ts{background:var(--bg);padding-bottom:140px}
+.ms{background:var(--bg);padding:52px 0 90px;min-height:100vh;display:flex;flex-direction:column}
+.ms-head{padding:0 20px 14px}
+.ms-title{font-family:var(--fd);font-size:22px;margin-bottom:3px}
+.ms-sub{font-size:12px;color:var(--tx2);line-height:1.4}
 .th{position:relative;height:210px;background:linear-gradient(168deg,#2A150B 0%,#DB4A2B 100%);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
 .th::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(255,255,255,.04) 1px,transparent 1px),radial-gradient(circle at 80% 20%,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px,60px 60px}
 .tb{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border-radius:18px;padding:4px 10px;font-size:10px;color:#fff;font-weight:500;width:fit-content;margin-bottom:8px;position:relative}
@@ -82,9 +86,9 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .stp{font-size:11px;color:var(--tx2);margin-bottom:3px;line-height:1.4}
 .sad{font-size:10px;color:var(--tx3)}
 .sar{display:flex;align-items:center;color:var(--pr);font-size:16px}
-.mw{display:none;margin:0 14px;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);background:var(--card)}
-.mw.show{display:block}
-#lm{width:100%;height:360px}
+.mw{display:none;margin:0 14px;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);background:var(--card);flex:1}
+.mw.show{display:flex;flex-direction:column}
+#lm{width:100%;height:70vh;min-height:420px;flex:1}
 @keyframes pulse{0%,100%{transform:scale(1);opacity:.4}50%{transform:scale(1.8);opacity:0}}
 .gw-popup .leaflet-popup-content-wrapper{border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.12);border:none}
 .gw-popup .leaflet-popup-tip{box-shadow:none}
@@ -266,15 +270,15 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <div class="tic an d3"><div class="ic">⏰</div><div class="lb">Deadline</div><div class="vl">10 PM</div></div>
 </div>
 <div class="tst">Your stops</div>
-<div class="vt">
-<button class="vtb on" id="vl" onclick="tV('l')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>List</button>
-<button class="vtb" id="vm" onclick="tV('m')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 3.5 4.5 8.5 4.5 8.5s4.5-5 4.5-8.5c0-2.5-2-4.5-4.5-4.5z" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>Map</button>
-</div>
 <div class="sl" id="lv"></div>
-<div class="mw" id="mv"><div id="lm"></div>
+<div style="padding:14px;margin-top:6px"><button class="bsb" onclick="go('sr')" style="background:var(--ok)">✅ I've finished — Rate my experience</button></div>
+</div></div>
+
+<div class="s h" id="sm"><div class="ms">
+<div class="ms-head"><div class="ms-title">Tour map</div><div class="ms-sub" id="ms-sub">Walk the route at your own pace</div></div>
+<div class="mw show"><div id="lm"></div>
 <div class="ml"><div class="mli"><div class="mld" style="background:#DB4A2B"></div>Stops</div><div class="mli"><div class="mld" style="background:#4285F4"></div>You</div><div class="mli"><svg width="12" height="2"><line x1="0" y1="1" x2="12" y2="1" stroke="#DB4A2B" stroke-width="1.5" stroke-dasharray="3 2"/></svg>Route</div></div>
 </div>
-<div style="padding:14px;margin-top:6px"><button class="bsb" onclick="go('sr')" style="background:var(--ok)">✅ I've finished — Rate my experience</button></div>
 </div></div>
 
 <div class="s h" id="sd"></div>
@@ -379,7 +383,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <svg viewBox="0 0 24 24"><path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3V7z" stroke-linejoin="round"/><path d="M9 4v13M15 7v13"/></svg>
 <span>Tour</span>
 </button>
-<button class="nav-item" id="nav-map" onclick="navTo('st','nav-map');setTimeout(()=>tV('m'),100)">
+<button class="nav-item" id="nav-map" onclick="navTo('sm','nav-map')">
 <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
 <span>Map</span>
 </button>
@@ -415,7 +419,7 @@ window._booking=null;
 window._user={email:null,name:null,picture:null,source:null,language:null,status:'anonymous'};
 
 // Pantallas donde el navbar debe mostrarse
-const NAV_SCREENS=['st','sd','sr','ss','sx'];
+const NAV_SCREENS=['st','sm','sd','sr','ss','sx'];
 
 // ========================================================================
 // SESIÓN PERSISTENTE (localStorage) — 7 días
@@ -731,6 +735,7 @@ function go(id){
     const nb=document.getElementById('navbar');
     if(NAV_SCREENS.includes(id)){nb.classList.add('show')}else{nb.classList.remove('show')}
     if(id==='st'){setNav('nav-tour')}
+    else if(id==='sm'){setNav('nav-map');iM();setTimeout(()=>{if(window._m){try{window._m.invalidateSize()}catch(e){}}},420)}
     else if(id==='sr'){setNav('nav-rate')}
     else if(id==='ss'){setNav('nav-support')}
   },50);
@@ -740,7 +745,7 @@ function setNav(activeId){
   const el=document.getElementById(activeId);
   if(el)el.classList.add('on');
 }
-function navTo(screenId,navId){setNav(navId);go(screenId);if(screenId==='st'){iM()}}
+function navTo(screenId,navId){setNav(navId);go(screenId)}
 function togFaq(el){el.classList.toggle('open')}
 function cB(v){
   const f=document.getElementById('bf'),b=document.getElementById('bbc');
@@ -754,54 +759,114 @@ function ra(s){
     i<=Array.from(p.children).indexOf(s)?c.classList.add('fl'):c.classList.remove('fl')
   });
 }
-function tV(v){
-  const lv=document.getElementById('lv'),mv=document.getElementById('mv'),vl=document.getElementById('vl'),vm=document.getElementById('vm');
-  if(v==='m'){lv.classList.add('hd');mv.classList.add('show');vl.classList.remove('on');vm.classList.add('on');if(window._m)window._m.invalidateSize()}
-  else{lv.classList.remove('hd');mv.classList.remove('show');vl.classList.add('on');vm.classList.remove('on')}
-}
 
 // ========================================================================
 // MAPA — usa coordenadas reales de Airtable
 // ========================================================================
 function iM(){
-  if(window._m||!S.length)return;
+  // Si ya existe el mapa: solo asegurar que se redibuje al cambiar de pantalla
+  if(window._m){
+    setTimeout(()=>{try{window._m.invalidateSize()}catch(e){}},120);
+    return;
+  }
+  if(!S.length){console.warn('[map] No stops loaded, aborting map init');return}
   setTimeout(()=>{
-    if(!document.getElementById('lm'))return;
-    // Centro inicial: media de las coords
-    const avgLat=S.reduce((a,s)=>a+s.lt,0)/S.length;
-    const avgLng=S.reduce((a,s)=>a+s.ln,0)/S.length;
+    const lmEl=document.getElementById('lm');
+    if(!lmEl){console.warn('[map] #lm element missing');return}
+
+    // Validar coords antes de dibujar
+    const validStops=S.filter(s=>{
+      const ok=Number.isFinite(s.lt)&&Number.isFinite(s.ln)&&Math.abs(s.lt)>0&&Math.abs(s.ln)>0;
+      if(!ok)console.warn('[map] Stop with invalid coords:',s.n,s.nm,s.lt,s.ln);
+      return ok;
+    });
+    if(!validStops.length){console.error('[map] No valid coordinates in any stop');return}
+    console.log('[map] Initializing with',validStops.length,'stops out of',S.length);
+
+    const avgLat=validStops.reduce((a,s)=>a+s.lt,0)/validStops.length;
+    const avgLng=validStops.reduce((a,s)=>a+s.ln,0)/validStops.length;
     const m=L.map('lm',{zoomControl:false,attributionControl:false}).setView([avgLat,avgLng],16);
     L.control.zoom({position:'topright'}).addTo(m);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,crossOrigin:true}).addTo(m);
-    // Ruta a pie con OSRM
-    const coords=S.map(s=>s.ln+','+s.lt).join(';');
-    fetch('https://router.project-osrm.org/route/v1/foot/'+coords+'?overview=full&geometries=geojson')
-      .then(r=>r.json()).then(data=>{
-        if(data.routes&&data.routes[0]){
-          const routeCoords=data.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
-          L.polyline(routeCoords,{color:'#DB4A2B',weight:5,opacity:.6,dashArray:'12 8',lineCap:'round'}).addTo(m);
-        }
-      }).catch(()=>{
-        L.polyline(S.map(s=>[s.lt,s.ln]),{color:'#DB4A2B',weight:4,opacity:.5,dashArray:'10 8'}).addTo(m);
-      });
-    // Marcadores
-    S.forEach((s,i)=>{
+
+    // 1) PINTAR YA una línea recta entre los pines (fallback inmediato)
+    const straightCoords=validStops.map(s=>[s.lt,s.ln]);
+    const straightLine=L.polyline(straightCoords,{
+      color:'#DB4A2B',weight:3,opacity:.4,dashArray:'8 6',lineCap:'round'
+    }).addTo(m);
+
+    // 2) MARCADORES
+    validStops.forEach((s,i)=>{
+      const idx=S.indexOf(s);
       const ic=L.divIcon({className:'',html:'<div class="gp" style="width:32px;height:32px;font-size:14px;border:3px solid #fff;box-shadow:0 2px 12px rgba(219,74,43,.5)">'+s.n+'</div>',iconSize:[32,32],iconAnchor:[16,16]});
       const mk=L.marker([s.lt,s.ln],{icon:ic}).addTo(m);
       const teaser=s.tp[0].nm+(s.tp[1].nm?' or '+s.tp[1].nm:'');
-      mk.bindPopup('<div style="font-family:DM Sans,sans-serif;min-width:150px;padding:2px"><b style="font-size:14px;color:#1C1917">'+escapeHtml(s.nm)+'</b><br><span style="font-size:11px;color:#78716C;line-height:1.4;display:block;margin:4px 0">'+escapeHtml(teaser)+'</span><button onclick="sD('+i+')" style="margin-top:6px;padding:6px 16px;background:#DB4A2B;color:#fff;border:none;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:DM Sans,sans-serif">View details</button></div>',{closeButton:true,className:'gw-popup'});
+      mk.bindPopup('<div style="font-family:DM Sans,sans-serif;min-width:150px;padding:2px"><b style="font-size:14px;color:#1C1917">'+escapeHtml(s.nm)+'</b><br><span style="font-size:11px;color:#78716C;line-height:1.4;display:block;margin:4px 0">'+escapeHtml(teaser)+'</span><button onclick="sD('+idx+')" style="margin-top:6px;padding:6px 16px;background:#DB4A2B;color:#fff;border:none;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;font-family:DM Sans,sans-serif">View details</button></div>',{closeButton:true,className:'gw-popup'});
     });
-    // "You are here" — solo si conseguimos geolocalización; si no, no pintamos punto azul falso
+
+    // 3) Geolocalización (opcional, no bloqueante)
     if(navigator.geolocation){
       navigator.geolocation.getCurrentPosition(pos=>{
         const ui=L.divIcon({className:'',html:'<div style="position:relative"><div style="width:14px;height:14px;background:#4285F4;border:3px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(66,133,244,.4);position:relative;z-index:2"></div><div style="position:absolute;top:-5px;left:-5px;width:24px;height:24px;background:rgba(66,133,244,.12);border-radius:50%;animation:pulse 2s ease-in-out infinite"></div></div>',iconSize:[14,14],iconAnchor:[7,7]});
         L.marker([pos.coords.latitude,pos.coords.longitude],{icon:ui,interactive:false}).addTo(m);
-      },()=>{},{timeout:5000,maximumAge:60000});
+      },err=>console.log('[map] Geolocation denied/failed:',err.message),{timeout:5000,maximumAge:60000});
     }
-    const bounds=L.latLngBounds(S.map(s=>[s.lt,s.ln]));
-    m.fitBounds(bounds.pad(0.12));
+
+    // 4) Ajustar bounds a las paradas (sin mezclar con la posición del usuario)
+    try{
+      const bounds=L.latLngBounds(validStops.map(s=>[s.lt,s.ln]));
+      m.fitBounds(bounds.pad(0.18));
+    }catch(e){console.warn('[map] fitBounds failed:',e)}
+
     window._m=m;
+    window._mStraightLine=straightLine;
+
+    // 5) RUTA REAL (OSRM) — async, no bloqueante, con timeout y un reintento
+    fetchOsrmRoute(validStops,m,straightLine,0);
+
+    // 6) Asegurar repaint cuando aparezca el contenedor
+    setTimeout(()=>{try{m.invalidateSize()}catch(e){}},250);
   },150);
+}
+
+function fetchOsrmRoute(stops,map,straightLine,attempt){
+  if(stops.length<2)return;
+  const coords=stops.map(s=>s.ln+','+s.lt).join(';');
+  const url='https://router.project-osrm.org/route/v1/foot/'+coords+'?overview=full&geometries=geojson';
+  console.log('[osrm] Requesting route, attempt',attempt+1);
+  const ctrl=new AbortController();
+  const timer=setTimeout(()=>ctrl.abort(),8000);
+  fetch(url,{signal:ctrl.signal})
+    .then(r=>{
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      return r.json();
+    })
+    .then(data=>{
+      clearTimeout(timer);
+      if(data.code&&data.code!=='Ok'){
+        console.warn('[osrm] Returned code:',data.code,'— keeping straight line');
+        return;
+      }
+      if(!data.routes||!data.routes[0]||!data.routes[0].geometry){
+        console.warn('[osrm] No route in response — keeping straight line');
+        return;
+      }
+      const routeCoords=data.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
+      console.log('[osrm] Route OK with',routeCoords.length,'points');
+      // Pintar la ruta real y eliminar la línea recta
+      L.polyline(routeCoords,{color:'#DB4A2B',weight:5,opacity:.7,lineCap:'round',lineJoin:'round'}).addTo(map);
+      try{map.removeLayer(straightLine)}catch(e){}
+    })
+    .catch(err=>{
+      clearTimeout(timer);
+      console.warn('[osrm] Request failed (attempt',attempt+1,'):',err.name,err.message);
+      // Reintentar una vez
+      if(attempt<1){
+        setTimeout(()=>fetchOsrmRoute(stops,map,straightLine,attempt+1),1500);
+      }else{
+        console.warn('[osrm] Giving up — straight line stays as route');
+      }
+    });
 }
 
 // ========================================================================
@@ -981,7 +1046,6 @@ function linkBooking(){
     if(window._m){try{window._m.remove()}catch(e){}window._m=null}
     if(btn){btn.disabled=false;btn.textContent='Access my tour'}
     go('st');
-    iM();
   })
   .catch(err=>{
     console.error('Booking webhook error:',err);
@@ -1038,7 +1102,6 @@ function resumeToTour(){
   t.classList.add('a');
   document.getElementById('navbar').classList.add('show');
   setNav('nav-tour');
-  iM();
 }
 </script>
 </body>
