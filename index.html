@@ -96,6 +96,8 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .gw-popup .leaflet-popup-tip{box-shadow:none}
 .leaflet-control-zoom a{background:var(--card)!important;color:var(--tx)!important;border-color:var(--bd)!important;font-size:16px!important;width:32px!important;height:32px!important;line-height:32px!important;border-radius:8px!important}
 .leaflet-control-zoom{border:none!important;box-shadow:var(--sh)!important;border-radius:8px!important;overflow:hidden}
+.leaflet-control-attribution{font-size:9px!important;background:rgba(255,253,248,.85)!important;padding:1px 6px!important;border-radius:6px 0 0 0!important;color:var(--tx3)!important}
+.leaflet-control-attribution a{color:var(--tx2)!important;text-decoration:none!important}
 .ml{display:flex;align-items:center;gap:12px;padding:9px 12px;border-top:1px solid var(--bd);font-size:10px;color:var(--tx3)}
 .mli{display:flex;align-items:center;gap:3px}
 .mld{width:6px;height:6px;border-radius:50%;flex-shrink:0}
@@ -425,6 +427,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 // ===== CONFIG =====
 const WEBHOOK_URL='https://gastrowalk.app.n8n.cloud/webhook/app-users';
 const GOOGLE_CLIENT_ID='454941758134-901psai6286sfgugl7gifqn6cubmbmcn.apps.googleusercontent.com';
+const MAPBOX_TOKEN='pk.eyJ1IjoiZ2FzdHJvd2FsayIsImEiOiJjbW9pcXh4djMwNWZyMndwaWF3bjBsdnlyIn0.akvuofgbsDBXG5_UnC-Eig';
 const SESSION_TTL_MS=7*24*60*60*1000; // 7 días
 const SESSION_KEY='gw_session_v1';
 
@@ -843,7 +846,15 @@ function iM(){
     const avgLng=validStops.reduce((a,s)=>a+s.ln,0)/validStops.length;
     const m=L.map('lm',{zoomControl:false,attributionControl:false}).setView([avgLat,avgLng],16);
     L.control.zoom({position:'topright'}).addTo(m);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,crossOrigin:true}).addTo(m);
+    // Tiles de Mapbox Streets — look profesional, calles legibles
+    L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/{z}/{x}/{y}@2x?access_token='+MAPBOX_TOKEN,{
+      maxZoom:19,
+      tileSize:512,
+      zoomOffset:-1,
+      crossOrigin:true,
+      attribution:'© Mapbox © OpenStreetMap'
+    }).addTo(m);
+    L.control.attribution({position:'bottomright',prefix:false}).addTo(m);
 
     // 1) PINTAR YA una línea recta entre los pines (fallback inmediato)
     const straightCoords=validStops.map(s=>[s.lt,s.ln]);
@@ -876,23 +887,22 @@ function iM(){
     window._m=m;
     window._mStraightLine=straightLine;
 
-    // 5) RUTA REAL (OSRM) — async, no bloqueante, con timeout y un reintento
-    fetchOsrmRoute(validStops,m,straightLine,0);
+    // 5) RUTA REAL (Mapbox Directions, walking) — async, no bloqueante, con timeout y reintento
+    fetchMapboxRoute(validStops,m,straightLine,0);
 
     // 6) Asegurar repaint cuando aparezca el contenedor
     setTimeout(()=>{try{m.invalidateSize()}catch(e){}},250);
   },150);
 }
 
-function fetchOsrmRoute(stops,map,straightLine,attempt){
+function fetchMapboxRoute(stops,map,straightLine,attempt){
   if(stops.length<2)return;
-  // Pedir UNA SOLA petición OSRM con todos los waypoints (eficiente).
-  // Luego "coser" la geometría a las coords reales de los pines insertando cada
-  // pin al inicio del tramo correspondiente, para que la ruta SIEMPRE toque cada parada.
+  // Mapbox Directions API: hasta 25 waypoints por petición.
+  // Formato: lng,lat;lng,lat;...
   const coords=stops.map(s=>s.ln+','+s.lt).join(';');
-  // steps=true → la respuesta separa la ruta en "legs" (tramos entre waypoints)
-  const url='https://router.project-osrm.org/route/v1/foot/'+coords+'?overview=full&geometries=geojson&steps=false';
-  console.log('[osrm] Requesting route, attempt',attempt+1);
+  const url='https://api.mapbox.com/directions/v5/mapbox/walking/'+coords+
+    '?geometries=geojson&overview=full&steps=false&access_token='+MAPBOX_TOKEN;
+  console.log('[mapbox] Requesting walking route, attempt',attempt+1);
   const ctrl=new AbortController();
   const timer=setTimeout(()=>ctrl.abort(),8000);
   fetch(url,{signal:ctrl.signal})
@@ -903,31 +913,27 @@ function fetchOsrmRoute(stops,map,straightLine,attempt){
     .then(data=>{
       clearTimeout(timer);
       if(data.code&&data.code!=='Ok'){
-        console.warn('[osrm] Returned code:',data.code,'— keeping straight line');
+        console.warn('[mapbox] Returned code:',data.code,data.message||'','— keeping straight line');
         return;
       }
       const route=data.routes&&data.routes[0];
       if(!route||!route.geometry){
-        console.warn('[osrm] No route in response — keeping straight line');
+        console.warn('[mapbox] No route in response — keeping straight line');
         return;
       }
-      // Geometría de OSRM (lng,lat) → leaflet (lat,lng)
+      // Geometría en formato [lng,lat] → leaflet usa [lat,lng]
       let routeCoords=route.geometry.coordinates.map(c=>[c[1],c[0]]);
-      console.log('[osrm] Route OK with',routeCoords.length,'points across',(route.legs||[]).length,'legs');
+      const distKm=(route.distance/1000).toFixed(2);
+      const durMin=Math.round(route.duration/60);
+      console.log('[mapbox] Route OK with',routeCoords.length,'points |',distKm,'km |',durMin,'min walking');
 
-      // ESTRATEGIA: coser conectores entre cada pin y su punto más cercano de la ruta.
-      // Si OSRM devuelve waypoints[].location (que son los snap points), los usamos
-      // como referencia para insertar segmentos rectos cortos pin↔ruta.
+      // Conectores cortos pin↔ruta para los casos donde el snap point esté lejos del pin
       const wp=data.waypoints||[];
-      const connectorCoords=[]; // pares [pin, snapPoint] para dibujar conectores
+      const connectorCoords=[];
       for(let i=0;i<stops.length;i++){
         const pin=[stops[i].lt,stops[i].ln];
-        let snap=null;
         if(wp[i]&&Array.isArray(wp[i].location)){
-          snap=[wp[i].location[1],wp[i].location[0]]; // lng,lat → lat,lng
-        }
-        if(snap){
-          // Solo dibujar conector si la distancia es perceptible (> ~5 metros aprox)
+          const snap=[wp[i].location[1],wp[i].location[0]];
           const dLat=Math.abs(snap[0]-pin[0]);
           const dLng=Math.abs(snap[1]-pin[1]);
           if(dLat>0.00004||dLng>0.00004){
@@ -936,8 +942,7 @@ function fetchOsrmRoute(stops,map,straightLine,attempt){
         }
       }
 
-      // Forzar que la ruta principal empiece y termine en los pines exactos
-      // (insertar primer y último pin al inicio/fin de la geometría)
+      // Forzar inicio y fin exactos en los pines
       if(routeCoords.length){
         const first=[stops[0].lt,stops[0].ln];
         const last=[stops[stops.length-1].lt,stops[stops.length-1].ln];
@@ -945,22 +950,26 @@ function fetchOsrmRoute(stops,map,straightLine,attempt){
       }
 
       // Pintar ruta principal
-      L.polyline(routeCoords,{color:'#DB4A2B',weight:5,opacity:.75,lineCap:'round',lineJoin:'round'}).addTo(map);
-      // Pintar conectores cortos punteados (pin → calle)
+      L.polyline(routeCoords,{color:'#DB4A2B',weight:5,opacity:.8,lineCap:'round',lineJoin:'round'}).addTo(map);
+      // Conectores cortos punteados
       connectorCoords.forEach(pair=>{
         L.polyline(pair,{color:'#DB4A2B',weight:2.5,opacity:.55,dashArray:'4 4',lineCap:'round'}).addTo(map);
       });
 
       // Quitar la línea recta provisional
       try{map.removeLayer(straightLine)}catch(e){}
+
+      // Mostrar distancia + duración total en el header del mapa (si existe)
+      const subEl=document.getElementById('ms-sub');
+      if(subEl)subEl.textContent='Total walking distance: '+distKm+' km · ~'+durMin+' min';
     })
     .catch(err=>{
       clearTimeout(timer);
-      console.warn('[osrm] Request failed (attempt',attempt+1,'):',err.name,err.message);
+      console.warn('[mapbox] Request failed (attempt',attempt+1,'):',err.name,err.message);
       if(attempt<1){
-        setTimeout(()=>fetchOsrmRoute(stops,map,straightLine,attempt+1),1500);
+        setTimeout(()=>fetchMapboxRoute(stops,map,straightLine,attempt+1),1500);
       }else{
-        console.warn('[osrm] Giving up — straight line stays as route');
+        console.warn('[mapbox] Giving up — straight line stays as route');
       }
     });
 }
