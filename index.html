@@ -193,7 +193,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 /* === NAVBAR === */
 .nav{display:none;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:var(--mw);background:var(--card);border-top:1px solid var(--bd);padding:6px 0 env(safe-area-inset-bottom,8px);z-index:200;box-shadow:0 -2px 12px rgba(0,0,0,.06)}
 .nav.show{display:flex}
-.nav-items{display:flex;width:100%;justify-content:space-around;align-items:center}
+.nav-items{display:flex;width:100%;flex:1;justify-content:space-around;align-items:center}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;border:none;background:none;cursor:pointer;font-family:var(--fb);transition:all .15s;border-radius:8px;min-width:56px}
 .nav-item svg{width:22px;height:22px;stroke:var(--tx3);fill:none;stroke-width:1.8;transition:all .15s}
 .nav-item span{font-size:10px;font-weight:500;color:var(--tx3);transition:all .15s}
@@ -230,6 +230,53 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sup-acc-vl{color:var(--tx);font-weight:600;text-align:right;max-width:60%;overflow-wrap:anywhere;word-break:break-word}
 .sup-logout{margin-top:12px;width:100%;padding:11px;background:none;color:var(--pr);border:1.5px solid var(--pr);border-radius:60px;font-size:13px;font-weight:600;font-family:var(--fb);cursor:pointer;transition:all .15s}
 .sup-logout:active{background:var(--prl)}
+
+/* === MY BOOKINGS LIST === */
+.bls{display:flex;flex-direction:column;min-height:100vh;background:var(--bg);padding:52px 18px 32px}
+.bls-head{margin-bottom:20px}
+.bls-greet{font-family:var(--fd);font-size:24px;margin-bottom:3px}
+.bls-sub{font-size:13px;color:var(--tx2);line-height:1.5}
+.bls-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px}
+.bls-empty-ic{font-size:54px;margin-bottom:16px;opacity:.6}
+.bls-empty-t{font-family:var(--fd);font-size:18px;margin-bottom:6px}
+.bls-empty-s{font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:24px;max-width:280px}
+.bls-list{display:flex;flex-direction:column;gap:11px;margin-top:10px}
+.blc{background:var(--card);border-radius:var(--r);padding:16px;box-shadow:var(--sh);cursor:pointer;transition:all .15s;border:none;text-align:left;font-family:var(--fb);width:100%;position:relative;overflow:hidden}
+.blc:active{transform:scale(.98)}
+.blc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
+.blc-title{font-family:var(--fs);font-weight:600;font-size:15px;line-height:1.3;color:var(--tx);flex:1}
+.blc-badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:12px;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0;white-space:nowrap}
+.blc-badge.act{background:var(--okbg);color:var(--ok)}
+.blc-badge.soon{background:#FEF3C7;color:#92400E}
+.blc-badge.urg{background:#FEE2E2;color:#991B1B}
+.blc-meta{display:flex;gap:14px;font-size:11px;color:var(--tx2);margin-bottom:10px;flex-wrap:wrap}
+.blc-meta span{display:flex;align-items:center;gap:4px}
+.blc-foot{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--bd)}
+.blc-id{font-family:var(--fd);font-size:11px;color:var(--tx3);letter-spacing:.5px}
+.blc-arr{color:var(--pr);font-size:18px;font-weight:600}
+.blc-expire{font-size:10px;color:var(--tx3);margin-top:6px;display:flex;align-items:center;gap:4px}
+.blc-expire.urg{color:#991B1B;font-weight:600}
+.bls-add{margin-top:14px;padding:13px;background:none;color:var(--pr);border:1.5px dashed var(--pr);border-radius:var(--r);font-size:13px;font-weight:600;font-family:var(--fb);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.bls-add:active{background:var(--prl)}
+.bls-back{position:absolute;top:14px;left:14px;width:36px;height:36px;background:rgba(255,255,255,.88);backdrop-filter:blur(8px);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--sh);font-size:15px;z-index:5}
+
+/* === EXPIRED BOOKING CARD === */
+.blc.exp{cursor:not-allowed;background:#F5F2ED;box-shadow:none;opacity:.6;filter:grayscale(.7)}
+.blc.exp:active{transform:none}
+.blc.exp .blc-title,.blc.exp .blc-id{color:var(--tx3)}
+.blc.exp .blc-meta{color:var(--tx3)}
+.blc.exp .blc-arr{display:none}
+.blc.exp .blc-foot{justify-content:flex-start}
+.blc-section-label{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;padding:18px 4px 8px;display:block}
+
+/* === ADD BOOKING + BUTTON (top-right of bookings list) === */
+.bls-add-btn{position:absolute;top:46px;right:20px;width:40px;height:40px;background:var(--pr);color:#fff;border:none;border-radius:50%;font-size:24px;font-weight:300;font-family:var(--fb);cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 4px 14px rgba(219,74,43,.35);transition:transform .15s;z-index:5}
+.bls-add-btn:active{transform:scale(.92)}
+
+/* === BACK BUTTON inside Tour (top-left arrow) === */
+.tour-back{position:fixed;top:14px;left:50%;transform:translateX(calc(-1 * (var(--mw) / 2 - 14px)));width:38px;height:38px;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shl);font-size:18px;z-index:90;color:var(--tx);font-weight:700;font-family:var(--fb)}
+.tour-back:active{transform:translateX(calc(-1 * (var(--mw) / 2 - 14px))) scale(.9)}
+@media(max-width:430px){.tour-back{left:14px;transform:none}.tour-back:active{transform:scale(.9)}}
 </style>
 </head>
 <body>
@@ -261,8 +308,31 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <button class="bc an d5" id="blc" disabled onclick="registerUser();go('sb')">Continue</button>
 </div></div>
 
+<!-- MY BOOKINGS LIST screen -->
+<div class="s h" id="sbl"><div class="bls">
+<button class="bls-add-btn" onclick="goAddBooking()" aria-label="Add booking">+</button>
+<div class="bls-head an d1">
+<div class="bls-greet" id="bls-greet">Your tours</div>
+<div class="bls-sub" id="bls-sub">Tap a booking to start your tour</div>
+</div>
+<div id="bls-content"></div>
+</div></div>
+
+<!-- NEWS screen (placeholder) -->
+<div class="s h" id="sn"><div class="bls">
+<div class="bls-head an d1">
+<div class="bls-greet">News &amp; updates</div>
+<div class="bls-sub">Latest from Gastrowalk</div>
+</div>
+<div class="bls-empty an d2" id="news-content">
+<div class="bls-empty-ic">📰</div>
+<div class="bls-empty-t">Coming soon</div>
+<div class="bls-empty-s">News, exclusive offers and tour updates will appear here.</div>
+</div>
+</div></div>
+
 <div class="s h" id="sb"><div class="bs">
-<button class="db" onclick="go('sl')" style="position:relative;top:0;left:0;margin-bottom:14px">←</button>
+<button class="db" id="sb-back-btn" onclick="goBackFromBooking()" style="position:relative;top:0;left:0;margin-bottom:14px">←</button>
 <div class="bs-t an d1">Link your booking</div>
 <div class="bs-s an d2">Enter your booking ID to access your tour</div>
 <div class="bs-c an d2"><label class="bs-l">Booking ID</label><input type="text" class="bs-i" id="bid" placeholder="e.g. FH-28491" maxlength="20" oninput="cB(this.value)"></div>
@@ -274,6 +344,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 </div></div>
 
 <div class="s h" id="st"><div class="ts">
+<button class="tour-back" id="tour-back-btn" onclick="backToBookingsList()" style="display:none" aria-label="Back to my tours">←</button>
 <div class="th"><div class="tb">📍 Self-guided</div><div class="th1">Gourmet Tapas Tour</div><div class="tc">Palma de Mallorca</div></div>
 <div class="ti">
 <div class="tic an d1"><div class="ic">🕐</div><div class="lb">Duration</div><div class="vl">3–4h</div></div>
@@ -397,7 +468,23 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 
 <!-- BOTTOM NAVBAR -->
 <nav class="nav" id="navbar">
-<div class="nav-items">
+<!-- Mode: BOOKINGS LIST (Bookings / News / Support) -->
+<div class="nav-items" id="nav-items-list" style="display:none">
+<button class="nav-item on" id="nav-bookings" onclick="navTo('sbl','nav-bookings')">
+<svg viewBox="0 0 24 24"><path d="M19 4H5a2 2 0 00-2 2v14l4-3 4 3 4-3 4 3V6a2 2 0 00-2-2z" stroke-linejoin="round"/><path d="M8 9h8M8 13h6"/></svg>
+<span>Bookings</span>
+</button>
+<button class="nav-item" id="nav-news" onclick="navTo('sn','nav-news')">
+<svg viewBox="0 0 24 24"><path d="M4 4h13a2 2 0 012 2v13a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" stroke-linejoin="round"/><path d="M8 8h7M8 12h7M8 16h5"/></svg>
+<span>News</span>
+</button>
+<button class="nav-item" id="nav-support-list" onclick="navTo('ss','nav-support-list')">
+<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+<span>Support</span>
+</button>
+</div>
+<!-- Mode: ACTIVE TOUR (Tour / Map / Rate / Support) -->
+<div class="nav-items" id="nav-items-tour">
 <button class="nav-item on" id="nav-tour" onclick="navTo('st','nav-tour')">
 <svg viewBox="0 0 24 24"><path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3V7z" stroke-linejoin="round"/><path d="M9 4v13M15 7v13"/></svg>
 <span>Tour</span>
@@ -437,9 +524,19 @@ let S=[];
 // _booking: datos de la reserva actual
 window._booking=null;
 window._user={email:null,name:null,picture:null,source:null,language:null,status:'anonymous'};
+// Lista de bookings del usuario (cuando viene logueado y existe en Airtable)
+window._userBookings=[];
+// Flag: ¿venimos de la lista de bookings? (controla si mostrar el back-button del tour)
+window._cameFromList=false;
+// Flag: ¿el usuario está añadiendo un booking adicional desde la lista?
+window._addingNewBooking=false;
 
 // Pantallas donde el navbar debe mostrarse
-const NAV_SCREENS=['st','sm','sd','sr','ss','sx'];
+const NAV_SCREENS=['sbl','sn','st','sm','sd','sr','ss','sx'];
+// Modo "lista de bookings" (navbar: Bookings / News / Support)
+const LIST_MODE_SCREENS=['sbl','sn','ss'];
+// Modo "tour activo" (navbar: Tour / Map / Rate / Support)
+const TOUR_MODE_SCREENS=['st','sm','sd','sr','sx'];
 
 // ========================================================================
 // SESIÓN PERSISTENTE (localStorage) — 7 días
@@ -450,6 +547,8 @@ function saveSession(){
       user:window._user,
       booking:window._booking,
       stops:S,
+      cameFromList:!!window._cameFromList,
+      userBookings:window._userBookings||[],
       savedAt:Date.now()
     };
     localStorage.setItem(SESSION_KEY,JSON.stringify(data));
@@ -755,10 +854,45 @@ function go(id){
     t.classList.remove('h','hl');t.classList.add('a');t.scrollTop=0;
     const nb=document.getElementById('navbar');
     if(NAV_SCREENS.includes(id)){nb.classList.add('show')}else{nb.classList.remove('show')}
-    if(id==='st'){setNav('nav-tour')}
+
+    // Determinar el "modo" del navbar.
+    // Si el usuario está logueado con email y NO hay tour activo cargado → modo LISTA.
+    // Si entra a "ss" (Support), respetamos el modo en el que estaba antes (sticky).
+    const inTour=!!(window._booking&&Array.isArray(S)&&S.length);
+    let mode;
+    if(LIST_MODE_SCREENS.includes(id)&&id!=='ss'){
+      mode='list';
+    }else if(TOUR_MODE_SCREENS.includes(id)){
+      mode='tour';
+    }else if(id==='ss'){
+      // Support es compartido — usar el último modo si lo tenemos, si no inferir
+      mode=window._navMode||(inTour?'tour':'list');
+    }else{
+      mode=window._navMode||(inTour?'tour':'list');
+    }
+    window._navMode=mode;
+
+    const navList=document.getElementById('nav-items-list');
+    const navTour=document.getElementById('nav-items-tour');
+    if(navList&&navTour){
+      navList.style.display=(mode==='list')?'flex':'none';
+      navTour.style.display=(mode==='tour')?'flex':'none';
+    }
+
+    // Mostrar/ocultar botón "back to bookings list" en pantallas del tour
+    const tourBack=document.getElementById('tour-back-btn');
+    if(tourBack){
+      const showBack=window._cameFromList&&window._user&&window._user.email&&TOUR_MODE_SCREENS.includes(id);
+      tourBack.style.display=showBack?'flex':'none';
+    }
+
+    // Marcar la pestaña activa
+    if(id==='sbl'){setNav('nav-bookings')}
+    else if(id==='sn'){setNav('nav-news')}
+    else if(id==='st'){setNav('nav-tour')}
     else if(id==='sm'){setNav('nav-map');iM();setTimeout(()=>{if(window._m){try{window._m.invalidateSize()}catch(e){}}},420)}
     else if(id==='sr'){setNav('nav-rate')}
-    else if(id==='ss'){setNav('nav-support');renderAccountInfo()}
+    else if(id==='ss'){setNav(mode==='list'?'nav-support-list':'nav-support');renderAccountInfo()}
   },50);
 }
 
@@ -1053,8 +1187,359 @@ function handleGoogleResponse(response){
     status:'registered'
   };
   console.log('Google Login OK:',payload.email);
-  document.querySelector('.ls-hi').textContent='Hola, '+(payload.name||'').split(' ')[0]+'! 👋';
+  // Antes de pedir idioma, comprobar si el usuario ya existe y tiene bookings
+  checkExistingUser();
+}
+
+// ========================================================================
+// CHECK EXISTING USER → si existe va a la lista de bookings, si no a idioma
+// ========================================================================
+function checkExistingUser(){
+  if(!window._user.email){
+    // Sin email (anónimo) → no podemos buscar, ir a flujo normal
+    document.querySelector('.ls-hi').textContent='Welcome! 👋';
+    go('sl');
+    return;
+  }
+  // Mostrar pantalla de carga rápida
+  showLoadingScreen('Checking your account...');
+  fetch(WEBHOOK_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      action:'get_user_bookings',
+      email:window._user.email
+    })
+  })
+  .then(r=>r.ok?r.json():Promise.reject('HTTP '+r.status))
+  .then(raw=>{
+    const data=normalizeResponse(raw);
+    hideLoadingScreen();
+    if(!data){
+      // Sin respuesta válida → tratar como usuario nuevo
+      goToLanguageSelection();
+      return;
+    }
+    if(data.status==='new_user'){
+      // Usuario no existe en Airtable aún → flujo de registro normal (idioma → booking)
+      goToLanguageSelection();
+      return;
+    }
+    if(data.status==='ok'){
+      // Usuario existe → recuperar nombre/idioma del backend si no los tenemos
+      if(data.user){
+        if(data.user.language)window._user.language=data.user.language;
+        if(data.user.name&&!window._user.name)window._user.name=data.user.name;
+      }
+      window._userBookings=Array.isArray(data.bookings)?data.bookings:[];
+      // Saltar directamente a la lista de bookings
+      renderBookingsList();
+      go('sbl');
+      return;
+    }
+    // Cualquier otro caso → flujo normal
+    goToLanguageSelection();
+  })
+  .catch(err=>{
+    hideLoadingScreen();
+    console.warn('checkExistingUser failed:',err);
+    // Fallback: tratar como usuario nuevo
+    goToLanguageSelection();
+  });
+}
+
+function goToLanguageSelection(){
+  document.querySelector('.ls-hi').textContent='Hola, '+(window._user.name||'').split(' ')[0]+'! 👋';
   go('sl');
+}
+
+// Mini loading overlay (no creamos pantalla nueva — usamos un div temporal)
+function showLoadingScreen(msg){
+  let l=document.getElementById('gw-loading');
+  if(!l){
+    l=document.createElement('div');
+    l.id='gw-loading';
+    l.style.cssText='position:fixed;inset:0;background:rgba(237,230,220,.96);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;font-family:var(--fb)';
+    l.innerHTML='<div style="width:48px;height:48px;border:3px solid var(--bd);border-top-color:var(--pr);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:16px"></div><div id="gw-loading-msg" style="font-size:13px;color:var(--tx2)">Loading...</div><style>@keyframes spin{to{transform:rotate(360deg)}}</style>';
+    document.body.appendChild(l);
+  }
+  document.getElementById('gw-loading-msg').textContent=msg||'Loading...';
+  l.style.display='flex';
+}
+function hideLoadingScreen(){
+  const l=document.getElementById('gw-loading');
+  if(l)l.style.display='none';
+}
+
+// ========================================================================
+// RENDER BOOKINGS LIST — la nueva pantalla de "Mis tours"
+// ========================================================================
+function renderBookingsList(){
+  const greet=document.getElementById('bls-greet');
+  const sub=document.getElementById('bls-sub');
+  const content=document.getElementById('bls-content');
+  if(!content)return;
+
+  // Saludo personalizado
+  if(greet){
+    if(window._user&&window._user.name){
+      greet.textContent='Hi, '+window._user.name.split(' ')[0]+'! 👋';
+    }else{
+      greet.textContent='Your tours';
+    }
+  }
+
+  const bookings=Array.isArray(window._userBookings)?window._userBookings:[];
+
+  if(!bookings.length){
+    // Estado vacío
+    if(sub)sub.textContent='You don\'t have any tours yet';
+    content.innerHTML='<div class="bls-empty an d2">'+
+      '<div class="bls-empty-ic">🍷</div>'+
+      '<div class="bls-empty-t">No tours yet</div>'+
+      '<div class="bls-empty-s">Once you book a tour you\'ll see it here. Got a confirmation email already? Add your booking ID to start.</div>'+
+      '<button class="bc" style="max-width:240px" onclick="goAddBooking()">+ Add booking</button>'+
+      '</div>';
+    return;
+  }
+
+  // Separar activos y caducados
+  const active=[];
+  const expired=[];
+  bookings.forEach(b=>{
+    const st=computeBookingStatus(b);
+    if(st.cls==='urg'&&st.label==='Expired')expired.push({b,st});
+    else active.push({b,st});
+  });
+
+  if(sub){
+    if(active.length===0)sub.textContent='All your tours have expired';
+    else sub.textContent='Tap a booking to start your tour';
+  }
+
+  let html='';
+
+  // ACTIVOS
+  if(active.length){
+    html+='<div class="bls-list">';
+    active.forEach((row,i)=>{
+      html+=renderBookingCard(row.b,row.st,i,false);
+    });
+    html+='</div>';
+  }
+
+  // CADUCADOS
+  if(expired.length){
+    html+='<span class="bls-section-label an d3">Past tours</span>';
+    html+='<div class="bls-list">';
+    expired.forEach((row,i)=>{
+      html+=renderBookingCard(row.b,row.st,i,true);
+    });
+    html+='</div>';
+  }
+
+  // Footer link discreto si no hay un add prominente arriba
+  // (el botón "+" ya está en la cabecera, así que esto es opcional)
+
+  content.innerHTML=html;
+}
+
+// Devuelve el HTML de una card de booking. expired=true → modo gris sin clic
+function renderBookingCard(b,st,i,expired){
+  const dateLabel=formatBookingDate(b.start_date,b.start_time);
+  const titleParts=(b.item_name||'Tour').split(/\s*-\s*/);
+  const tourName=titleParts[0]||'Tour';
+  const city=titleParts[1]||'';
+  const idShort=b.booking_id||('#'+(b.uuid||'').slice(0,8));
+  const cls='blc an d'+Math.min(i+2,5)+(expired?' exp':'');
+  const onclick=expired?'':('onclick="openBooking(\''+escapeHtml(b.uuid||'')+'\')"');
+  const tag=expired?'div':'button';
+  let badgeHtml='<span class="blc-badge '+st.cls+'">'+st.label+'</span>';
+  return '<'+tag+' class="'+cls+'" '+onclick+'>'+
+    '<div class="blc-top">'+
+      '<div class="blc-title">'+escapeHtml(tourName)+(city?' <span style="color:var(--tx3);font-weight:400;font-size:13px">· '+escapeHtml(city)+'</span>':'')+'</div>'+
+      badgeHtml+
+    '</div>'+
+    '<div class="blc-meta">'+
+      '<span>📅 '+escapeHtml(dateLabel)+'</span>'+
+      (b.pax?'<span>👥 '+b.pax+' pax</span>':'')+
+    '</div>'+
+    (st.expireText&&!expired?'<div class="blc-expire'+(st.cls==='urg'?' urg':'')+'">⏳ '+escapeHtml(st.expireText)+'</div>':'')+
+    '<div class="blc-foot">'+
+      '<span class="blc-id">'+escapeHtml(idShort)+'</span>'+
+      (expired?'':'<span class="blc-arr">›</span>')+
+    '</div>'+
+  '</'+tag+'>';
+}
+
+// Calcular estado del booking según su expires_at
+function computeBookingStatus(b){
+  // expires_at puede venir del backend o calcularse aquí
+  let expiresAt=null;
+  if(b.expires_at){
+    expiresAt=new Date(b.expires_at);
+  }else if(b.start_date&&b.start_time){
+    // Construir desde start_date (puede ser "2025-08-25" o "25/8/2025") + start_time "13:00"
+    expiresAt=parseStartDateTime(b.start_date,b.start_time);
+    if(expiresAt)expiresAt=new Date(expiresAt.getTime()+7*24*60*60*1000);
+  }
+  const now=new Date();
+  if(!expiresAt||isNaN(expiresAt.getTime())){
+    return {cls:'act',label:'Active',expireText:''};
+  }
+  const msLeft=expiresAt.getTime()-now.getTime();
+  const daysLeft=Math.ceil(msLeft/(1000*60*60*24));
+  if(msLeft<=0){
+    return {cls:'urg',label:'Expired',expireText:'Access has expired'};
+  }
+  if(daysLeft<=2){
+    return {cls:'urg',label:daysLeft+'d left',expireText:'Expires in '+daysLeft+' day'+(daysLeft===1?'':'s')};
+  }
+  if(daysLeft<=4){
+    return {cls:'soon',label:daysLeft+'d left',expireText:'Expires in '+daysLeft+' days'};
+  }
+  return {cls:'act',label:'Active',expireText:'Available for '+daysLeft+' more days'};
+}
+
+function parseStartDateTime(dateStr,timeStr){
+  if(!dateStr)return null;
+  let y,m,d;
+  // Formato ISO "2025-08-25"
+  let mIso=String(dateStr).match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(mIso){y=+mIso[1];m=+mIso[2]-1;d=+mIso[3]}
+  else{
+    // Formato "25/8/2025" (DD/M/YYYY)
+    let mEu=String(dateStr).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+    if(mEu){d=+mEu[1];m=+mEu[2]-1;y=+mEu[3]}
+    else return null;
+  }
+  let hh=0,mm=0;
+  if(timeStr){
+    let mt=String(timeStr).match(/^(\d{1,2}):(\d{2})/);
+    if(mt){hh=+mt[1];mm=+mt[2]}
+  }
+  return new Date(y,m,d,hh,mm,0);
+}
+
+function formatBookingDate(dateStr,timeStr){
+  const dt=parseStartDateTime(dateStr,timeStr);
+  if(!dt||isNaN(dt.getTime()))return dateStr||'';
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const dayName=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dt.getDay()];
+  const t=String(dt.getHours()).padStart(2,'0')+':'+String(dt.getMinutes()).padStart(2,'0');
+  return dayName+' '+dt.getDate()+' '+months[dt.getMonth()]+' · '+t;
+}
+
+// ========================================================================
+// OPEN A BOOKING from the list — load tour stops
+// ========================================================================
+function openBooking(uuid){
+  if(!uuid)return;
+  // Localizar el booking en cache para chequear caducidad antes de pedir nada
+  const b=(window._userBookings||[]).find(x=>x.uuid===uuid);
+  if(b){
+    const st=computeBookingStatus(b);
+    if(st.cls==='urg'&&st.label==='Expired'){
+      alert('This tour has expired (more than 7 days have passed since the start date). Contact support if you need help.');
+      return;
+    }
+  }
+  showLoadingScreen('Loading your tour...');
+  fetch(WEBHOOK_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      action:'load_tour',
+      booking_uuid:uuid,
+      email:window._user.email
+    })
+  })
+  .then(r=>r.ok?r.json():Promise.reject('HTTP '+r.status))
+  .then(raw=>{
+    hideLoadingScreen();
+    const data=normalizeResponse(raw);
+    if(!data||data.status!=='ok'){
+      const msg=(data&&data.message)||'unknown_error';
+      if(msg==='booking_expired'){
+        alert('This tour has expired. Bookings are only accessible for 7 days after the start date.');
+      }else if(msg==='booking_not_found'){
+        alert('We couldn\'t find this booking. Please try again or contact support.');
+      }else{
+        alert('Could not load your tour: '+msg);
+      }
+      return;
+    }
+    const ok=applyTourData(data);
+    if(!ok){
+      alert('Your booking was found but no stops are configured yet. Please contact support.');
+      return;
+    }
+    // Marcar que venimos de la lista de bookings (para mostrar back button)
+    window._cameFromList=true;
+    saveSession();
+    renderTourScreen();
+    // Reset mapa anterior si lo había
+    if(window._m){try{window._m.remove()}catch(e){}window._m=null}
+    go('st');
+  })
+  .catch(err=>{
+    hideLoadingScreen();
+    console.error('load_tour failed:',err);
+    alert('Connection error. Please check your internet and try again.');
+  });
+}
+
+function goAddBooking(){
+  // Ir a la pantalla de booking ID, pero recordar que volvemos a la lista
+  window._addingNewBooking=true;
+  // Si nunca elegimos idioma (usuario nuevo), pasarlo primero
+  if(!window._user.language){
+    go('sl');
+  }else{
+    go('sb');
+  }
+}
+
+function goBackFromBooking(){
+  // Si el usuario está añadiendo un booking adicional → volver a la lista
+  if(window._addingNewBooking&&window._user.email){
+    window._addingNewBooking=false;
+    go('sbl');
+  }else{
+    // Flujo normal (primer registro): volver a idioma
+    go('sl');
+  }
+}
+
+function backToBookingsList(){
+  // Cerrar mapa y limpiar tour actual antes de volver a la lista
+  if(window._m){try{window._m.remove()}catch(e){}window._m=null}
+  window._cameFromList=false;
+  // Refrescar la lista por si añadió un booking
+  refreshUserBookings();
+  go('sbl');
+}
+
+// Recargar bookings desde el backend (silencioso)
+function refreshUserBookings(){
+  if(!window._user.email)return;
+  fetch(WEBHOOK_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      action:'get_user_bookings',
+      email:window._user.email
+    })
+  })
+  .then(r=>r.ok?r.json():null)
+  .then(raw=>{
+    const data=normalizeResponse(raw);
+    if(data&&data.status==='ok'&&Array.isArray(data.bookings)){
+      window._userBookings=data.bookings;
+      renderBookingsList();
+    }
+  })
+  .catch(()=>{});
 }
 
 function loginAnonymous(){
@@ -1150,6 +1635,15 @@ function linkBooking(){
     // Reset de mapa por si vino de una sesión anterior
     if(window._m){try{window._m.remove()}catch(e){}window._m=null}
     if(btn){btn.disabled=false;btn.textContent='Access my tour'}
+    // Si el usuario está logueado con email → marcar que viene de lista y refrescar bookings
+    if(window._user&&window._user.email){
+      window._cameFromList=true;
+      // Refrescar lista en background para que cuando vuelva atrás vea el nuevo booking
+      refreshUserBookings();
+    }else{
+      window._cameFromList=false;
+    }
+    window._addingNewBooking=false;
     go('st');
   })
   .catch(err=>{
@@ -1165,6 +1659,9 @@ window.gwLogout=function(){
   clearSession();
   window._user={email:null,name:null,source:null,language:null,status:'anonymous'};
   window._booking=null;
+  window._userBookings=[];
+  window._cameFromList=false;
+  window._addingNewBooking=false;
   S=[];
   if(window._m){try{window._m.remove()}catch(e){}window._m=null}
   location.reload();
@@ -1175,38 +1672,60 @@ window.gwLogout=function(){
 // ========================================================================
 (function autoResume(){
   const sess=loadSession();
-  if(!sess||!sess.user||!sess.booking||!Array.isArray(sess.stops)||!sess.stops.length){
+  if(!sess||!sess.user){
     return; // sin sesión → flujo normal (welcome screen)
   }
   // Restaurar estado en memoria
   window._user=sess.user;
-  window._booking=sess.booking;
-  S=sess.stops;
+  window._booking=sess.booking||null;
+  S=Array.isArray(sess.stops)?sess.stops:[];
+  window._userBookings=Array.isArray(sess.userBookings)?sess.userBookings:[];
+  window._cameFromList=!!sess.cameFromList;
   // Esperar a que el DOM esté listo para pintar
   if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',resumeToTour);
+    document.addEventListener('DOMContentLoaded',resumeApp);
   }else{
-    resumeToTour();
+    resumeApp();
   }
 })();
 
-function resumeToTour(){
+function resumeApp(){
+  // Si el usuario tiene email → refrescar bookings desde backend en background
+  if(window._user&&window._user.email){
+    refreshUserBookings();
+  }
+  // Decidir a qué pantalla volver
+  const hasActiveTour=window._booking&&S.length;
+  // ¿El tour activo aún es válido (no caducado)?
+  let tourValid=true;
+  if(hasActiveTour&&window._booking){
+    const b=window._booking;
+    const expiresAt=b.expires_at?new Date(b.expires_at):
+      (b.start_date&&b.start_time?new Date(parseStartDateTime(b.start_date,b.start_time).getTime()+7*24*60*60*1000):null);
+    if(expiresAt&&!isNaN(expiresAt.getTime())&&expiresAt.getTime()<Date.now()){
+      tourValid=false;
+    }
+  }
+
   // Saludo
   if(window._user&&window._user.name){
     const hi=document.querySelector('.ls-hi');
     if(hi)hi.textContent='Hola, '+window._user.name.split(' ')[0]+'! 👋';
   }
-  renderTourScreen();
-  // Activar la pantalla de tour sin animación de "go" (para que sea instantáneo)
-  document.querySelectorAll('.s').forEach(s=>{
-    s.classList.remove('a','hl');
-    s.classList.add('h');
-  });
-  const t=document.getElementById('st');
-  t.classList.remove('h','hl');
-  t.classList.add('a');
-  document.getElementById('navbar').classList.add('show');
-  setNav('nav-tour');
+
+  if(hasActiveTour&&tourValid){
+    // Volver directo al tour
+    renderTourScreen();
+    go('st');
+  }else if(window._user&&window._user.email){
+    // Sin tour activo (o caducado) pero usuario logueado → ir a la lista
+    window._booking=null;
+    S=[];
+    window._cameFromList=false;
+    renderBookingsList();
+    go('sbl');
+  }
+  // Si no hay nada útil → quedarse en welcome
 }
 </script>
 </body>
