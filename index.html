@@ -428,7 +428,6 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <div class="spanel" id="spanel">
 <div class="sp-topbar">
 <button class="sp-topbtn" onclick="closePanel()" aria-label="Close">✕</button>
-<button class="sp-topbtn locbtn" onclick="viewStopOnMap()" aria-label="View on map">📍</button>
 </div>
 <div class="sp-handle" onclick="closePanel()"></div>
 <div class="sp-head">
@@ -1112,7 +1111,6 @@ function iM(){
     const avgLat=validStops.reduce((a,s)=>a+s.lt,0)/validStops.length;
     const avgLng=validStops.reduce((a,s)=>a+s.ln,0)/validStops.length;
     const m=L.map('lm',{zoomControl:false,attributionControl:false}).setView([avgLat,avgLng],16);
-    L.control.zoom({position:'topright'}).addTo(m);
     // Tiles de Mapbox Streets — look profesional, calles legibles
     L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/{z}/{x}/{y}@2x?access_token='+MAPBOX_TOKEN,{
       maxZoom:19,
@@ -1273,7 +1271,7 @@ function sD(i){
   const drinkText=s.drList&&s.drList.length?s.drList.join(', '):s.dr;
   h+='<div class="sp-drink">🍷 '+escapeHtml(drinkText)+'</div></div>';
 
-  h+='<div style="padding:14px 22px 30px"><button class="sp-btn sp-btn-dir" onclick="viewStopOnMap()" style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:14px;background:var(--pr);color:#fff;border:none;border-radius:60px;font-size:14px;font-weight:600;font-family:var(--fb);cursor:pointer;box-shadow:0 4px 14px rgba(219,74,43,.3)">🗺️ View on map</button></div>';
+  h+='<div style="padding:14px 22px 30px"><button class="sp-btn sp-btn-dir" onclick="viewStopOnMap()" style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:14px;background:var(--pr);color:#fff;border:none;border-radius:60px;font-size:14px;font-weight:600;font-family:var(--fb);cursor:pointer;box-shadow:0 4px 14px rgba(219,74,43,.3)">View on map</button></div>';
 
   document.getElementById('sp-body').innerHTML=h;
   document.getElementById('spanel').scrollTop=0;
@@ -1318,7 +1316,8 @@ function viewStopOnMap(){
 }
 
 // ========================================================================
-// QR MODAL — muestra el QR de la reserva actual (de window._booking.qr_url)
+// QR MODAL — muestra el QR de la reserva actual
+// FareHarbor genera los N pases automáticamente al escanearlo
 // ========================================================================
 function openQR(){
   const b=window._booking;
@@ -1335,14 +1334,19 @@ function openQR(){
     if(imgBox)imgBox.innerHTML='<div class="qrm-img-loading">QR not available for this booking</div>';
     if(sub)sub.textContent='Please contact support if this persists';
   }else{
-    // Subtitle con el booking_id si lo tenemos
     if(sub){
-      sub.textContent=b.booking_id?('Booking '+b.booking_id):'Show this code at each restaurant';
+      // Subtítulo según pax
+      const pax=b&&b.pax?+b.pax:1;
+      if(pax>1){
+        sub.textContent='Show this code · '+pax+' passes inside';
+      }else{
+        sub.textContent=b.booking_id?('Booking '+b.booking_id):'Show this code at each restaurant';
+      }
     }
-    // Renderizar el QR usando quickchart.io (servicio gratuito)
     const encoded=encodeURIComponent(qrUrl);
     const qrSrc='https://quickchart.io/qr?text='+encoded+'&size=400&margin=2&ecLevel=M';
     if(imgBox){
+      imgBox.classList.remove('multi');
       imgBox.innerHTML='<div class="qrm-img-loading">Loading QR…</div>';
       const img=new Image();
       img.alt='Booking QR code';
@@ -1355,7 +1359,6 @@ function openQR(){
 }
 
 function closeQR(e){
-  // Si se llama por click en backdrop, solo cerrar si fue ahí (no en la card interna)
   if(e&&e.target&&e.currentTarget&&e.target!==e.currentTarget&&!e.target.classList.contains('qrm-close'))return;
   document.getElementById('qrm').classList.remove('show');
 }
