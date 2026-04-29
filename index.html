@@ -201,19 +201,24 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-hist{font-family:var(--fs);font-style:italic;font-size:13px;color:var(--tx2);line-height:1.7}
 .sp-overlay{display:none}
 
-/* === QR MODAL (popup with dark overlay) === */
-.qrm{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:400;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+/* === QR MODAL (popup with FareHarbor iframe) === */
+.qrm{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:400;align-items:flex-end;justify-content:center;padding:0;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .qrm.show{display:flex;animation:fadeIn .2s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.qrm-card{background:var(--card);border-radius:22px;padding:24px 22px 22px;width:100%;max-width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);position:relative;animation:popIn .25s cubic-bezier(.34,1.56,.64,1)}
-@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
-.qrm-close{position:absolute;top:14px;right:14px;width:32px;height:32px;background:var(--bg);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--tx2)}
-.qrm-title{font-family:var(--fd);font-size:18px;margin-bottom:4px;padding:0 28px}
-.qrm-sub{font-family:var(--fs);font-style:italic;font-size:13px;color:var(--tx2);margin-bottom:18px;line-height:1.4}
-.qrm-img{width:240px;height:240px;background:#fff;border-radius:12px;border:1.5px solid var(--bd);padding:12px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center}
-.qrm-img img{width:100%;height:100%;display:block}
-.qrm-img-loading{font-size:11px;color:var(--tx3);font-family:var(--fb)}
-.qrm-info{background:var(--bg);border-radius:10px;padding:11px 14px;font-size:11px;color:var(--tx2);line-height:1.5;text-align:left;display:flex;align-items:flex-start;gap:8px}
+.qrm-card{background:var(--card);border-radius:18px 18px 0 0;padding:0;width:100%;max-width:var(--mw);height:92vh;text-align:center;box-shadow:0 -10px 40px rgba(0,0,0,.4);position:relative;animation:slideUp .3s cubic-bezier(.34,1.2,.64,1);display:flex;flex-direction:column;overflow:hidden}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.qrm-header{padding:14px 18px 10px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--bd);flex-shrink:0;background:var(--card)}
+.qrm-handle{position:absolute;top:6px;left:50%;transform:translateX(-50%);width:42px;height:4px;background:var(--bd);border-radius:2px}
+.qrm-close{width:34px;height:34px;background:var(--bg);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;color:var(--tx2);flex-shrink:0;font-family:var(--fb)}
+.qrm-titles{flex:1;text-align:left;min-width:0}
+.qrm-title{font-family:var(--fd);font-size:16px;line-height:1.2;margin-bottom:2px}
+.qrm-sub{font-family:var(--fs);font-style:italic;font-size:12px;color:var(--tx2);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qrm-iframe-wrap{flex:1;width:100%;background:var(--bg);position:relative;overflow:hidden}
+.qrm-iframe{width:100%;height:100%;border:none;display:block;background:#fff}
+.qrm-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:var(--bg);font-size:12px;color:var(--tx2);font-family:var(--fb);z-index:2;transition:opacity .3s}
+.qrm-loading.hidden{opacity:0;pointer-events:none}
+.qrm-loading .spinner{width:36px;height:36px;border:3px solid var(--bd);border-top-color:var(--pr);border-radius:50%;animation:spin 0.8s linear infinite}
+.qrm-info{padding:10px 18px env(safe-area-inset-bottom,12px);font-size:11px;color:var(--tx2);line-height:1.4;background:var(--bg);border-top:1px solid var(--bd);display:flex;align-items:center;gap:8px;flex-shrink:0}
 .qrm-info-em{font-size:14px;flex-shrink:0}
 
 /* === NAVBAR === */
@@ -535,18 +540,24 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <div class="mli"><svg width="12" height="2"><line x1="0" y1="1" x2="12" y2="1" stroke="#DB4A2B" stroke-width="1.5" stroke-dasharray="3 2"/></svg>Route</div>
 </div>
 
-<!-- QR MODAL (popup with QR image) -->
+<!-- QR MODAL (FareHarbor iframe) -->
 <div class="qrm" id="qrm" onclick="closeQR(event)">
 <div class="qrm-card" onclick="event.stopPropagation()">
+<div class="qrm-handle"></div>
+<div class="qrm-header">
 <button class="qrm-close" onclick="closeQR()" aria-label="Close">×</button>
-<div class="qrm-title">Your Booking QR</div>
-<div class="qrm-sub" id="qrm-sub">Show this code at each restaurant</div>
-<div class="qrm-img" id="qrm-img">
-<div class="qrm-img-loading">Loading QR…</div>
+<div class="qrm-titles">
+<div class="qrm-title">Your Booking Passes</div>
+<div class="qrm-sub" id="qrm-sub">Show these QRs at each restaurant</div>
+</div>
+</div>
+<div class="qrm-iframe-wrap">
+<div class="qrm-loading" id="qrm-loading"><div class="spinner"></div><div>Loading your passes…</div></div>
+<iframe class="qrm-iframe" id="qrm-iframe" title="Your booking passes" allow="payment" referrerpolicy="no-referrer-when-downgrade"></iframe>
 </div>
 <div class="qrm-info">
 <span class="qrm-info-em">💡</span>
-<span>The waiter will scan this code to confirm your tapa & drink at every stop.</span>
+<span>The waiter will scan one QR per person at each stop.</span>
 </div>
 </div>
 </div>
@@ -1316,43 +1327,46 @@ function viewStopOnMap(){
 }
 
 // ========================================================================
-// QR MODAL — muestra el QR de la reserva actual
-// FareHarbor genera los N pases automáticamente al escanearlo
+// QR MODAL — embebe la página de FareHarbor (genera N QRs por pax)
 // ========================================================================
 function openQR(){
   const b=window._booking;
-  // Construir la URL: usar qr_url del backend si viene, si no construirla del uuid como fallback
   let qrUrl='';
   if(b&&b.qr_url){
     qrUrl=b.qr_url;
   }else if(b&&b.uuid){
     qrUrl='https://fareharbor.com/embeds/checkin/mealpass/bookings/'+b.uuid+'/';
   }
-  const imgBox=document.getElementById('qrm-img');
+  const iframe=document.getElementById('qrm-iframe');
+  const loading=document.getElementById('qrm-loading');
   const sub=document.getElementById('qrm-sub');
+
   if(!qrUrl){
-    if(imgBox)imgBox.innerHTML='<div class="qrm-img-loading">QR not available for this booking</div>';
-    if(sub)sub.textContent='Please contact support if this persists';
+    if(sub)sub.textContent='QR not available — please contact support';
+    if(loading)loading.innerHTML='<div style="padding:24px;text-align:center;font-size:13px;color:var(--tx2)">QR not available for this booking</div>';
+    if(iframe)iframe.removeAttribute('src');
   }else{
+    // Subtítulo
     if(sub){
-      // Subtítulo según pax
       const pax=b&&b.pax?+b.pax:1;
       if(pax>1){
-        sub.textContent='Show this code · '+pax+' passes inside';
+        sub.textContent='One QR per person · '+pax+' passes';
       }else{
-        sub.textContent=b.booking_id?('Booking '+b.booking_id):'Show this code at each restaurant';
+        sub.textContent=b.booking_id?('Booking '+b.booking_id):'Show this QR at each restaurant';
       }
     }
-    const encoded=encodeURIComponent(qrUrl);
-    const qrSrc='https://quickchart.io/qr?text='+encoded+'&size=400&margin=2&ecLevel=M';
-    if(imgBox){
-      imgBox.classList.remove('multi');
-      imgBox.innerHTML='<div class="qrm-img-loading">Loading QR…</div>';
-      const img=new Image();
-      img.alt='Booking QR code';
-      img.onload=()=>{imgBox.innerHTML='';imgBox.appendChild(img)};
-      img.onerror=()=>{imgBox.innerHTML='<div class="qrm-img-loading">Could not load QR. Check your connection.</div>'};
-      img.src=qrSrc;
+    // Mostrar loading y cargar el iframe
+    if(loading)loading.classList.remove('hidden');
+    if(iframe){
+      iframe.onload=()=>{
+        if(loading)loading.classList.add('hidden');
+      };
+      // Reset para forzar reload si era la misma URL
+      iframe.src='about:blank';
+      setTimeout(()=>{iframe.src=qrUrl},50);
+      // Failsafe: si no dispara onload en 8s, ocultamos loading igualmente
+      clearTimeout(window._qrLoadTimer);
+      window._qrLoadTimer=setTimeout(()=>{if(loading)loading.classList.add('hidden')},8000);
     }
   }
   document.getElementById('qrm').classList.add('show');
@@ -1361,6 +1375,11 @@ function openQR(){
 function closeQR(e){
   if(e&&e.target&&e.currentTarget&&e.target!==e.currentTarget&&!e.target.classList.contains('qrm-close'))return;
   document.getElementById('qrm').classList.remove('show');
+  // Liberar el iframe para no consumir recursos en background
+  setTimeout(()=>{
+    const iframe=document.getElementById('qrm-iframe');
+    if(iframe&&!document.getElementById('qrm').classList.contains('show'))iframe.src='about:blank';
+  },350);
 }
 
 // ========================================================================
