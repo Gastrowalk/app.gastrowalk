@@ -840,8 +840,10 @@ function normalizeResponse(data){
 }
 
 function applyTourData(payload){
-  // payload = {status:'ok', booking:{...}, stops:[...], passes:[...], qr_url, has_individual_passes}
-  if(!payload||payload.status!=='ok'||!Array.isArray(payload.stops)||payload.stops.length===0){
+  // payload = {status:'ok'|success:true, booking:{...}, stops:[...], passes:[...], qr_url, has_individual_passes}
+  // Tolerante a ambos formatos de respuesta del backend (status:'ok' o success:true)
+  const isOk = payload && (payload.status==='ok' || payload.success===true);
+  if(!isOk || !Array.isArray(payload.stops) || payload.stops.length===0){
     return false;
   }
   window._booking=payload.booking||null;
@@ -1429,7 +1431,13 @@ function renderPassesGrid(b){
   const total=_currentPasses.length;
 
   if(sub){
-    sub.textContent=total>1?('One QR per person · '+total+' passes'):(b.booking_id?('Booking '+b.booking_id):'Show this QR at the restaurant');
+    if(total>1){
+      sub.textContent='Tap a pass to enlarge it · '+total+' passes';
+    }else if(total===1){
+      sub.textContent='Tap the pass to enlarge it';
+    }else{
+      sub.textContent=b.booking_id?('Booking '+b.booking_id):'Show this QR at the restaurant';
+    }
   }
 
   // Inyectar el grid dentro del wrap (reemplaza el iframe)
@@ -1472,6 +1480,11 @@ function closePassZoom(e){
 function closeQR(e){
   if(e&&e.target&&e.currentTarget&&e.target!==e.currentTarget&&!e.target.classList.contains('qrm-close'))return;
   document.getElementById('qrm').classList.remove('show');
+  // Limpiar el grid para evitar mostrar datos viejos al reabrir
+  setTimeout(function(){
+    const wrap=document.getElementById('qrm-iframe-wrap');
+    if(wrap) wrap.innerHTML='';
+  },300);
 }
 
 // ========================================================================
