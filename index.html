@@ -73,8 +73,8 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .ml .mld{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
 /* Mini drop-up panel for map markers (Google Maps style) */
-.mini-pop{position:fixed;bottom:-100%;left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:calc(var(--mw) - 24px);background:var(--card);border-radius:18px;box-shadow:0 -4px 24px rgba(0,0,0,.18);z-index:250;transition:bottom .35s cubic-bezier(.4,0,.2,1);padding:18px 20px 20px;margin-bottom:80px}
-.mini-pop.open{bottom:0}
+.mini-pop{position:fixed;bottom:-100%;left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:calc(var(--mw) - 24px);background:var(--card);border-radius:18px;box-shadow:0 -4px 24px rgba(0,0,0,.18);z-index:250;transition:bottom .35s cubic-bezier(.4,0,.2,1);padding:18px 20px 20px;margin-bottom:80px;visibility:hidden;pointer-events:none}
+.mini-pop.open{bottom:0;visibility:visible;pointer-events:auto}
 .mini-pop-handle{width:42px;height:4px;background:var(--bd);border-radius:2px;margin:-6px auto 12px;cursor:grab}
 .mini-pop-row{display:flex;align-items:center;gap:14px;margin-bottom:14px}
 .mini-pop-num{width:42px;height:42px;border-radius:50%;background:var(--pr);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px;flex-shrink:0;box-shadow:0 2px 10px rgba(219,74,43,.3)}
@@ -173,8 +173,8 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 
 /* === SLIDE PANEL === */
 /* === STOP DETAIL — fullscreen modal === */
-.spanel{position:fixed;top:100%;left:50%;transform:translateX(-50%);width:100%;max-width:var(--mw);height:100vh;background:var(--card);box-shadow:0 -4px 24px rgba(0,0,0,.12);z-index:300;overflow-y:auto;transition:top .4s cubic-bezier(.4,0,.2,1);-webkit-overflow-scrolling:touch;padding:0 0 100px}
-.spanel.open{top:0}
+.spanel{position:fixed;top:100%;left:50%;transform:translateX(-50%);width:100%;max-width:var(--mw);height:100vh;background:var(--card);box-shadow:0 -4px 24px rgba(0,0,0,.12);z-index:300;overflow-y:auto;transition:top .4s cubic-bezier(.4,0,.2,1);-webkit-overflow-scrolling:touch;padding:0 0 100px;visibility:hidden;pointer-events:none}
+.spanel.open{top:0;visibility:visible;pointer-events:auto}
 .spanel::-webkit-scrollbar{width:0}
 .sp-topbar{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:14px 14px 12px;background:linear-gradient(to bottom,var(--card) 70%,transparent);z-index:5}
 .sp-topbtn{width:40px;height:40px;background:var(--card);border:1.5px solid var(--bd);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;color:var(--tx);box-shadow:var(--sh);transition:transform .15s}
