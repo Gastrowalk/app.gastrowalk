@@ -1380,39 +1380,12 @@ function openQR(){
   }else if(b&&b.uuid){
     qrUrl='https://fareharbor.com/embeds/checkin/mealpass/bookings/'+b.uuid+'/';
   }
-  const iframe=document.getElementById('qrm-iframe');
-  const loading=document.getElementById('qrm-loading');
-  const sub=document.getElementById('qrm-sub');
-
   if(!qrUrl){
-    if(sub)sub.textContent='QR not available — please contact support';
-    if(loading)loading.innerHTML='<div style="padding:24px;text-align:center;font-size:13px;color:var(--tx2)">QR not available for this booking</div>';
-    if(iframe)iframe.removeAttribute('src');
-  }else{
-    // Subtítulo
-    if(sub){
-      const pax=b&&b.pax?+b.pax:1;
-      if(pax>1){
-        sub.textContent='One QR per person · '+pax+' passes';
-      }else{
-        sub.textContent=b.booking_id?('Booking '+b.booking_id):'Show this QR at each restaurant';
-      }
-    }
-    // Mostrar loading y cargar el iframe
-    if(loading)loading.classList.remove('hidden');
-    if(iframe){
-      iframe.onload=()=>{
-        if(loading)loading.classList.add('hidden');
-      };
-      // Reset para forzar reload si era la misma URL
-      iframe.src='about:blank';
-      setTimeout(()=>{iframe.src=qrUrl},50);
-      // Failsafe: si no dispara onload en 8s, ocultamos loading igualmente
-      clearTimeout(window._qrLoadTimer);
-      window._qrLoadTimer=setTimeout(()=>{if(loading)loading.classList.add('hidden')},8000);
-    }
+    alert('QR not available — please contact support');
+    return;
   }
-  document.getElementById('qrm').classList.add('show');
+  // Abrir la URL del QR de FareHarbor directamente en una pestaña nueva
+  window.open(qrUrl,'_blank','noopener,noreferrer');
 }
 
 function closeQR(e){
