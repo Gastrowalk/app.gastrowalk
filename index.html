@@ -67,7 +67,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 #lm{width:100%;height:100vh;flex:1;border-radius:0}
 
 /* Floating legend pill (overlay on map, above navbar) */
-.ml{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);display:none;align-items:center;gap:14px;padding:9px 16px;font-size:11px;color:var(--tx);background:rgba(255,253,248,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:60px;box-shadow:0 4px 20px rgba(0,0,0,.15);z-index:210;border:none;font-weight:500}
+.ml{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);display:none;align-items:center;gap:14px;padding:9px 16px;font-size:11px;color:var(--tx);background:rgba(255,253,248,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:60px;box-shadow:0 4px 20px rgba(0,0,0,.18);z-index:220;border:1px solid rgba(0,0,0,.05);font-weight:500}
 .ml.show{display:flex}
 .ml .mli{display:flex;align-items:center;gap:5px}
 .ml .mld{width:8px;height:8px;border-radius:50%;flex-shrink:0}
@@ -201,10 +201,13 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-overlay{display:none}
 
 /* === FLOATING QR BUTTON inside Tour === */
-.qr-fab{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:var(--pr);color:#fff;border:none;border-radius:60px;padding:14px 28px;font-family:var(--fb);font-size:14px;font-weight:600;cursor:pointer;display:none;align-items:center;gap:9px;box-shadow:0 6px 22px rgba(219,74,43,.45);z-index:160;transition:transform .15s}
+.qr-fab{position:fixed;bottom:84px;right:18px;width:58px;height:58px;background:#fff;color:var(--tx);border:1.5px solid var(--bd);border-radius:14px;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,0,0,.15);z-index:160;transition:transform .15s;padding:0}
 .qr-fab.show{display:flex}
-.qr-fab:active{transform:translateX(-50%) scale(.95)}
-.qr-fab svg{width:18px;height:18px;flex-shrink:0}
+.qr-fab:active{transform:scale(.92)}
+.qr-fab svg{width:34px;height:34px}
+.qr-fab-label{display:none}
+/* Mobile: keep right anchored within max-width frame */
+@media(min-width:431px){.qr-fab{right:auto;left:50%;transform:translateX(calc(var(--mw) / 2 - 76px))}.qr-fab:active{transform:translateX(calc(var(--mw) / 2 - 76px)) scale(.92)}}
 
 /* === NAVBAR === */
 .nav{display:none;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:var(--mw);background:var(--card);border-top:1px solid var(--bd);padding:6px 0 env(safe-area-inset-bottom,8px);z-index:200;box-shadow:0 -2px 12px rgba(0,0,0,.06)}
@@ -300,7 +303,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .bls-add-btn:active{transform:scale(.92)}
 
 /* === BACK BUTTON inside Tour (top-left arrow) === */
-.tour-back{position:fixed;top:14px;left:50%;transform:translateX(calc(-1 * (var(--mw) / 2 - 14px)));width:38px;height:38px;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shl);font-size:18px;z-index:90;color:var(--tx);font-weight:700;font-family:var(--fb)}
+.tour-back{position:fixed;top:14px;left:50%;transform:translateX(calc(-1 * (var(--mw) / 2 - 14px)));width:38px;height:38px;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shl);font-size:18px;z-index:230;color:var(--tx);font-weight:700;font-family:var(--fb)}
 .tour-back:active{transform:translateX(calc(-1 * (var(--mw) / 2 - 14px))) scale(.9)}
 @media(max-width:430px){.tour-back{left:14px;transform:none}.tour-back:active{transform:scale(.9)}}
 </style>
@@ -372,7 +375,6 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 </div></div>
 
 <div class="s h" id="st"><div class="ts">
-<button class="tour-back" id="tour-back-btn" onclick="backToBookingsList()" style="display:none" aria-label="Back to my tours">←</button>
 <div class="th"><div class="tb">📍 Self-guided</div><div class="th1">Gourmet Tapas Tour</div><div class="tc">Palma de Mallorca</div></div>
 <div class="ti">
 <div class="tic an d1"><div class="ic">🕐</div><div class="lb">Duration</div><div class="vl">3–4h</div></div>
@@ -386,7 +388,6 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 
 <div class="s h" id="sm"><div class="ms">
 <div class="mw show"><div id="lm"></div></div>
-<div class="ml" id="map-legend"><div class="mli"><div class="mld" style="background:#DB4A2B"></div>Stops</div><div class="mli"><div class="mld" style="background:#4285F4"></div>You</div><div class="mli"><svg width="12" height="2"><line x1="0" y1="1" x2="12" y2="1" stroke="#DB4A2B" stroke-width="1.5" stroke-dasharray="3 2"/></svg>Route</div></div>
 </div></div>
 
 <!-- MINI POPUP for map markers (Google Maps style drop-up) -->
@@ -510,10 +511,19 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 
 </div></div>
 
+<!-- FLOATING BACK BUTTON (Tour & Map screens) -->
+<button class="tour-back" id="tour-back-btn" onclick="backToBookingsList()" style="display:none" aria-label="Back to my tours">←</button>
+
+<!-- FLOATING MAP LEGEND (only on Map screen) -->
+<div class="ml" id="map-legend">
+<div class="mli"><div class="mld" style="background:#DB4A2B"></div>Stops</div>
+<div class="mli"><div class="mld" style="background:#4285F4"></div>You</div>
+<div class="mli"><svg width="12" height="2"><line x1="0" y1="1" x2="12" y2="1" stroke="#DB4A2B" stroke-width="1.5" stroke-dasharray="3 2"/></svg>Route</div>
+</div>
+
 <!-- FLOATING QR BUTTON (only on Tour screen) -->
 <button class="qr-fab" id="qr-fab" onclick="openQR()" aria-label="Show QR code">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3M14 17v4M17 14v3M21 14h-1M21 17v4M14 21h7"/></svg>
-<span>Show my QR</span>
 </button>
 
 <!-- BOTTOM NAVBAR -->
