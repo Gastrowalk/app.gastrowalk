@@ -67,7 +67,8 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 #lm{width:100%;height:100vh;flex:1;border-radius:0}
 
 /* Floating legend pill (overlay on map, above navbar) */
-.ml{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);display:none;align-items:center;gap:14px;padding:9px 16px;font-size:11px;color:var(--tx);background:rgba(255,253,248,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:60px;box-shadow:0 4px 20px rgba(0,0,0,.18);z-index:220;border:1px solid rgba(0,0,0,.05);font-weight:500}
+.ml{position:fixed;top:14px;right:14px;left:auto;display:none;align-items:center;gap:12px;padding:8px 14px;font-size:11px;color:var(--tx);background:rgba(255,253,248,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:60px;box-shadow:0 4px 20px rgba(0,0,0,.18);z-index:220;border:1px solid rgba(0,0,0,.05);font-weight:500}
+@media(min-width:431px){.ml{right:auto;left:50%;transform:translateX(calc(var(--mw) / 2 - 100% - 14px))}}
 .ml.show{display:flex}
 .ml .mli{display:flex;align-items:center;gap:5px}
 .ml .mld{width:8px;height:8px;border-radius:50%;flex-shrink:0}
@@ -200,14 +201,6 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-hist{font-family:var(--fs);font-style:italic;font-size:13px;color:var(--tx2);line-height:1.7}
 .sp-overlay{display:none}
 
-/* === FLOATING QR BUTTON inside Tour === */
-.qr-fab{position:fixed;bottom:84px;right:18px;width:58px;height:58px;background:#fff;color:var(--tx);border:1.5px solid var(--bd);border-radius:14px;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,0,0,.15);z-index:160;transition:transform .15s;padding:0}
-.qr-fab.show{display:flex}
-.qr-fab:active{transform:scale(.92)}
-.qr-fab svg{width:34px;height:34px}
-.qr-fab-label{display:none}
-@media(min-width:431px){.qr-fab{right:auto;left:50%;transform:translateX(calc(var(--mw) / 2 - 76px))}.qr-fab:active{transform:translateX(calc(var(--mw) / 2 - 76px)) scale(.92)}}
-
 /* === QR MODAL (popup with dark overlay) === */
 .qrm{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:400;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .qrm.show{display:flex;animation:fadeIn .2s ease}
@@ -234,6 +227,14 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .nav-item.on span{color:var(--pr);font-weight:700}
 .nav-item:active{transform:scale(.92)}
 .nav-dot{position:absolute;top:2px;right:14px;width:7px;height:7px;background:#16A34A;border-radius:50%;border:1.5px solid var(--card)}
+
+/* === CENTRAL QR TAB (highlighted bubble) === */
+.nav-qr{position:relative}
+.nav-qr-bubble{display:flex;align-items:center;justify-content:center;width:42px;height:42px;background:var(--pr);color:#fff;border-radius:14px;margin-bottom:2px;box-shadow:0 4px 14px rgba(219,74,43,.35);transition:transform .15s}
+.nav-qr-bubble svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2}
+.nav-qr:active .nav-qr-bubble{transform:scale(.9)}
+.nav-qr svg{stroke:#fff!important}
+.nav-qr span:not(.nav-qr-bubble){font-size:10px;font-weight:600;color:var(--tx2)}
 
 /* === SUPPORT === */
 .sup-scr{background:var(--bg);padding:24px 20px 110px}
@@ -535,11 +536,6 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <div class="mli"><svg width="12" height="2"><line x1="0" y1="1" x2="12" y2="1" stroke="#DB4A2B" stroke-width="1.5" stroke-dasharray="3 2"/></svg>Route</div>
 </div>
 
-<!-- FLOATING QR BUTTON (only on Tour screen) -->
-<button class="qr-fab" id="qr-fab" onclick="openQR()" aria-label="Show QR code">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3M14 17v4M17 14v3M21 14h-1M21 17v4M14 21h7"/></svg>
-</button>
-
 <!-- QR MODAL (popup with QR image) -->
 <div class="qrm" id="qrm" onclick="closeQR(event)">
 <div class="qrm-card" onclick="event.stopPropagation()">
@@ -573,7 +569,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <span>Support</span>
 </button>
 </div>
-<!-- Mode: ACTIVE TOUR (Tour / Map / Rate / Support) -->
+<!-- Mode: ACTIVE TOUR (Tour / Map / QR / Rate / Support) -->
 <div class="nav-items" id="nav-items-tour">
 <button class="nav-item on" id="nav-tour" onclick="navTo('st','nav-tour')">
 <svg viewBox="0 0 24 24"><path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3V7z" stroke-linejoin="round"/><path d="M9 4v13M15 7v13"/></svg>
@@ -582,6 +578,12 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <button class="nav-item" id="nav-map" onclick="navTo('sm','nav-map')">
 <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
 <span>Map</span>
+</button>
+<button class="nav-item nav-qr" id="nav-qr" onclick="openQR()" aria-label="Show QR">
+<span class="nav-qr-bubble">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3M14 17v4M17 14v3M21 14h-1M21 17v4M14 21h7"/></svg>
+</span>
+<span>QR</span>
 </button>
 <button class="nav-item" id="nav-rate" onclick="navTo('sr','nav-rate')">
 <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -952,10 +954,6 @@ function go(id){
     const legend=document.getElementById('map-legend');
     if(legend)legend.classList.toggle('show',id==='sm');
 
-    // Mostrar/ocultar QR FAB solo en pantalla del Tour
-    const qrFab=document.getElementById('qr-fab');
-    if(qrFab)qrFab.classList.toggle('show',id==='st');
-
     // Determinar el "modo" del navbar.
     // Si el usuario está logueado con email y NO hay tour activo cargado → modo LISTA.
     // Si entra a "ss" (Support), respetamos el modo en el que estaba antes (sticky).
@@ -1275,26 +1273,17 @@ function sD(i){
   const drinkText=s.drList&&s.drList.length?s.drList.join(', '):s.dr;
   h+='<div class="sp-drink">🍷 '+escapeHtml(drinkText)+'</div></div>';
 
-  h+='<div style="padding:14px 22px 30px"><button class="sp-btn sp-btn-dir" onclick="oD()" style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:14px;background:var(--pr);color:#fff;border:none;border-radius:60px;font-size:14px;font-weight:600;font-family:var(--fb);cursor:pointer;box-shadow:0 4px 14px rgba(219,74,43,.3)">📍 Open in Google Maps</button></div>';
+  h+='<div style="padding:14px 22px 30px"><button class="sp-btn sp-btn-dir" onclick="viewStopOnMap()" style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:14px;background:var(--pr);color:#fff;border:none;border-radius:60px;font-size:14px;font-weight:600;font-family:var(--fb);cursor:pointer;box-shadow:0 4px 14px rgba(219,74,43,.3)">🗺️ View on map</button></div>';
 
   document.getElementById('sp-body').innerHTML=h;
   document.getElementById('spanel').scrollTop=0;
   document.getElementById('spanel').classList.add('open');
   document.getElementById('spo').classList.add('show');
-  // Ocultar FAB del QR mientras está el panel abierto
-  const fab=document.getElementById('qr-fab');
-  if(fab)fab.classList.remove('show');
 }
 
 function closePanel(){
   document.getElementById('spanel').classList.remove('open');
   document.getElementById('spo').classList.remove('show');
-  // Restaurar FAB si seguimos en pantalla del tour
-  const cur=document.querySelector('.s.a');
-  if(cur&&cur.id==='st'){
-    const fab=document.getElementById('qr-fab');
-    if(fab)fab.classList.add('show');
-  }
 }
 
 function oD(){
