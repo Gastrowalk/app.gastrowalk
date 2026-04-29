@@ -232,14 +232,24 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sup-logout:active{background:var(--prl)}
 
 /* === MY BOOKINGS LIST === */
-.bls{display:flex;flex-direction:column;min-height:100vh;background:var(--bg);padding:52px 18px 32px}
+.bls{display:flex;flex-direction:column;min-height:100vh;background:var(--bg);padding:52px 18px 90px}
 .bls-head{margin-bottom:20px}
 .bls-greet{font-family:var(--fd);font-size:24px;margin-bottom:3px}
 .bls-sub{font-size:13px;color:var(--tx2);line-height:1.5}
-.bls-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px}
-.bls-empty-ic{font-size:54px;margin-bottom:16px;opacity:.6}
-.bls-empty-t{font-family:var(--fd);font-size:18px;margin-bottom:6px}
-.bls-empty-s{font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:24px;max-width:280px}
+
+/* Empty state — grande y bonito */
+.bls-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px 16px;min-height:60vh}
+.bls-empty-art{position:relative;width:160px;height:160px;margin-bottom:28px;display:flex;align-items:center;justify-content:center}
+.bls-empty-art::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,var(--prl) 0%,transparent 70%);border-radius:50%;animation:pulseBg 3s ease-in-out infinite}
+.bls-empty-art-circle{width:120px;height:120px;background:linear-gradient(168deg,#FFFDF8 0%,#F5DDD7 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:60px;box-shadow:0 8px 32px rgba(219,74,43,.18);position:relative;z-index:2}
+@keyframes pulseBg{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.08);opacity:.8}}
+.bls-empty-t{font-family:var(--fd);font-size:28px;line-height:1.15;margin-bottom:10px;letter-spacing:-.5px}
+.bls-empty-s{font-family:var(--fs);font-size:15px;color:var(--tx2);line-height:1.55;margin-bottom:32px;max-width:300px}
+.bls-empty-cta{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--pr);color:#fff;border:none;border-radius:60px;padding:16px 32px;font-size:15px;font-weight:600;font-family:var(--fb);cursor:pointer;box-shadow:0 6px 20px rgba(219,74,43,.35);transition:all .2s;min-width:240px}
+.bls-empty-cta:active{transform:scale(.96);box-shadow:0 3px 12px rgba(219,74,43,.4)}
+.bls-empty-cta svg{width:18px;height:18px;flex-shrink:0}
+.bls-empty-hint{margin-top:18px;font-size:11px;color:var(--tx3);max-width:280px;line-height:1.5}
+
 .bls-list{display:flex;flex-direction:column;gap:11px;margin-top:10px}
 .blc{background:var(--card);border-radius:var(--r);padding:16px;box-shadow:var(--sh);cursor:pointer;transition:all .15s;border:none;text-align:left;font-family:var(--fb);width:100%;position:relative;overflow:hidden}
 .blc:active{transform:scale(.98)}
@@ -305,7 +315,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <div class="lo an d2" onclick="sL(this)"><span class="lf">🇬🇧</span><span class="ln">English</span><span class="lna">English</span></div>
 <div class="lo an d3" onclick="sL(this)"><span class="lf">🇪🇸</span><span class="ln">Español</span><span class="lna">Spanish</span></div>
 <div class="lo an d4" onclick="sL(this)"><span class="lf">🇩🇪</span><span class="ln">Deutsch</span><span class="lna">German</span></div>
-<button class="bc an d5" id="blc" disabled onclick="registerUser();go('sb')">Continue</button>
+<button class="bc an d5" id="blc" disabled onclick="afterLanguageSelected()">Continue</button>
 </div></div>
 
 <!-- MY BOOKINGS LIST screen -->
@@ -325,9 +335,11 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <div class="bls-sub">Latest from Gastrowalk</div>
 </div>
 <div class="bls-empty an d2" id="news-content">
-<div class="bls-empty-ic">📰</div>
+<div class="bls-empty-art">
+<div class="bls-empty-art-circle">📰</div>
+</div>
 <div class="bls-empty-t">Coming soon</div>
-<div class="bls-empty-s">News, exclusive offers and tour updates will appear here.</div>
+<div class="bls-empty-s">News, exclusive offers and tour updates will appear here. Stay tuned!</div>
 </div>
 </div></div>
 
@@ -1196,13 +1208,13 @@ function handleGoogleResponse(response){
 // ========================================================================
 function checkExistingUser(){
   if(!window._user.email){
-    // Sin email (anónimo) → no podemos buscar, ir a flujo normal
+    // Sin email (login anónimo "continue without account") → flujo antiguo
     document.querySelector('.ls-hi').textContent='Welcome! 👋';
     go('sl');
     return;
   }
   // Mostrar pantalla de carga rápida
-  showLoadingScreen('Checking your account...');
+  showLoadingScreen('Loading your account...');
   fetch(WEBHOOK_URL,{
     method:'POST',
     headers:{'Content-Type':'application/json'},
@@ -1215,42 +1227,41 @@ function checkExistingUser(){
   .then(raw=>{
     const data=normalizeResponse(raw);
     hideLoadingScreen();
-    if(!data){
-      // Sin respuesta válida → tratar como usuario nuevo
-      goToLanguageSelection();
-      return;
-    }
-    if(data.status==='new_user'){
-      // Usuario no existe en Airtable aún → flujo de registro normal (idioma → booking)
-      goToLanguageSelection();
-      return;
-    }
-    if(data.status==='ok'){
-      // Usuario existe → recuperar nombre/idioma del backend si no los tenemos
+
+    // Caso 1: USUARIO EXISTENTE → directo a My Tours, sin idioma
+    if(data&&data.status==='ok'){
       if(data.user){
         if(data.user.language)window._user.language=data.user.language;
         if(data.user.name&&!window._user.name)window._user.name=data.user.name;
       }
       window._userBookings=Array.isArray(data.bookings)?data.bookings:[];
-      // Saltar directamente a la lista de bookings
+      saveSession();
       renderBookingsList();
       go('sbl');
       return;
     }
-    // Cualquier otro caso → flujo normal
-    goToLanguageSelection();
+
+    // Caso 2: USUARIO NUEVO → primero pide idioma, después My Tours
+    // (también si la respuesta es desconocida — fallback al flujo "nuevo")
+    window._userBookings=[];
+    // Marcar para que tras escoger idioma vaya directo a My Tours (no a booking ID)
+    window._newUserPendingTours=true;
+    document.querySelector('.ls-hi').textContent='Hola, '+(window._user.name||'').split(' ')[0]+'! 👋';
+    go('sl');
   })
   .catch(err=>{
     hideLoadingScreen();
     console.warn('checkExistingUser failed:',err);
-    // Fallback: tratar como usuario nuevo
-    goToLanguageSelection();
+    // Sin red / error: si tenemos sesión previa con bookings, usar esos; si no, idioma
+    if(Array.isArray(window._userBookings)&&window._userBookings.length){
+      renderBookingsList();
+      go('sbl');
+    }else{
+      window._newUserPendingTours=true;
+      document.querySelector('.ls-hi').textContent='Hola, '+(window._user.name||'').split(' ')[0]+'! 👋';
+      go('sl');
+    }
   });
-}
-
-function goToLanguageSelection(){
-  document.querySelector('.ls-hi').textContent='Hola, '+(window._user.name||'').split(' ')[0]+'! 👋';
-  go('sl');
 }
 
 // Mini loading overlay (no creamos pantalla nueva — usamos un div temporal)
@@ -1292,16 +1303,28 @@ function renderBookingsList(){
   const bookings=Array.isArray(window._userBookings)?window._userBookings:[];
 
   if(!bookings.length){
-    // Estado vacío
-    if(sub)sub.textContent='You don\'t have any tours yet';
+    // Estado vacío — bonito y grande
+    if(sub)sub.textContent='No bookings yet';
     content.innerHTML='<div class="bls-empty an d2">'+
-      '<div class="bls-empty-ic">🍷</div>'+
-      '<div class="bls-empty-t">No tours yet</div>'+
-      '<div class="bls-empty-s">Once you book a tour you\'ll see it here. Got a confirmation email already? Add your booking ID to start.</div>'+
-      '<button class="bc" style="max-width:240px" onclick="goAddBooking()">+ Add booking</button>'+
+      '<div class="bls-empty-art">'+
+        '<div class="bls-empty-art-circle">🍷</div>'+
+      '</div>'+
+      '<div class="bls-empty-t">Add your<br>first booking</div>'+
+      '<div class="bls-empty-s">Have a confirmation email from GetYourGuide, Viator or directly from us? Link your booking ID to unlock the tour.</div>'+
+      '<button class="bls-empty-cta" onclick="goAddBooking()">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'+
+        'Add your booking'+
+      '</button>'+
+      '<div class="bls-empty-hint">You can find your booking ID in the confirmation email you received after purchasing your tour.</div>'+
       '</div>';
+    // Ocultar el botón "+" de la cabecera cuando estamos en empty state (ya hay CTA grande)
+    const addBtn=document.querySelector('.bls-add-btn');
+    if(addBtn)addBtn.style.display='none';
     return;
   }
+  // Mostrar el botón "+" cuando hay bookings
+  const addBtn=document.querySelector('.bls-add-btn');
+  if(addBtn)addBtn.style.display='flex';
 
   // Separar activos y caducados
   const active=[];
@@ -1584,6 +1607,33 @@ function registerUser(){
 }
 
 // ========================================================================
+// AFTER LANGUAGE SELECTED — decide a dónde ir según el tipo de usuario
+// ========================================================================
+function afterLanguageSelected(){
+  // Siempre registrar/actualizar el idioma en el backend
+  registerUser();
+
+  // Si el usuario está intentando añadir un booking (vino de "+ Add booking")
+  // → tras escoger idioma debe ir a la pantalla de booking ID
+  if(window._addingNewBooking){
+    go('sb');
+    return;
+  }
+
+  if(window._user&&window._user.email){
+    // Usuario nuevo con cuenta Google que acaba de elegir idioma → va a My Tours (vacía)
+    window._newUserPendingTours=false;
+    window._userBookings=window._userBookings||[];
+    saveSession();
+    renderBookingsList();
+    go('sbl');
+  }else{
+    // Usuario anónimo (sin email) → flujo antiguo, sigue al booking ID
+    go('sb');
+  }
+}
+
+// ========================================================================
 // LINK BOOKING — recibe paradas reales y las pinta
 // ========================================================================
 function linkBooking(){
@@ -1694,18 +1744,6 @@ function resumeApp(){
   if(window._user&&window._user.email){
     refreshUserBookings();
   }
-  // Decidir a qué pantalla volver
-  const hasActiveTour=window._booking&&S.length;
-  // ¿El tour activo aún es válido (no caducado)?
-  let tourValid=true;
-  if(hasActiveTour&&window._booking){
-    const b=window._booking;
-    const expiresAt=b.expires_at?new Date(b.expires_at):
-      (b.start_date&&b.start_time?new Date(parseStartDateTime(b.start_date,b.start_time).getTime()+7*24*60*60*1000):null);
-    if(expiresAt&&!isNaN(expiresAt.getTime())&&expiresAt.getTime()<Date.now()){
-      tourValid=false;
-    }
-  }
 
   // Saludo
   if(window._user&&window._user.name){
@@ -1713,19 +1751,20 @@ function resumeApp(){
     if(hi)hi.textContent='Hola, '+window._user.name.split(' ')[0]+'! 👋';
   }
 
-  if(hasActiveTour&&tourValid){
-    // Volver directo al tour
-    renderTourScreen();
-    go('st');
-  }else if(window._user&&window._user.email){
-    // Sin tour activo (o caducado) pero usuario logueado → ir a la lista
+  // Política: SIEMPRE ir a My Tours si el usuario tiene email guardado
+  // (independientemente de si hay un tour activo cargado en sesión).
+  // El tour solo se abre si el usuario pulsa explícitamente una card.
+  if(window._user&&window._user.email){
+    // Limpiar el "tour activo" cargado: para que la lista sea el punto de partida.
+    // Los datos del tour se recargan desde el backend con load_tour cuando el usuario pulse.
     window._booking=null;
     S=[];
     window._cameFromList=false;
+    if(window._m){try{window._m.remove()}catch(e){}window._m=null}
     renderBookingsList();
     go('sbl');
   }
-  // Si no hay nada útil → quedarse en welcome
+  // Si no hay email (sesión anónima/inválida) → quedarse en welcome
 }
 </script>
 </body>
