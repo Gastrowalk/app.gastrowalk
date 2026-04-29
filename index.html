@@ -186,6 +186,11 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-num{width:44px;height:44px;border-radius:50%;background:var(--pr);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;flex-shrink:0;box-shadow:0 3px 12px rgba(219,74,43,.3)}
 .sp-name{font-family:var(--fs);font-size:22px;font-weight:600;color:var(--tx);line-height:1.2}
 .sp-addr{font-size:12px;color:var(--tx3);margin-top:3px}
+.sp-gmaps{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--pr);text-decoration:none;margin-top:6px;font-weight:600;font-family:var(--fb);cursor:pointer;padding:4px 10px 4px 8px;background:var(--prl);border-radius:60px;transition:transform .12s;max-width:100%}
+.sp-gmaps:active{transform:scale(.96)}
+.sp-gmaps svg{flex-shrink:0;stroke:var(--pr)}
+.sp-gmaps span:not(.sp-gmaps-arrow){white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.sp-gmaps-arrow{font-weight:400;opacity:.7;margin-left:1px}
 .sp-dist{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--tx2);margin-top:5px}
 .sp-sec{padding:0 22px;margin-bottom:22px}
 .sp-sec-t{font-family:var(--fd);font-size:15px;margin-bottom:10px}
@@ -440,7 +445,11 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <div>
 <div class="sp-name" id="sp-name">—</div>
 <div class="sp-addr" id="sp-addr"></div>
-<div class="sp-dist" id="sp-dist"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#78716C" stroke-width="1.5"><path d="M2 14l4-12 3 6 5-2-12 8z"/></svg><span>3 min · 240m</span></div>
+<a class="sp-gmaps" id="sp-gmaps" href="#" onclick="openInGmaps(event)">
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+<span id="sp-gmaps-name">View in Google Maps</span>
+<span class="sp-gmaps-arrow">›</span>
+</a>
 </div>
 </div>
 <div id="sp-body"></div>
@@ -1263,6 +1272,9 @@ function sD(i){
   // Distancia: ocultamos si no la tenemos
   const distEl=document.getElementById('sp-dist');
   if(distEl)distEl.style.display='none';
+  // Link a Google Maps con el nombre del restaurante
+  const gmapsName=document.getElementById('sp-gmaps-name');
+  if(gmapsName)gmapsName.textContent=s.nm;
 
   let h='';
   h+='<div class="sp-sec"><div class="sp-sec-t">Your tapa &amp; drink</div>';
@@ -1301,6 +1313,22 @@ function oD(){
   // Si tenemos URL de Google Maps original, abrirla; si no, generar una de "directions"
   if(s.mu)window.open(s.mu,'_blank');
   else window.open('https://www.google.com/maps/dir/?api=1&destination='+s.lt+','+s.ln+'&travelmode=walking','_blank');
+}
+
+// Abrir en Google Maps externamente (desde el link del header del modal)
+function openInGmaps(e){
+  if(e&&e.preventDefault)e.preventDefault();
+  const s=window._cs;
+  if(!s)return;
+  // Preferir la URL original de Google Maps (mantiene el lugar exacto), sino búsqueda por nombre+coords
+  if(s.mu){
+    window.open(s.mu,'_blank');
+  }else if(s.nm&&s.lt&&s.ln){
+    const q=encodeURIComponent(s.nm);
+    window.open('https://www.google.com/maps/search/?api=1&query='+q+'&query_place_id='+s.lt+','+s.ln,'_blank');
+  }else if(s.lt&&s.ln){
+    window.open('https://www.google.com/maps/search/?api=1&query='+s.lt+','+s.ln,'_blank');
+  }
 }
 
 // "View on map" desde el detalle de una parada → ir al mapa y centrar en esa parada
