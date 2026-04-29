@@ -1294,18 +1294,69 @@ function openQR(){
 }
 
 // ========================================================================
-// GOOGLE LOGIN (real)
+// GOOGLE LOGIN — OAuth2 popup directo (sin depender de FedCM)
 // ========================================================================
-function loginGoogle(){
+let _googleInitialized=false;
+
+function ensureGoogleInit(){
+  if(_googleInitialized)return;
+  if(typeof google==='undefined'||!google.accounts||!google.accounts.id){
+    console.warn('Google Identity Services script not yet loaded');
+    return;
+  }
   google.accounts.id.initialize({
     client_id:GOOGLE_CLIENT_ID,
     callback:handleGoogleResponse,
-    ux_mode:'popup'
+    ux_mode:'popup',
+    use_fedcm_for_prompt:false  // ← evita problemas con FedCM disabled
   });
-  google.accounts.id.prompt();
+  _googleInitialized=true;
+}
+
+function loginGoogle(){
+  // Comprobación de que Google está cargado
+  if(typeof google==='undefined'||!google.accounts||!google.accounts.oauth2){
+    alert('Google sign-in is still loading. Please wait a second and try again.');
+    return;
+  }
+  // Usar OAuth2 token client (popup directo, sin FedCM)
+  // Pide solo perfil + email
+  const tokenClient=google.accounts.oauth2.initTokenClient({
+    client_id:GOOGLE_CLIENT_ID,
+    scope:'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid',
+    callback:async (resp)=>{
+      if(resp.error){
+        console.warn('Google OAuth error:',resp);
+        alert('Could not sign in with Google. Please try again.');
+        return;
+      }
+      // Tenemos access_token. Pedimos info de usuario al endpoint userinfo.
+      try{
+        const r=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{
+          headers:{Authorization:'Bearer '+resp.access_token}
+        });
+        const profile=await r.json();
+        window._user={
+          email:profile.email,
+          name:profile.name,
+          picture:profile.picture,
+          source:'google_login',
+          language:null,
+          status:'registered'
+        };
+        console.log('Google Login OK:',profile.email);
+        checkExistingUser();
+      }catch(err){
+        console.error('Failed to fetch userinfo:',err);
+        alert('Sign-in succeeded but we could not load your profile. Please retry.');
+      }
+    }
+  });
+  tokenClient.requestAccessToken({prompt:''});
 }
 
 function handleGoogleResponse(response){
+  // (legacy, por si algún flujo todavía usa One Tap o el initialize)
   const token=response.credential;
   const payload=JSON.parse(atob(token.split('.')[1]));
   window._user={
@@ -1316,8 +1367,7 @@ function handleGoogleResponse(response){
     language:null,
     status:'registered'
   };
-  console.log('Google Login OK:',payload.email);
-  // Antes de pedir idioma, comprobar si el usuario ya existe y tiene bookings
+  console.log('Google Login OK (legacy):',payload.email);
   checkExistingUser();
 }
 
