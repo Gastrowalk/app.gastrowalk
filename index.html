@@ -206,7 +206,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-hist{font-family:var(--fs);font-style:italic;font-size:13px;color:var(--tx2);line-height:1.7}
 .sp-overlay{display:none}
 
-/* === QR MODAL (FareHarbor iframe with floating close) === */
+/* === QR MODAL (Grid de pases individuales con zoom on tap) === */
 .qrm{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:400;align-items:flex-end;justify-content:center;padding:0;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .qrm.show{display:flex;animation:fadeIn .2s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -223,20 +223,32 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .qrm-title{font-family:var(--fd);font-size:15px;line-height:1.2;margin-bottom:1px;color:#1F1B16}
 .qrm-sub{font-family:var(--fs);font-style:italic;font-size:11px;color:#78716C;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-/* Iframe wrapper - fixed-size scrollable with small QRs */
-.qrm-iframe-wrap{flex:1;width:100%;background:#fff;position:relative;overflow:hidden}
-.qrm-iframe-scroll{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
-.qrm-iframe-scroll::-webkit-scrollbar{width:0}
-/* Desktop: scale 60% */
-.qrm-iframe{width:166.67%;border:none;display:block;background:#fff;height:1500px;transform:scale(.6);transform-origin:top left}
-/* Mobile: smaller scale (45%) so QRs fit much smaller */
-@media(max-width:430px){
-  .qrm-iframe{width:222.22%;height:1700px;transform:scale(.45)}
-}
+/* Grid wrapper - replaces old iframe wrapper */
+.qrm-iframe-wrap{flex:1;width:100%;background:#fff;position:relative;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.qrm-iframe-wrap::-webkit-scrollbar{width:0}
 
-.qrm-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#fff;font-size:12px;color:#78716C;font-family:var(--fb);z-index:2;transition:opacity .3s}
-.qrm-loading.hidden{opacity:0;pointer-events:none}
-.qrm-loading .spinner{width:36px;height:36px;border:3px solid #E8E3DC;border-top-color:var(--pr);border-radius:50%;animation:spin 0.8s linear infinite}
+/* === PASSES GRID (lista compacta de QRs) === */
+.passes-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:14px}
+.pass-card{background:#FFFDF8;border:1px solid var(--bd);border-radius:14px;padding:12px;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease,border-color .15s;display:flex;flex-direction:column;align-items:center}
+.pass-card:active{transform:scale(.97);box-shadow:0 2px 8px rgba(0,0,0,.08);border-color:var(--pr)}
+.pass-qr-thumb{width:100%;background:#fff;border-radius:8px;margin-bottom:8px;padding:6px}
+.pass-qr-thumb img{width:100%;height:auto;display:block;border-radius:4px}
+.pass-info{display:flex;flex-direction:column;align-items:center;gap:2px}
+.pass-type{font-size:13px;font-weight:600;color:var(--tx);font-family:var(--fb)}
+.pass-number{font-size:11px;color:var(--tx2);font-family:var(--fb)}
+
+/* === PASS ZOOM MODAL (popup grande individual) === */
+.pass-zoom-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.pass-zoom-modal.show{display:flex;animation:fadeIn .2s ease}
+.pass-zoom-card{background:#fff;border-radius:20px;padding:28px 24px 24px;max-width:90vw;width:340px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:slideUp .3s cubic-bezier(.34,1.2,.64,1)}
+.pass-zoom-close{position:absolute;top:12px;right:12px;background:#F5F2EC;border:none;width:36px;height:36px;border-radius:50%;font-size:22px;font-weight:300;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tx);line-height:1;transition:transform .12s}
+.pass-zoom-close:active{transform:scale(.9)}
+.pass-zoom-wrapper{display:flex;flex-direction:column;align-items:center;padding-top:8px}
+.pass-zoom-title{font-family:var(--fd);font-size:22px;margin:0 0 4px;color:var(--tx)}
+.pass-zoom-subtitle{font-family:var(--fs);font-style:italic;font-size:13px;color:var(--tx2);margin:0 0 18px}
+.pass-zoom-image{background:#fff;padding:10px;border-radius:14px;margin-bottom:14px;border:1px solid var(--bd)}
+.pass-zoom-image img{width:260px;height:260px;display:block;max-width:100%}
+.pass-zoom-hint{font-family:var(--fb);font-size:12px;color:var(--tx2);margin:0;text-align:center}
 
 .qrm-info{padding:10px 18px env(safe-area-inset-bottom,12px);font-size:11px;color:#78716C;line-height:1.4;background:#FFFDF8;border-top:1px solid #E8E3DC;display:flex;align-items:center;gap:8px;flex-shrink:0}
 .qrm-info-em{font-size:14px;flex-shrink:0}
@@ -564,25 +576,28 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <div class="mli"><svg width="12" height="2"><line x1="0" y1="1" x2="12" y2="1" stroke="#DB4A2B" stroke-width="1.5" stroke-dasharray="3 2"/></svg>Route</div>
 </div>
 
-<!-- QR MODAL (FareHarbor iframe with floating close) -->
+<!-- QR MODAL (Grid de pases individuales) -->
 <div class="qrm" id="qrm" onclick="closeQR(event)">
 <div class="qrm-card" onclick="event.stopPropagation()">
 <div class="qrm-handle"></div>
 <button class="qrm-close" onclick="closeQR()" aria-label="Close">×</button>
 <div class="qrm-header">
 <div class="qrm-title">Your Booking Passes</div>
-<div class="qrm-sub" id="qrm-sub">Show these QRs at each restaurant</div>
+<div class="qrm-sub" id="qrm-sub">Tap a pass to enlarge it</div>
 </div>
-<div class="qrm-iframe-wrap">
-<div class="qrm-loading" id="qrm-loading"><div class="spinner"></div><div>Loading your passes…</div></div>
-<div class="qrm-iframe-scroll">
-<iframe class="qrm-iframe" id="qrm-iframe" title="Your booking passes" referrerpolicy="no-referrer-when-downgrade" scrolling="no"></iframe>
-</div>
-</div>
+<div class="qrm-iframe-wrap" id="qrm-iframe-wrap"></div>
 <div class="qrm-info">
 <span class="qrm-info-em">💡</span>
-<span>Scroll to see all your passes. The waiter will scan one per person.</span>
+<span>Tap any QR to enlarge it. The waiter will scan one per person.</span>
 </div>
+</div>
+</div>
+
+<!-- PASS ZOOM MODAL (popup grande de un pase individual) -->
+<div class="pass-zoom-modal" id="passZoomModal" onclick="closePassZoom(event)">
+<div class="pass-zoom-card" onclick="event.stopPropagation()">
+<button class="pass-zoom-close" onclick="closePassZoom()" aria-label="Close">×</button>
+<div id="passZoomContent"></div>
 </div>
 </div>
 
@@ -825,11 +840,17 @@ function normalizeResponse(data){
 }
 
 function applyTourData(payload){
-  // payload = {status:'ok', booking:{...}, stops:[...]}
+  // payload = {status:'ok', booking:{...}, stops:[...], passes:[...], qr_url, has_individual_passes}
   if(!payload||payload.status!=='ok'||!Array.isArray(payload.stops)||payload.stops.length===0){
     return false;
   }
   window._booking=payload.booking||null;
+  // Guardar también datos de QR en _booking para que openQR los use
+  if(window._booking){
+    window._booking.qr_url=payload.qr_url||'';
+    window._booking.has_individual_passes=!!payload.has_individual_passes;
+    window._booking.passes=Array.isArray(payload.passes)?payload.passes:[];
+  }
   S=payload.stops.map((s,idx)=>{
     const tapas=parseTapas(s.tapas);
     const drinks=parseDrinks(s.drinks);
@@ -1370,59 +1391,87 @@ function viewStopOnMap(){
 }
 
 // ========================================================================
-// QR MODAL — embebe la página de FareHarbor (genera N QRs por pax)
+// QR MODAL — Grid de pases individuales (+ zoom) o redirección a FareHarbor
 // ========================================================================
+let _currentPasses=[];
+
 function openQR(){
   const b=window._booking;
-  let qrUrl='';
-  if(b&&b.qr_url){
-    qrUrl=b.qr_url;
-  }else if(b&&b.uuid){
-    qrUrl='https://fareharbor.com/embeds/checkin/mealpass/bookings/'+b.uuid+'/';
+  if(!b){
+    alert('No active booking');
+    return;
   }
-  const iframe=document.getElementById('qrm-iframe');
-  const loading=document.getElementById('qrm-loading');
-  const sub=document.getElementById('qrm-sub');
+  const hasPasses=!!b.has_individual_passes && Array.isArray(b.passes) && b.passes.length>0;
 
-  if(!qrUrl){
-    if(sub)sub.textContent='QR not available — please contact support';
-    if(loading)loading.innerHTML='<div style="padding:24px;text-align:center;font-size:13px;color:var(--tx2)">QR not available for this booking</div>';
-    if(iframe)iframe.removeAttribute('src');
-  }else{
-    // Subtítulo
-    if(sub){
-      const pax=b&&b.pax?+b.pax:1;
-      if(pax>1){
-        sub.textContent='One QR per person · '+pax+' passes';
-      }else{
-        sub.textContent=b.booking_id?('Booking '+b.booking_id):'Show this QR at each restaurant';
-      }
-    }
-    // Mostrar loading y cargar el iframe
-    if(loading)loading.classList.remove('hidden');
-    if(iframe){
-      iframe.onload=()=>{
-        if(loading)loading.classList.add('hidden');
-      };
-      // Reset para forzar reload si era la misma URL
-      iframe.src='about:blank';
-      setTimeout(()=>{iframe.src=qrUrl},50);
-      // Failsafe: si no dispara onload en 8s, ocultamos loading igualmente
-      clearTimeout(window._qrLoadTimer);
-      window._qrLoadTimer=setTimeout(()=>{if(loading)loading.classList.add('hidden')},8000);
-    }
+  // Caso 1: tenemos pases individuales → abrir modal con grid
+  if(hasPasses){
+    _currentPasses=b.passes;
+    renderPassesGrid(b);
+    document.getElementById('qrm').classList.add('show');
+    return;
   }
-  document.getElementById('qrm').classList.add('show');
+
+  // Caso 2: reserva antigua sin pases → abrir URL de FareHarbor en nueva pestaña
+  let fallbackUrl=b.qr_url||'';
+  if(!fallbackUrl && b.uuid){
+    fallbackUrl='https://fareharbor.com/embeds/checkin/mealpass/bookings/'+b.uuid+'/';
+  }
+  if(fallbackUrl){
+    window.open(fallbackUrl,'_blank','noopener,noreferrer');
+  }else{
+    alert('Pass not available — please contact support');
+  }
+}
+
+function renderPassesGrid(b){
+  const sub=document.getElementById('qrm-sub');
+  const wrap=document.getElementById('qrm-iframe-wrap');
+  const total=_currentPasses.length;
+
+  if(sub){
+    sub.textContent=total>1?('One QR per person · '+total+' passes'):(b.booking_id?('Booking '+b.booking_id):'Show this QR at the restaurant');
+  }
+
+  // Inyectar el grid dentro del wrap (reemplaza el iframe)
+  if(wrap){
+    let html='<div class="passes-grid">';
+    _currentPasses.forEach((p,idx)=>{
+      html+='<div class="pass-card" onclick="openPassZoom('+idx+')">'
+        +'<div class="pass-qr-thumb"><img src="'+p.qr_image_url+'" alt="Pass '+(idx+1)+'" loading="lazy"/></div>'
+        +'<div class="pass-info">'
+        +'<span class="pass-type">'+(p.customer_type||'Guest')+'</span>'
+        +'<span class="pass-number">'+(p.pass_number||'')+'</span>'
+        +'</div>'
+        +'</div>';
+    });
+    html+='</div>';
+    wrap.innerHTML=html;
+  }
+}
+
+function openPassZoom(index){
+  const pass=_currentPasses[index];
+  if(!pass)return;
+  const zoom=document.getElementById('passZoomModal');
+  const content=document.getElementById('passZoomContent');
+  if(!zoom||!content)return;
+  content.innerHTML='<div class="pass-zoom-wrapper">'
+    +'<h3 class="pass-zoom-title">'+(pass.customer_type||'Guest')+'</h3>'
+    +'<p class="pass-zoom-subtitle">Pass '+(pass.pass_number||'')+'</p>'
+    +'<div class="pass-zoom-image"><img src="'+pass.qr_image_url+'" alt="QR"/></div>'
+    +'<p class="pass-zoom-hint">Show this QR at the restaurant</p>'
+    +'</div>';
+  zoom.classList.add('show');
+}
+
+function closePassZoom(e){
+  if(e&&e.target&&e.currentTarget&&e.target!==e.currentTarget&&!e.target.classList.contains('pass-zoom-close'))return;
+  document.getElementById('passZoomModal').classList.remove('show');
 }
 
 function closeQR(e){
   if(e&&e.target&&e.currentTarget&&e.target!==e.currentTarget&&!e.target.classList.contains('qrm-close'))return;
   document.getElementById('qrm').classList.remove('show');
-  // Liberar el iframe para no consumir recursos en background
-  setTimeout(()=>{
-    const iframe=document.getElementById('qrm-iframe');
-    if(iframe&&!document.getElementById('qrm').classList.contains('show'))iframe.src='about:blank';
-  },350);
 }
 
 // ========================================================================
