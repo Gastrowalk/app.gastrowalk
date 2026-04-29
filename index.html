@@ -206,8 +206,22 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .qr-fab:active{transform:scale(.92)}
 .qr-fab svg{width:34px;height:34px}
 .qr-fab-label{display:none}
-/* Mobile: keep right anchored within max-width frame */
 @media(min-width:431px){.qr-fab{right:auto;left:50%;transform:translateX(calc(var(--mw) / 2 - 76px))}.qr-fab:active{transform:translateX(calc(var(--mw) / 2 - 76px)) scale(.92)}}
+
+/* === QR MODAL (popup with dark overlay) === */
+.qrm{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:400;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.qrm.show{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.qrm-card{background:var(--card);border-radius:22px;padding:24px 22px 22px;width:100%;max-width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);position:relative;animation:popIn .25s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+.qrm-close{position:absolute;top:14px;right:14px;width:32px;height:32px;background:var(--bg);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--tx2)}
+.qrm-title{font-family:var(--fd);font-size:18px;margin-bottom:4px;padding:0 28px}
+.qrm-sub{font-family:var(--fs);font-style:italic;font-size:13px;color:var(--tx2);margin-bottom:18px;line-height:1.4}
+.qrm-img{width:240px;height:240px;background:#fff;border-radius:12px;border:1.5px solid var(--bd);padding:12px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center}
+.qrm-img img{width:100%;height:100%;display:block}
+.qrm-img-loading{font-size:11px;color:var(--tx3);font-family:var(--fb)}
+.qrm-info{background:var(--bg);border-radius:10px;padding:11px 14px;font-size:11px;color:var(--tx2);line-height:1.5;text-align:left;display:flex;align-items:flex-start;gap:8px}
+.qrm-info-em{font-size:14px;flex-shrink:0}
 
 /* === NAVBAR === */
 .nav{display:none;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:var(--mw);background:var(--card);border-top:1px solid var(--bd);padding:6px 0 env(safe-area-inset-bottom,8px);z-index:200;box-shadow:0 -2px 12px rgba(0,0,0,.06)}
@@ -525,6 +539,22 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <button class="qr-fab" id="qr-fab" onclick="openQR()" aria-label="Show QR code">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3M14 17v4M17 14v3M21 14h-1M21 17v4M14 21h7"/></svg>
 </button>
+
+<!-- QR MODAL (popup with QR image) -->
+<div class="qrm" id="qrm" onclick="closeQR(event)">
+<div class="qrm-card" onclick="event.stopPropagation()">
+<button class="qrm-close" onclick="closeQR()" aria-label="Close">×</button>
+<div class="qrm-title">Your Booking QR</div>
+<div class="qrm-sub" id="qrm-sub">Show this code at each restaurant</div>
+<div class="qrm-img" id="qrm-img">
+<div class="qrm-img-loading">Loading QR…</div>
+</div>
+<div class="qrm-info">
+<span class="qrm-info-em">💡</span>
+<span>The waiter will scan this code to confirm your tapa & drink at every stop.</span>
+</div>
+</div>
+</div>
 
 <!-- BOTTOM NAVBAR -->
 <nav class="nav" id="navbar">
@@ -1298,9 +1328,47 @@ function viewStopOnMap(){
   },550);
 }
 
-// QR placeholder — se configurará más adelante
+// ========================================================================
+// QR MODAL — muestra el QR de la reserva actual (de window._booking.qr_url)
+// ========================================================================
 function openQR(){
-  alert('QR feature coming soon — this will show your booking QR code to scan at restaurants.');
+  const b=window._booking;
+  // Construir la URL: usar qr_url del backend si viene, si no construirla del uuid como fallback
+  let qrUrl='';
+  if(b&&b.qr_url){
+    qrUrl=b.qr_url;
+  }else if(b&&b.uuid){
+    qrUrl='https://fareharbor.com/embeds/checkin/mealpass/bookings/'+b.uuid+'/';
+  }
+  const imgBox=document.getElementById('qrm-img');
+  const sub=document.getElementById('qrm-sub');
+  if(!qrUrl){
+    if(imgBox)imgBox.innerHTML='<div class="qrm-img-loading">QR not available for this booking</div>';
+    if(sub)sub.textContent='Please contact support if this persists';
+  }else{
+    // Subtitle con el booking_id si lo tenemos
+    if(sub){
+      sub.textContent=b.booking_id?('Booking '+b.booking_id):'Show this code at each restaurant';
+    }
+    // Renderizar el QR usando quickchart.io (servicio gratuito)
+    const encoded=encodeURIComponent(qrUrl);
+    const qrSrc='https://quickchart.io/qr?text='+encoded+'&size=400&margin=2&ecLevel=M';
+    if(imgBox){
+      imgBox.innerHTML='<div class="qrm-img-loading">Loading QR…</div>';
+      const img=new Image();
+      img.alt='Booking QR code';
+      img.onload=()=>{imgBox.innerHTML='';imgBox.appendChild(img)};
+      img.onerror=()=>{imgBox.innerHTML='<div class="qrm-img-loading">Could not load QR. Check your connection.</div>'};
+      img.src=qrSrc;
+    }
+  }
+  document.getElementById('qrm').classList.add('show');
+}
+
+function closeQR(e){
+  // Si se llama por click en backdrop, solo cerrar si fue ahí (no en la card interna)
+  if(e&&e.target&&e.currentTarget&&e.target!==e.currentTarget&&!e.target.classList.contains('qrm-close'))return;
+  document.getElementById('qrm').classList.remove('show');
 }
 
 // ========================================================================
