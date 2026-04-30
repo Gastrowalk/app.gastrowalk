@@ -1847,7 +1847,10 @@ function computeBookingStatus(b){
     const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
     const daysToStart=Math.round((startDay.getTime()-today.getTime())/(1000*60*60*24));
     if(daysToStart>3){
-      return {cls:'upc',label:'Upcoming',expireText:'Available to see your tour in '+daysToStart+' days',isUpcoming:true};
+      // Días hasta que el tour se hace accesible (3 días antes del tour)
+      const daysUntilAccess=daysToStart-3;
+      const dayWord=daysUntilAccess===1?'day':'days';
+      return {cls:'upc',label:'Upcoming',expireText:'Available to see your tour in '+daysUntilAccess+' '+dayWord,isUpcoming:true};
     }
   }
   if(daysLeft<=2){
