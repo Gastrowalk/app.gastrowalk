@@ -893,7 +893,7 @@ function extractAddrFromMapsUrl(url){
 function renderTourScreen(){
   // Header del tour
   if(window._booking){
-    const tourTitle=window._booking.item_name||'Your tour';
+    const tourTitle=cleanItemName(window._booking.item_name||'Your tour');
     // Limpia: "Gourmet Tapas & Wine Tour - Palma de Mallorca" → titulo + ciudad
     const parts=tourTitle.split(/\s*-\s*/);
     const titleEl=document.querySelector('#st .th1');
@@ -1042,6 +1042,13 @@ function renderRatingScreen(){
 function escapeHtml(s){
   if(!s)return '';
   return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+// Quita códigos internos al final del nombre del tour: "(W)", "(T)", "(S)", etc.
+// Solo cosmético para mostrar al cliente; los datos crudos no se modifican.
+function cleanItemName(name){
+  if(!name)return '';
+  return String(name).replace(/\s*\([A-Za-z]{1,3}\)\s*$/,'').trim();
 }
 
 // ========================================================================
@@ -1780,7 +1787,7 @@ function renderBookingCard(b,st,i,mode){
   if(mode===true)mode='expired';
   if(mode===false||mode==null)mode='active';
   const dateLabel=formatBookingDate(b.start_date,b.start_time);
-  const titleParts=(b.item_name||'Tour').split(/\s*-\s*/);
+  const titleParts=cleanItemName(b.item_name||'Tour').split(/\s*-\s*/);
   const tourName=titleParts[0]||'Tour';
   const city=titleParts[1]||'';
   const idShort=b.booking_id||('#'+(b.uuid||'').slice(0,8));
@@ -1840,7 +1847,7 @@ function computeBookingStatus(b){
     const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
     const daysToStart=Math.round((startDay.getTime()-today.getTime())/(1000*60*60*24));
     if(daysToStart>3){
-      return {cls:'upc',label:'Upcoming',expireText:'Available in '+daysToStart+' days',isUpcoming:true};
+      return {cls:'upc',label:'Upcoming',expireText:'Available to see your tour in '+daysToStart+' days',isUpcoming:true};
     }
   }
   if(daysLeft<=2){
