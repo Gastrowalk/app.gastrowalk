@@ -1832,10 +1832,13 @@ function computeBookingStatus(b){
     return {cls:'urg',label:'Expired',expireText:'Access has expired',isUpcoming:false};
   }
   // UPCOMING: el tour aún no ha empezado y faltan más de 3 días para empezarlo.
-  // En este modo el cliente puede ver la info pero NO el QR ni el rating.
+  // Comparamos a nivel de día (sin horas): el cambio ocurre a medianoche del día
+  // que está 3 días antes del tour, no en horas exactas.
+  // Ejemplo: tour 3 mayo 18:00 → se activa el 30 abril a las 00:00.
   if(startAt&&!isNaN(startAt.getTime())){
-    const msToStart=startAt.getTime()-now.getTime();
-    const daysToStart=Math.ceil(msToStart/(1000*60*60*24));
+    const startDay=new Date(startAt.getFullYear(),startAt.getMonth(),startAt.getDate());
+    const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+    const daysToStart=Math.round((startDay.getTime()-today.getTime())/(1000*60*60*24));
     if(daysToStart>3){
       return {cls:'upc',label:'Upcoming',expireText:'Available in '+daysToStart+' days',isUpcoming:true};
     }
