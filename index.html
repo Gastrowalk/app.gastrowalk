@@ -2169,7 +2169,15 @@ function openTourFromMagicLink(params){
     if(!(window._user&&window._user.email)){
       // Marcamos para que se muestre el banner cuando entremos al tour
       window._showSaveBookingBanner=true;
+      window._cameFromList=false; // anónimo → sin flecha back, no hay lista
+    }else{
+      // Usuario logueado entrando por magic link → activamos la flecha back
+      // y refrescamos la lista de bookings en background para que esté lista
+      window._cameFromList=true;
+      window._showSaveBookingBanner=false;
+      if(typeof refreshUserBookings==='function')refreshUserBookings();
     }
+    saveSession(); // re-guardar con _cameFromList ya correcto
     if(document.readyState==='loading'){
       document.addEventListener('DOMContentLoaded',()=>go('st'));
     }else{
