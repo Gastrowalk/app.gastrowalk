@@ -1582,7 +1582,7 @@ function checkExistingUser(){
     go('sl');
     return;
   }
-  // CASO ESPECIAL: el usuario acaba de loguearse desde el banner "Save this booking"
+  // CASO ESPECIAL 1: el usuario acaba de loguearse desde el banner "Save this booking"
   // (entró por magic link, viendo el tour, y pulsó "Sign in" para guardarlo).
   // En ese caso re-vinculamos en background y NOS QUEDAMOS en el tour.
   if(window._pendingSaveBookingAfterLogin&&window._booking){
@@ -1590,6 +1590,12 @@ function checkExistingUser(){
     relinkCurrentBookingToUser();
     saveSession();
     return; // no salimos de la pantalla del tour
+  }
+  // CASO ESPECIAL 2: hay un magic link pendiente (entró por enlace y eligió Google).
+  // Disparamos el flujo del magic link ya con el email del usuario logueado.
+  if(window._pendingMagicLink){
+    consumePendingMagicLink();
+    return;
   }
   // Mostrar pantalla de carga rápida
   showLoadingScreen('Loading your account...');
@@ -1945,6 +1951,11 @@ function refreshUserBookings(){
 
 function loginAnonymous(){
   window._user={email:null,name:null,source:'anonymous',language:null,status:'anonymous'};
+  // Si hay un magic link pendiente, abrir el tour directamente (sin pasar por sl)
+  if(window._pendingMagicLink){
+    consumePendingMagicLink();
+    return;
+  }
   document.querySelector('.ls-hi').textContent='Welcome! 👋';
   go('sl');
 }
@@ -2175,17 +2186,26 @@ function openTourFromMagicLink(params){
 // AUTO-LOGIN al cargar la app: si hay sesión válida, saltar al tour
 // ========================================================================
 (function autoResume(){
-  // 1) PRIORIDAD MÁXIMA: magic link en la URL
+  // 1) Magic link en la URL: NO abrir el tour todavía. Solo guardamos los
+  //    parámetros y limpiamos la URL. Después de que el usuario elija login
+  //    (Google o anónimo), se disparará openTourFromMagicLink.
   const magic=getMagicLinkParams();
   if(magic){
     clearMagicLinkFromURL();
-    // Restaurar el usuario si lo había (para vincular si ya está logueado)
+    window._pendingMagicLink=magic;
+    // Si ya hay sesión guardada con email → saltarse el welcome y abrir tour ya
     const sess=loadSession();
-    if(sess&&sess.user){
+    if(sess&&sess.user&&sess.user.email){
       window._user=sess.user;
       window._userBookings=Array.isArray(sess.userBookings)?sess.userBookings:[];
+      if(document.readyState==='loading'){
+        document.addEventListener('DOMContentLoaded',consumePendingMagicLink);
+      }else{
+        consumePendingMagicLink();
+      }
+      return;
     }
-    openTourFromMagicLink(magic);
+    // Sin sesión → dejar que vea el welcome screen y elija
     return;
   }
 
@@ -2207,6 +2227,15 @@ function openTourFromMagicLink(params){
     resumeApp();
   }
 })();
+
+// Llama a openTourFromMagicLink con los params guardados (si los hay) y los borra.
+function consumePendingMagicLink(){
+  const magic=window._pendingMagicLink;
+  if(!magic)return false;
+  window._pendingMagicLink=null;
+  openTourFromMagicLink(magic);
+  return true;
+}
 
 function resumeApp(){
   // Si el usuario tiene email → refrescar bookings desde backend en background
