@@ -328,6 +328,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .blc-badge.act{background:var(--okbg);color:var(--ok)}
 .blc-badge.soon{background:#FEF3C7;color:#92400E}
 .blc-badge.urg{background:#FEE2E2;color:#991B1B}
+.blc-badge.upc{background:#E0E7FF;color:#3730A3}
 .blc-meta{display:flex;gap:14px;font-size:11px;color:var(--tx2);margin-bottom:10px;flex-wrap:wrap}
 .blc-meta span{display:flex;align-items:center;gap:4px}
 .blc-foot{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--bd)}
@@ -346,6 +347,14 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .blc.exp .blc-meta{color:var(--tx3)}
 .blc.exp .blc-arr{display:none}
 .blc.exp .blc-foot{justify-content:flex-start}
+
+/* === UPCOMING BOOKING CARD === */
+.blc.upc{cursor:not-allowed;background:#F8FAFE;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.blc.upc:active{transform:none}
+.blc.upc .blc-title{color:var(--tx2)}
+.blc.upc .blc-arr{display:none}
+.blc.upc .blc-foot{justify-content:flex-start}
+.blc.upc .blc-expire{color:#3730A3}
 .blc-section-label{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;padding:18px 4px 8px;display:block}
 
 /* === ADD BOOKING + BUTTON (top-right of bookings list) === */
@@ -1710,17 +1719,20 @@ function renderBookingsList(){
   const addBtn=document.querySelector('.bls-add-btn');
   if(addBtn)addBtn.style.display='flex';
 
-  // Separar activos y caducados
+  // Separar: upcoming (más de 3 días para empezar), active (incluye soon/urg), expired
+  const upcoming=[];
   const active=[];
   const expired=[];
   bookings.forEach(b=>{
     const st=computeBookingStatus(b);
     if(st.cls==='urg'&&st.label==='Expired')expired.push({b,st});
+    else if(st.isUpcoming)upcoming.push({b,st});
     else active.push({b,st});
   });
 
   if(sub){
-    if(active.length===0)sub.textContent='All your tours have expired';
+    if(active.length===0&&upcoming.length===0)sub.textContent='All your tours have expired';
+    else if(active.length===0&&upcoming.length>0)sub.textContent='Your tours will be ready soon';
     else sub.textContent='Tap a booking to start your tour';
   }
 
@@ -1730,7 +1742,17 @@ function renderBookingsList(){
   if(active.length){
     html+='<div class="bls-list">';
     active.forEach((row,i)=>{
-      html+=renderBookingCard(row.b,row.st,i,false);
+      html+=renderBookingCard(row.b,row.st,i,'active');
+    });
+    html+='</div>';
+  }
+
+  // UPCOMING (no clicable, badge azul, sin filtro gris)
+  if(upcoming.length){
+    html+='<span class="bls-section-label an d3">Coming up</span>';
+    html+='<div class="bls-list">';
+    upcoming.forEach((row,i)=>{
+      html+=renderBookingCard(row.b,row.st,i,'upcoming');
     });
     html+='</div>';
   }
@@ -1740,7 +1762,7 @@ function renderBookingsList(){
     html+='<span class="bls-section-label an d3">Past tours</span>';
     html+='<div class="bls-list">';
     expired.forEach((row,i)=>{
-      html+=renderBookingCard(row.b,row.st,i,true);
+      html+=renderBookingCard(row.b,row.st,i,'expired');
     });
     html+='</div>';
   }
@@ -1752,16 +1774,24 @@ function renderBookingsList(){
 }
 
 // Devuelve el HTML de una card de booking. expired=true → modo gris sin clic
-function renderBookingCard(b,st,i,expired){
+function renderBookingCard(b,st,i,mode){
+  // mode: 'active' | 'upcoming' | 'expired'
+  // Compatibilidad hacia atrás: si llega un boolean, lo mapeamos
+  if(mode===true)mode='expired';
+  if(mode===false||mode==null)mode='active';
   const dateLabel=formatBookingDate(b.start_date,b.start_time);
   const titleParts=(b.item_name||'Tour').split(/\s*-\s*/);
   const tourName=titleParts[0]||'Tour';
   const city=titleParts[1]||'';
   const idShort=b.booking_id||('#'+(b.uuid||'').slice(0,8));
-  const cls='blc an d'+Math.min(i+2,5)+(expired?' exp':'');
-  const onclick=expired?'':('onclick="openBooking(\''+escapeHtml(b.uuid||'')+'\')"');
-  const tag=expired?'div':'button';
+  const isClickable=mode==='active';
+  const modeClass=mode==='expired'?' exp':(mode==='upcoming'?' upc':'');
+  const cls='blc an d'+Math.min(i+2,5)+modeClass;
+  const onclick=isClickable?('onclick="openBooking(\''+escapeHtml(b.uuid||'')+'\')"'):'';
+  const tag=isClickable?'button':'div';
   let badgeHtml='<span class="blc-badge '+st.cls+'">'+st.label+'</span>';
+  // Mostrar línea de expireText en active y upcoming (no en expired)
+  const showExpireLine=st.expireText&&mode!=='expired';
   return '<'+tag+' class="'+cls+'" '+onclick+'>'+
     '<div class="blc-top">'+
       '<div class="blc-title">'+escapeHtml(tourName)+(city?' <span style="color:var(--tx3);font-weight:400;font-size:13px">· '+escapeHtml(city)+'</span>':'')+'</div>'+
@@ -1771,41 +1801,52 @@ function renderBookingCard(b,st,i,expired){
       '<span>📅 '+escapeHtml(dateLabel)+'</span>'+
       (b.pax?'<span>👥 '+b.pax+' pax</span>':'')+
     '</div>'+
-    (st.expireText&&!expired?'<div class="blc-expire'+(st.cls==='urg'?' urg':'')+'">⏳ '+escapeHtml(st.expireText)+'</div>':'')+
+    (showExpireLine?'<div class="blc-expire'+(st.cls==='urg'?' urg':'')+'">⏳ '+escapeHtml(st.expireText)+'</div>':'')+
     '<div class="blc-foot">'+
       '<span class="blc-id">'+escapeHtml(idShort)+'</span>'+
-      (expired?'':'<span class="blc-arr">›</span>')+
+      (isClickable?'<span class="blc-arr">›</span>':'')+
     '</div>'+
   '</'+tag+'>';
 }
 
 // Calcular estado del booking según su expires_at
 function computeBookingStatus(b){
-  // expires_at puede venir del backend o calcularse aquí
+  // Calcular start (inicio del tour) y expiresAt (start + 7 días)
+  let startAt=null;
   let expiresAt=null;
+  if(b.start_date&&b.start_time){
+    startAt=parseStartDateTime(b.start_date,b.start_time);
+  }
   if(b.expires_at){
     expiresAt=new Date(b.expires_at);
-  }else if(b.start_date&&b.start_time){
-    // Construir desde start_date (puede ser "2025-08-25" o "25/8/2025") + start_time "13:00"
-    expiresAt=parseStartDateTime(b.start_date,b.start_time);
-    if(expiresAt)expiresAt=new Date(expiresAt.getTime()+7*24*60*60*1000);
+  }else if(startAt){
+    expiresAt=new Date(startAt.getTime()+7*24*60*60*1000);
   }
   const now=new Date();
   if(!expiresAt||isNaN(expiresAt.getTime())){
-    return {cls:'act',label:'Active',expireText:''};
+    return {cls:'act',label:'Active',expireText:'',isUpcoming:false};
   }
   const msLeft=expiresAt.getTime()-now.getTime();
   const daysLeft=Math.ceil(msLeft/(1000*60*60*24));
   if(msLeft<=0){
-    return {cls:'urg',label:'Expired',expireText:'Access has expired'};
+    return {cls:'urg',label:'Expired',expireText:'Access has expired',isUpcoming:false};
+  }
+  // UPCOMING: el tour aún no ha empezado y faltan más de 3 días para empezarlo.
+  // En este modo el cliente puede ver la info pero NO el QR ni el rating.
+  if(startAt&&!isNaN(startAt.getTime())){
+    const msToStart=startAt.getTime()-now.getTime();
+    const daysToStart=Math.ceil(msToStart/(1000*60*60*24));
+    if(daysToStart>3){
+      return {cls:'upc',label:'Upcoming',expireText:'Available in '+daysToStart+' days',isUpcoming:true};
+    }
   }
   if(daysLeft<=2){
-    return {cls:'urg',label:daysLeft+'d left',expireText:'Expires in '+daysLeft+' day'+(daysLeft===1?'':'s')};
+    return {cls:'urg',label:daysLeft+'d left',expireText:'Expires in '+daysLeft+' day'+(daysLeft===1?'':'s'),isUpcoming:false};
   }
   if(daysLeft<=4){
-    return {cls:'soon',label:daysLeft+'d left',expireText:'Expires in '+daysLeft+' days'};
+    return {cls:'soon',label:daysLeft+'d left',expireText:'Expires in '+daysLeft+' days',isUpcoming:false};
   }
-  return {cls:'act',label:'Active',expireText:'Available for '+daysLeft+' more days'};
+  return {cls:'act',label:'Active',expireText:'Available for '+daysLeft+' more days',isUpcoming:false};
 }
 
 function parseStartDateTime(dateStr,timeStr){
