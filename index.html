@@ -206,6 +206,16 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-hist{font-family:var(--fs);font-style:italic;font-size:13px;color:var(--tx2);line-height:1.7}
 .sp-overlay{display:none}
 
+/* === SAVE BOOKING BANNER (magic link sin login) === */
+.save-bk-banner{margin:0 16px 12px;padding:12px 14px;background:linear-gradient(135deg,#fff5f1 0%,#ffeae1 100%);border:1px solid rgba(219,74,43,.18);border-radius:14px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(219,74,43,.06)}
+.save-bk-banner-ic{flex:0 0 auto;width:32px;height:32px;background:var(--pr);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px}
+.save-bk-banner-tx{flex:1;min-width:0}
+.save-bk-banner-tt{font-size:13px;font-weight:600;color:var(--tx);line-height:1.3}
+.save-bk-banner-sb{font-size:11px;color:var(--tx2);margin-top:2px;line-height:1.35}
+.save-bk-banner-bt{flex:0 0 auto;background:var(--pr);color:#fff;border:0;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.save-bk-banner-bt:active{transform:scale(.96)}
+.save-bk-banner-cl{flex:0 0 auto;background:transparent;border:0;color:var(--tx3);font-size:18px;cursor:pointer;padding:4px 6px;line-height:1}
+
 /* === QR MODAL (FareHarbor iframe with floating close) === */
 .qrm{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:400;align-items:flex-end;justify-content:center;padding:0;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .qrm.show{display:flex;animation:fadeIn .2s ease}
@@ -883,6 +893,10 @@ function renderTourScreen(){
     if(cityEl)cityEl.textContent=parts[1]||'';
   }
 
+  // Banner "Save this booking to your account" si el usuario llegó por magic link
+  // sin estar logueado
+  renderSaveBookingBanner();
+
   // Stats: nº de paradas
   const stats=document.querySelectorAll('#st .tic .vl');
   if(stats[1])stats[1].textContent=S.length;
@@ -915,6 +929,88 @@ function renderTourScreen(){
   if(txt&&window._user.name){
     txt.textContent='Thank you, '+window._user.name.split(' ')[0]+'!';
   }
+}
+
+// ========================================================================
+// SAVE BOOKING BANNER — invitación a hacer login después de magic-link
+// ========================================================================
+function renderSaveBookingBanner(){
+  const stScreen=document.getElementById('st');
+  if(!stScreen)return;
+  // Quitar banner previo si existe
+  const old=stScreen.querySelector('.save-bk-banner');
+  if(old)old.remove();
+  // Sólo mostrar si: magic-link activo, y el user NO tiene email
+  if(!window._showSaveBookingBanner)return;
+  if(window._user&&window._user.email)return;
+  // Construir banner
+  const banner=document.createElement('div');
+  banner.className='save-bk-banner an d2';
+  banner.innerHTML=
+    '<div class="save-bk-banner-ic">💾</div>'+
+    '<div class="save-bk-banner-tx">'+
+      '<div class="save-bk-banner-tt">Save this booking</div>'+
+      '<div class="save-bk-banner-sb">Sign in to access from any device</div>'+
+    '</div>'+
+    '<button class="save-bk-banner-bt" onclick="saveBookingViaLogin()">Sign in</button>'+
+    '<button class="save-bk-banner-cl" onclick="dismissSaveBookingBanner()" aria-label="Dismiss">×</button>';
+  // Insertarlo justo después del header del tour (.ts header) — al inicio de la pantalla
+  const ts=stScreen.querySelector('.ts');
+  if(ts&&ts.firstChild){
+    ts.insertBefore(banner,ts.firstChild.nextSibling);
+  }else if(ts){
+    ts.appendChild(banner);
+  }
+}
+
+function dismissSaveBookingBanner(){
+  window._showSaveBookingBanner=false;
+  const stScreen=document.getElementById('st');
+  if(stScreen){
+    const b=stScreen.querySelector('.save-bk-banner');
+    if(b)b.remove();
+  }
+}
+
+function saveBookingViaLogin(){
+  // Lanza el flujo de Google Login. Tras éxito, el callback existente
+  // refrescará el usuario; aquí marcamos flag para re-vincular el booking
+  // automáticamente después.
+  window._pendingSaveBookingAfterLogin=true;
+  if(typeof loginGoogle==='function'){
+    loginGoogle();
+  }else{
+    alert('Could not start sign-in. Please try again.');
+  }
+}
+
+// Re-vincula el booking actual al email recién logueado (post-login flow)
+function relinkCurrentBookingToUser(){
+  if(!window._booking||!window._booking.booking_id)return;
+  if(!window._user||!window._user.email)return;
+  fetch(WEBHOOK_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      action:'link_booking',
+      booking_id:window._booking.booking_id.replace(/^#/,''),
+      email:window._user.email,
+      name:window._user.name,
+      language:window._user.language,
+      via:'magic_link_after_login'
+    })
+  })
+  .then(r=>r.ok?r.json():null)
+  .then(raw=>{
+    if(!raw)return;
+    console.log('Booking re-linked to user account');
+    // Refrescar lista de bookings del usuario
+    if(typeof refreshUserBookings==='function')refreshUserBookings();
+    // Quitar banner
+    dismissSaveBookingBanner();
+    saveSession();
+  })
+  .catch(err=>console.warn('Re-link error:',err));
 }
 
 function renderRatingScreen(){
@@ -1486,6 +1582,15 @@ function checkExistingUser(){
     go('sl');
     return;
   }
+  // CASO ESPECIAL: el usuario acaba de loguearse desde el banner "Save this booking"
+  // (entró por magic link, viendo el tour, y pulsó "Sign in" para guardarlo).
+  // En ese caso re-vinculamos en background y NOS QUEDAMOS en el tour.
+  if(window._pendingSaveBookingAfterLogin&&window._booking){
+    window._pendingSaveBookingAfterLogin=false;
+    relinkCurrentBookingToUser();
+    saveSession();
+    return; // no salimos de la pantalla del tour
+  }
   // Mostrar pantalla de carga rápida
   showLoadingScreen('Loading your account...');
   fetch(WEBHOOK_URL,{
@@ -1991,9 +2096,100 @@ window.gwLogout=function(){
 };
 
 // ========================================================================
+// MAGIC LINK: detecta ?b=BOOKING_ID&t=TOKEN en la URL
+// y vincula el booking automáticamente al abrir la app
+// ========================================================================
+function getMagicLinkParams(){
+  try{
+    const u=new URL(window.location.href);
+    const b=u.searchParams.get('b');
+    const t=u.searchParams.get('t');
+    if(b&&t)return{booking_id:b,token:t};
+  }catch(e){}
+  return null;
+}
+
+function clearMagicLinkFromURL(){
+  try{
+    const u=new URL(window.location.href);
+    u.searchParams.delete('b');
+    u.searchParams.delete('t');
+    window.history.replaceState({},'',u.pathname+(u.search?u.search:'')+u.hash);
+  }catch(e){}
+}
+
+function openTourFromMagicLink(params){
+  // Llamada al webhook con action 'link_booking' + token, sin email todavía
+  fetch(WEBHOOK_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      action:'link_booking',
+      booking_id:params.booking_id,
+      token:params.token,
+      email:(window._user&&window._user.email)||null,
+      name:(window._user&&window._user.name)||null,
+      via:'magic_link'
+    })
+  })
+  .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
+  .then(raw=>{
+    const data=normalizeResponse(raw);
+    if(!data||data.status!=='ok'){
+      const msg=data&&data.message?data.message:'unknown_error';
+      if(msg==='invalid_token'){
+        alert('This link is invalid or has expired. Please check the link or contact support.');
+      }else if(msg==='booking_not_found'){
+        alert('Booking not found. Please contact support.');
+      }else{
+        alert('Could not load your tour: '+msg);
+      }
+      return;
+    }
+    const ok=applyTourData(data);
+    if(!ok){
+      alert('Your booking was found but no stops are configured yet. Please contact support.');
+      return;
+    }
+    // Éxito → guardar sesión, mostrar banner de "save to account" si no hay login,
+    // y abrir el tour
+    saveSession();
+    renderTourScreen();
+    if(!(window._user&&window._user.email)){
+      // Marcamos para que se muestre el banner cuando entremos al tour
+      window._showSaveBookingBanner=true;
+    }
+    if(document.readyState==='loading'){
+      document.addEventListener('DOMContentLoaded',()=>go('st'));
+    }else{
+      go('st');
+    }
+  })
+  .catch(err=>{
+    console.error('Magic link error:',err);
+    alert('Could not load your tour. Please check your connection and try again.');
+  });
+}
+
+// ========================================================================
 // AUTO-LOGIN al cargar la app: si hay sesión válida, saltar al tour
 // ========================================================================
 (function autoResume(){
+  // 1) PRIORIDAD MÁXIMA: magic link en la URL
+  const magic=getMagicLinkParams();
+  if(magic){
+    clearMagicLinkFromURL();
+    // Restaurar el usuario si lo había (para vincular si ya está logueado)
+    const sess=loadSession();
+    if(sess&&sess.user){
+      window._user=sess.user;
+      window._userBookings=Array.isArray(sess.userBookings)?sess.userBookings:[];
+    }
+    openTourFromMagicLink(magic);
+    return;
+  }
+
+  // 2) Flujo normal: restaurar sesión guardada
   const sess=loadSession();
   if(!sess||!sess.user){
     return; // sin sesión → flujo normal (welcome screen)
