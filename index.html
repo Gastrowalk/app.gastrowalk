@@ -209,6 +209,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-gmaps-arrow{font-weight:400;opacity:.7;margin-left:1px}
 .sp-dist{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--tx2);margin-top:5px}
 .sp-sec{padding:0 22px;margin-bottom:22px}
+.sp-sec-drinks{margin-top:30px}
 .sp-sec-t{font-family:'Archivo Black',sans-serif;font-size:18px;letter-spacing:-.03em;color:#1A1410;margin-bottom:4px;line-height:1.05}
 .sp-sec-t::after{content:" ";}
 .sp-sec-meta{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:13px;color:#5A5249;margin-bottom:14px;line-height:1.4}
@@ -228,7 +229,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-tag{font-family:'Archivo',var(--fb);font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;border:1.5px solid #1A1410;letter-spacing:.01em}
 .sp-tag.tv{background:#FFF7D7;color:#1A1410}
 .sp-tag.tgf{background:#FFC817;color:#1A1410}
-.sp-drink-box{background:#FFF7D7;border:none;border-radius:12px;padding:14px 18px}
+.sp-drink-box{display:block;width:100%;box-sizing:border-box;background:#FFF7D7;border:none;border-radius:12px;padding:14px 18px}
 .sp-drink-list{list-style:none;padding:0;margin:0}
 .sp-drink-list li{font-family:'Archivo',var(--fb);font-size:14px;color:#1A1410;padding:6px 0 6px 18px;position:relative;line-height:1.4}
 .sp-drink-list li::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:#DB4A2B}
@@ -1633,7 +1634,7 @@ function sD(i){
   // Sección de bebidas — mismo formato que "Choose your tapa"
   const drinks=s.drList&&s.drList.length?s.drList:(s.dr?s.dr.split(/,\s*/):[]);
   if(drinks.length){
-    h+='<div class="sp-sec" style="margin-top:30px"><div class="sp-sec-t">Choose your drink</div>';
+    h+='<div class="sp-sec sp-sec-drinks"><div class="sp-sec-t">Choose your drink</div>';
     h+='<div class="sp-sec-meta">Pick any of these — included with your tapa.</div>';
     h+='<div class="sp-drink-box"><ul class="sp-drink-list">';
     drinks.forEach(d=>{
