@@ -1628,6 +1628,8 @@ function sD(i){
   if(s.nt&&!s.vg&&!s.gf){
     h+='<div style="font-size:11px;color:var(--tx2);margin-top:8px;font-style:italic">'+escapeHtml(s.nt)+'</div>';
   }
+  h+='</div>'; // cierra sp-sec de "Choose your tapa"
+
   // Sección de bebidas — mismo formato que "Choose your tapa"
   const drinks=s.drList&&s.drList.length?s.drList:(s.dr?s.dr.split(/,\s*/):[]);
   if(drinks.length){
@@ -1638,9 +1640,8 @@ function sD(i){
       h+='<li>'+escapeHtml(d.trim())+'</li>';
     });
     h+='</ul></div>';
-    h+='</div>';
+    h+='</div>'; // cierra sp-sec de "Choose your drink"
   }
-  h+='</div>';
 
   h+='<div style="padding:14px 22px 30px"><button class="sp-btn sp-btn-dir" onclick="viewStopOnMap()" style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:14px;background:var(--pr);color:#fff;border:none;border-radius:60px;font-size:14px;font-weight:600;font-family:var(--fb);cursor:pointer;box-shadow:0 4px 14px rgba(219,74,43,.3)">View on map</button></div>';
 
