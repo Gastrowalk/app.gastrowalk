@@ -60,13 +60,14 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .bs-or{display:flex;align-items:center;gap:12px;margin:5px 0 14px;color:var(--tx3);font-size:11px}
 .bs-or::before,.bs-or::after{content:'';flex:1;height:1px;background:var(--bd)}
 .bnb{width:100%;padding:11px;background:none;color:var(--tx2);border:1.5px solid var(--bd);border-radius:60px;font-size:12px;font-family:var(--fb);cursor:pointer}
-.ts{background:var(--bg);padding-bottom:140px}
-.ti{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:0 16px;margin-top:-32px;position:relative;z-index:2}
-.tic{background:#fff;border:1.5px solid #1A1410;border-radius:14px;padding:14px 8px 12px;text-align:center;box-shadow:2px 2px 0 #1A1410;position:relative;overflow:hidden;transition:transform .15s cubic-bezier(.2,.6,.2,1),box-shadow .15s cubic-bezier(.2,.6,.2,1)}
-.tic .ic{display:flex;align-items:center;justify-content:center;width:34px;height:34px;margin:0 auto 6px;background:#FFF7D7;border:1.5px solid #1A1410;border-radius:50%;font-size:16px;line-height:1}
-.tic .lb{font-family:'Archivo',sans-serif;font-size:9px;color:#5A5249;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:3px}
-.tic .vl{font-family:'Archivo Black',sans-serif;font-size:18px;font-weight:900;color:#1A1410;letter-spacing:-.03em;line-height:1.05}
-.tst{font-family:'Archivo Black',sans-serif;font-size:24px;letter-spacing:-.04em;color:#1A1410;padding:26px 18px 14px;line-height:1}
+.ts{background:#FFF7D7;padding-bottom:140px}
+.ti{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:0 16px;margin-top:0;position:relative;z-index:2}
+.tic{background:#fff;border:1.5px solid #1A1410;border-radius:18px;padding:18px 10px 16px;text-align:center;box-shadow:3px 3px 0 #1A1410;position:relative;overflow:hidden;transition:transform .15s cubic-bezier(.2,.6,.2,1),box-shadow .15s cubic-bezier(.2,.6,.2,1)}
+.tic .ic{display:flex;align-items:center;justify-content:center;width:38px;height:38px;margin:0 auto 8px;color:#DB4A2B;font-size:20px;line-height:1}
+.tic .lb{font-family:'Archivo',sans-serif;font-size:10px;color:#1A1410;text-transform:uppercase;letter-spacing:.14em;font-weight:800;margin-bottom:4px}
+.tic .vl{font-family:'Archivo Black',sans-serif;font-size:19px;font-weight:900;color:#1A1410;letter-spacing:-.03em;line-height:1.05}
+.tic .sb{font-family:'Archivo',sans-serif;font-size:11px;color:#5A5249;font-weight:500;margin-top:4px;letter-spacing:.01em}
+.tst{font-family:'Archivo Black',sans-serif;font-size:24px;letter-spacing:-.04em;color:#1A1410;padding:30px 18px 14px;line-height:1}
 .ms{background:var(--bg);min-height:100vh;display:flex;flex-direction:column;padding:0}
 .mw{display:none;position:absolute;inset:0;margin:0;border-radius:0;box-shadow:none;background:var(--bg);flex:1}
 .mw.show{display:flex;flex-direction:column}
@@ -91,24 +92,27 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .mini-pop-close{position:absolute;top:14px;right:14px;width:30px;height:30px;background:var(--bg);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--tx2)}
 .mini-pop-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:13px;background:var(--pr);color:#fff;border:none;border-radius:60px;font-size:14px;font-weight:600;font-family:var(--fb);cursor:pointer;box-shadow:0 4px 14px rgba(219,74,43,.3)}
 .mini-pop-btn:active{transform:scale(.97)}
-.th{position:relative;height:240px;background:linear-gradient(168deg,#8B2914 0%,#DB4A2B 60%,#E55D3F 100%);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:24px 22px 28px}
-.th::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 15% 45%,rgba(255,200,23,.08) 1.5px,transparent 1.5px),radial-gradient(circle at 75% 25%,rgba(255,255,255,.06) 1px,transparent 1px),radial-gradient(circle at 90% 80%,rgba(255,200,23,.05) 1.5px,transparent 1.5px);background-size:50px 50px,30px 30px,70px 70px}
-.th::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:#1A1410}
-.tb{display:inline-flex;align-items:center;gap:5px;background:#FFC817;border:1.5px solid #1A1410;border-radius:999px;padding:5px 12px;font-family:'Archivo',sans-serif;font-size:11px;color:#1A1410;font-weight:700;width:fit-content;margin-bottom:14px;position:relative;letter-spacing:.01em;box-shadow:2px 2px 0 #1A1410}
-.th1{font-family:'Archivo Black',sans-serif;font-size:32px;color:#fff;line-height:.95;letter-spacing:-.04em;position:relative;text-shadow:0 2px 12px rgba(0,0,0,.15)}
-.tc{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:18px;color:rgba(255,247,215,.95);margin-top:6px;position:relative;letter-spacing:-.01em}
+.th{position:relative;min-height:340px;background:linear-gradient(165deg,#E55D3F 0%,#DB4A2B 50%,#B33A21 100%);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:60px 22px 32px;margin-bottom:-40px}
+.th::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 12% 38%,rgba(255,200,23,.07) 1.5px,transparent 1.5px),radial-gradient(circle at 78% 22%,rgba(255,255,255,.05) 1px,transparent 1px),radial-gradient(circle at 88% 75%,rgba(255,200,23,.05) 1.5px,transparent 1.5px),radial-gradient(circle at 32% 78%,rgba(255,255,255,.04) 1px,transparent 1px);background-size:55px 55px,30px 30px,70px 70px,40px 40px}
+.th-top{position:absolute;top:18px;left:22px;right:22px;display:flex;align-items:center;justify-content:space-between;z-index:2}
+.th-eyebrow{font-family:'Archivo',sans-serif;font-size:11px;font-weight:800;color:#FFC817;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;position:relative;z-index:2}
+.tb{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1.5px solid #1A1410;border-radius:999px;padding:6px 14px;font-family:'Archivo',sans-serif;font-size:12px;color:#1A1410;font-weight:700;width:fit-content;letter-spacing:.01em;box-shadow:2px 2px 0 #1A1410}
+.th1{font-family:'Archivo Black',sans-serif;font-size:42px;color:#fff;line-height:.95;letter-spacing:-.04em;position:relative;z-index:2;margin-bottom:14px}
+.th1 em,.th1 .gw-italic{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;letter-spacing:-.01em;color:#FFC817}
+.tc{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:17px;color:rgba(255,247,215,.92);position:relative;z-index:2;line-height:1.4}
 .vt{display:flex;background:var(--bd);border-radius:var(--rs);padding:3px;margin:9px 14px 12px}
 .vtb{flex:1;padding:8px 0;border:none;border-radius:5px;background:none;font-family:var(--fb);font-size:12px;font-weight:600;color:var(--tx3);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:4px}
 .vtb.on{background:var(--card);color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.07)}
 .sl{padding:0 14px}.sl.hd{display:none}
-.sc{display:flex;gap:14px;align-items:flex-start;background:var(--gw-white,#fff);border:1.5px solid var(--gw-ink,#1A1410);border-radius:18px;padding:16px 18px;margin-bottom:14px;box-shadow:3px 3px 0 var(--gw-ink,#1A1410);cursor:pointer;transition:transform .15s cubic-bezier(.2,.6,.2,1),box-shadow .15s cubic-bezier(.2,.6,.2,1);overflow:hidden;font-family:'Archivo',var(--fb)}
+.sc{display:flex;gap:14px;align-items:flex-start;background:var(--gw-white,#fff);border:1.5px solid var(--gw-ink,#1A1410);border-radius:18px;padding:18px 20px;margin-bottom:14px;box-shadow:3px 3px 0 var(--gw-ink,#1A1410);cursor:pointer;transition:transform .15s cubic-bezier(.2,.6,.2,1),box-shadow .15s cubic-bezier(.2,.6,.2,1);overflow:hidden;font-family:'Archivo',var(--fb)}
 .sc:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--gw-ink,#1A1410)}
-.sn{width:36px;height:36px;background:#DB4A2B;color:#fff;border:1.5px solid #1A1410;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-weight:900;font-size:16px;flex-shrink:0;letter-spacing:-.02em}
-.si{flex:1;min-width:0;padding-top:2px}
-.snm{font-family:'Archivo Black',sans-serif;font-weight:900;font-size:18px;letter-spacing:-.03em;line-height:1.05;color:#1A1410;margin-bottom:6px}
-.stp{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:13px;color:#5A5249;margin-bottom:6px;line-height:1.4}
-.sad{font-family:'Archivo',var(--fb);font-size:11px;color:#5A5249;letter-spacing:.01em}
-.sar{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:#FFC817;border:1.5px solid #1A1410;color:#1A1410;font-size:16px;font-weight:700;flex-shrink:0;align-self:center}
+.sn{width:38px;height:38px;background:#DB4A2B;color:#fff;border:1.5px solid #1A1410;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-weight:900;font-size:17px;flex-shrink:0;letter-spacing:-.02em}
+.si{flex:1;min-width:0;padding-top:0}
+.snm{font-family:'Archivo Black',sans-serif;font-weight:900;font-size:20px;letter-spacing:-.04em;line-height:1.05;color:#1A1410;margin-bottom:6px}
+.snm em,.snm .gw-italic{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;letter-spacing:-.01em;color:#DB4A2B}
+.stp{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:14px;color:#5A5249;margin-bottom:8px;line-height:1.4}
+.sad{font-family:'Archivo',var(--fb);font-size:12px;color:#5A5249;letter-spacing:.01em;display:flex;align-items:center;gap:5px}
+.sar{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#FFC817;border:1.5px solid #1A1410;color:#1A1410;font-size:18px;font-weight:700;flex-shrink:0;align-self:center}
 @keyframes hlflash{0%{background:var(--prl);box-shadow:0 0 0 3px var(--pr),var(--shl)}100%{background:var(--card);box-shadow:var(--sh)}}
 .sc.hl-flash{animation:hlflash 1.5s ease-out}
 .gp{background:var(--pr);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;font-family:var(--fb);box-shadow:0 2px 6px rgba(219,74,43,.35);border:2px solid #fff}
@@ -457,11 +461,18 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 </div></div>
 
 <div class="s h" id="st"><div class="ts">
-<div class="th"><div class="tb">🍷 Self-guided experience</div><div class="th1">Gourmet Tapas Tour</div><div class="tc">Palma de Mallorca</div></div>
+<div class="th">
+  <div class="th-top">
+    <div class="th-eyebrow" id="th-eyebrow">Your tour</div>
+    <div class="tb">🍷 Self-guided</div>
+  </div>
+  <div class="th1" id="th-title-wrap">Gourmet Tapas Tour</div>
+  <div class="tc" id="th-greeting">Palma de Mallorca</div>
+</div>
 <div class="ti">
-<div class="tic an d1"><div class="ic">⏱</div><div class="lb">Duration</div><div class="vl">3–4h</div></div>
-<div class="tic an d2"><div class="ic">📍</div><div class="lb">Stops</div><div class="vl">5</div></div>
-<div class="tic an d3"><div class="ic">🌙</div><div class="lb">Deadline</div><div class="vl">10 PM</div></div>
+<div class="tic an d1"><div class="ic">⏱</div><div class="lb">Pace</div><div class="vl">3–4h</div><div class="sb">self-paced</div></div>
+<div class="tic an d2"><div class="ic">📍</div><div class="lb">Stops</div><div class="vl">5</div><div class="sb">tapas + drinks</div></div>
+<div class="tic an d3"><div class="ic">🌙</div><div class="lb">Finish by</div><div class="vl">10 PM</div><div class="sb">kitchens close</div></div>
 </div>
 <div class="tst">Your stops</div>
 <div class="sl" id="lv"></div>
@@ -946,17 +957,54 @@ function renderTourScreen(){
     const tourTitle=cleanItemName(window._booking.item_name||'Your tour');
     // Limpia: "Gourmet Tapas & Wine Tour - Palma de Mallorca" → titulo + ciudad
     const parts=tourTitle.split(/\s*-\s*/);
+    const mainTitle=parts[0]||tourTitle;
+    const city=parts[1]||'';
+
+    // Para el toque editorial: convertimos UNA palabra clave del título en italic Playfair.
+    // Buscamos por orden de prioridad: Tapas, Tour, Wine, Gourmet, Food.
+    const keywordOrder=['Tapas','Tapa','Wine','Gourmet','Food','Tour'];
+    let titleHtml=escapeHtml(mainTitle);
+    for(const kw of keywordOrder){
+      const re=new RegExp('\\b('+kw+')\\b','i');
+      if(re.test(mainTitle)){
+        titleHtml=escapeHtml(mainTitle).replace(re,'<em>$1</em>');
+        break;
+      }
+    }
     const titleEl=document.querySelector('#st .th1');
     const cityEl=document.querySelector('#st .tc');
-    if(titleEl)titleEl.textContent=parts[0]||tourTitle;
-    if(cityEl)cityEl.textContent=parts[1]||'';
+    if(titleEl)titleEl.innerHTML=titleHtml;
+    if(cityEl){
+      // Si hay nombre de cliente, hacemos un saludo personal estilo:
+      // "Hello Sofia — your tour starts in Palma de Mallorca"
+      const firstName=(window._booking.customer_name||'').split(' ')[0];
+      if(firstName&&city){
+        cityEl.innerHTML='Hello '+escapeHtml(firstName)+' — your tour starts in '+escapeHtml(city);
+      }else{
+        cityEl.textContent=city;
+      }
+    }
+
+    // Eyebrow con fecha del tour: "YOUR TOUR · SAT 24 MAY"
+    const eyebrowEl=document.getElementById('th-eyebrow');
+    if(eyebrowEl&&window._booking.start_date){
+      try{
+        const d=new Date(window._booking.start_date+'T00:00:00');
+        const dayShort=d.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase();
+        const dayNum=d.getDate();
+        const monShort=d.toLocaleDateString('en-US',{month:'short'}).toUpperCase();
+        eyebrowEl.textContent='YOUR TOUR · '+dayShort+' '+dayNum+' '+monShort;
+      }catch(e){
+        eyebrowEl.textContent='YOUR TOUR';
+      }
+    }
   }
 
   // Banner "Save this booking to your account" si el usuario llegó por magic link
   // sin estar logueado
   renderSaveBookingBanner();
 
-  // Stats: nº de paradas
+  // Stats: nº de paradas + sublabel
   const stats=document.querySelectorAll('#st .tic .vl');
   if(stats[1])stats[1].textContent=S.length;
 
@@ -969,10 +1017,17 @@ function renderTourScreen(){
       card.className='sc an d'+Math.min(i+2,5);
       card.id='stop-card-'+i;
       card.onclick=()=>sD(i);
-      const teaser=s.tp[0].nm+(s.tp[1].nm?' or '+s.tp[1].nm:'');
+      const teaser=s.tp[0].nm+(s.tp[1]&&s.tp[1].nm?' or '+s.tp[1].nm:'');
       const addr=s.ad?'📍 '+s.ad:(s.mu?'📍 View on map':'');
+      // Toque editorial: si el nombre del bar tiene 2+ palabras, italizamos la última
+      // (ej: "Fervor Tapas" → "Fervor <em>Tapas</em>")
+      const nameEsc=escapeHtml(s.nm);
+      const words=nameEsc.split(/\s+/);
+      const nameHtml=words.length>=2
+        ? words.slice(0,-1).join(' ')+' <em>'+words[words.length-1]+'</em>'
+        : nameEsc;
       card.innerHTML='<div class="sn">'+s.n+'</div>'+
-        '<div class="si"><div class="snm">'+escapeHtml(s.nm)+'</div>'+
+        '<div class="si"><div class="snm">'+nameHtml+'</div>'+
         '<div class="stp">'+escapeHtml(teaser)+'</div>'+
         '<div class="sad">'+escapeHtml(addr)+'</div></div>'+
         '<div class="sar">›</div>';
