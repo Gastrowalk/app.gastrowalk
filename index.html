@@ -100,7 +100,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sl{padding:0 14px}.sl.hd{display:none}
 .sc{display:flex;gap:14px;align-items:flex-start;background:var(--gw-white,#fff);border:1.5px solid var(--gw-ink,#1A1410);border-radius:18px;padding:16px 18px;margin-bottom:14px;box-shadow:3px 3px 0 var(--gw-ink,#1A1410);cursor:pointer;transition:transform .15s cubic-bezier(.2,.6,.2,1),box-shadow .15s cubic-bezier(.2,.6,.2,1);overflow:hidden;font-family:'Archivo',var(--fb)}
 .sc:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--gw-ink,#1A1410)}
-.sn{width:36px;height:36px;background:#FFC817;color:#1A1410;border:1.5px solid #1A1410;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-weight:900;font-size:16px;flex-shrink:0;letter-spacing:-.02em}
+.sn{width:36px;height:36px;background:#DB4A2B;color:#fff;border:1.5px solid #1A1410;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-weight:900;font-size:16px;flex-shrink:0;letter-spacing:-.02em}
 .si{flex:1;min-width:0;padding-top:2px}
 .snm{font-family:'Archivo Black',sans-serif;font-weight:900;font-size:18px;letter-spacing:-.03em;line-height:1.05;color:#1A1410;margin-bottom:6px}
 .stp{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:13px;color:#5A5249;margin-bottom:6px;line-height:1.4}
@@ -196,14 +196,13 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-sec-t{font-family:'Archivo Black',sans-serif;font-size:18px;letter-spacing:-.03em;color:#1A1410;margin-bottom:4px;line-height:1.05}
 .sp-sec-t::after{content:" ";}
 .sp-sec-meta{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:13px;color:#5A5249;margin-bottom:14px;line-height:1.4}
-.sp-tapa{position:relative;display:flex;gap:0;align-items:stretch;background:#fff;border:1.5px solid #1A1410;border-radius:16px;margin-bottom:8px;box-shadow:2px 2px 0 #1A1410;overflow:hidden;padding:0}
-.sp-tapa-em{width:110px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:54px;background:repeating-linear-gradient(45deg,#FFF7D7 0 8px,#f8e9b8 8px 16px)}
-.sp-tapa-img{width:110px;height:auto;min-height:100px;align-self:stretch;border-radius:0;object-fit:cover;flex-shrink:0;background:#FFF7D7;cursor:pointer;display:block}
-.sp-tapa-img:active{opacity:.85}
-.sp-tapa>div:last-child,.sp-tapa-info{flex:1;min-width:0;padding:12px 14px;display:flex;flex-direction:column;gap:6px;justify-content:center}
+.sp-tapa{position:relative;display:flex;gap:0;align-items:stretch;background:#fff;border:1.5px solid #1A1410;border-radius:16px;margin-bottom:8px;box-shadow:2px 2px 0 #1A1410;overflow:hidden;padding:0;min-height:156px}
+.sp-tapa-em{width:140px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:54px;background:repeating-linear-gradient(45deg,#FFF7D7 0 8px,#f8e9b8 8px 16px)}
+.sp-tapa-img{width:140px;height:140px;align-self:center;border-radius:12px;margin:8px 0 8px 8px;object-fit:cover;flex-shrink:0;background:#FFF7D7;display:block}
+.sp-tapa>div:last-child,.sp-tapa-info{flex:1;min-width:0;padding:14px 16px;display:flex;flex-direction:column;gap:6px;justify-content:center}
 .sp-tapa-nm{font-family:'Archivo',var(--fb);font-weight:800;font-size:15px;letter-spacing:-.02em;color:#1A1410;line-height:1.2}
 .sp-tapa-ds{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:13px;line-height:1.45;color:#5A5249}
-.sp-tapa-letter{position:absolute;top:8px;left:8px;width:28px;height:28px;background:#FFC817;border:1.5px solid #1A1410;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-weight:900;font-size:13px;color:#1A1410;text-transform:uppercase;z-index:2}
+.sp-tapa-letter{position:absolute;top:14px;left:14px;width:30px;height:30px;background:#FFC817;border:1.5px solid #1A1410;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-weight:900;font-size:14px;color:#1A1410;text-transform:uppercase;z-index:2}
 .sp-or{text-align:center;font-family:'Archivo Black',sans-serif;font-size:11px;font-weight:900;color:#5A5249;letter-spacing:.2em;padding:8px 0;position:relative}
 .sp-or::before,.sp-or::after{content:'';position:absolute;top:50%;width:30%;height:1px;background:#E4DED5}
 .sp-or::before{left:0}.sp-or::after{right:0}
@@ -1504,9 +1503,12 @@ function sD(i){
   const labels=['A','B','C','D','E'];
   tapas.forEach((t,i)=>{
     if(i>0)h+='<div class="sp-or">— OR —</div>';
-    // Si la tapa tiene foto, la mostramos; si no, fallback al emoji con fondo de patrón
-    const visual=t.fs
-      ? '<img class="sp-tapa-img" src="'+escapeHtml(t.fs)+'" alt="" loading="lazy" onclick="openTapaPhoto(\''+escapeHtml(t.fl||t.fs)+'\',\''+escapeHtml(t.nm).replace(/'/g,"\\'")+'\')">'
+    // Si la tapa tiene foto, la mostramos; si no, fallback al emoji con fondo de patrón.
+    // Usamos foto_large (768px) en vez de foto_small (54px) — mucho más nítida
+    // al renderizarse a 140px, sobre todo en pantallas retina del móvil.
+    const photoSrc=t.fl||t.fs;
+    const visual=photoSrc
+      ? '<img class="sp-tapa-img" src="'+escapeHtml(photoSrc)+'" alt="" loading="lazy">'
       : '<div class="sp-tapa-em">'+t.em+'</div>';
     const letter=labels[i]||String(i+1);
     const desc=t.ds?'<div class="sp-tapa-ds">'+escapeHtml(t.ds)+'</div>':'';
