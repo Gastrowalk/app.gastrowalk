@@ -228,7 +228,12 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-tag{font-family:'Archivo',var(--fb);font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;border:1.5px solid #1A1410;letter-spacing:.01em}
 .sp-tag.tv{background:#FFF7D7;color:#1A1410}
 .sp-tag.tgf{background:#FFC817;color:#1A1410}
-.sp-drink{display:flex;align-items:center;gap:8px;font-family:'Archivo',var(--fb);font-size:13px;color:#1A1410;font-weight:600;margin-top:14px;padding:12px 14px;background:#FFF7D7;border:1.5px solid #1A1410;border-radius:12px;line-height:1.4}
+.sp-drink-sec{padding:0 22px;margin-top:24px;margin-bottom:22px}
+.sp-drink-t{font-family:'Archivo Black',sans-serif;font-size:18px;letter-spacing:-.03em;color:#1A1410;margin-bottom:14px;line-height:1.05}
+.sp-drink-list{list-style:none;padding:0;margin:0}
+.sp-drink-list li{font-family:'Archivo',var(--fb);font-size:14px;color:#1A1410;padding:10px 0 10px 24px;position:relative;line-height:1.4;border-bottom:1px solid #F2EDE5}
+.sp-drink-list li:last-child{border-bottom:none}
+.sp-drink-list li::before{content:'';position:absolute;left:6px;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:#DB4A2B}
 
 /* === Lightbox para foto de tapa === */
 .tapa-lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;align-items:center;justify-content:center;padding:20px;flex-direction:column;gap:14px;animation:fadeIn .2s ease;cursor:pointer}
@@ -1625,9 +1630,19 @@ function sD(i){
   if(s.nt&&!s.vg&&!s.gf){
     h+='<div style="font-size:11px;color:var(--tx2);margin-top:8px;font-style:italic">'+escapeHtml(s.nt)+'</div>';
   }
-  // Lista de bebidas
-  const drinkText=s.drList&&s.drList.length?s.drList.join(', '):s.dr;
-  h+='<div class="sp-drink">🍷 '+escapeHtml(drinkText)+'</div></div>';
+  // Sección de bebidas — lista vertical estilo "Choose your drink"
+  const drinks=s.drList&&s.drList.length?s.drList:(s.dr?s.dr.split(/,\s*/):[]);
+  if(drinks.length){
+    h+='<div class="sp-drink-sec">';
+    h+='<div class="sp-drink-t">Choose your drink</div>';
+    h+='<ul class="sp-drink-list">';
+    drinks.forEach(d=>{
+      h+='<li>'+escapeHtml(d.trim())+'</li>';
+    });
+    h+='</ul>';
+    h+='</div>';
+  }
+  h+='</div>';
 
   h+='<div style="padding:14px 22px 30px"><button class="sp-btn sp-btn-dir" onclick="viewStopOnMap()" style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:14px;background:var(--pr);color:#fff;border:none;border-radius:60px;font-size:14px;font-weight:600;font-family:var(--fb);cursor:pointer;box-shadow:0 4px 14px rgba(219,74,43,.3)">View on map</button></div>';
 
