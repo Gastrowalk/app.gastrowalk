@@ -228,8 +228,6 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-tag{font-family:'Archivo',var(--fb);font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;border:1.5px solid #1A1410;letter-spacing:.01em}
 .sp-tag.tv{background:#FFF7D7;color:#1A1410}
 .sp-tag.tgf{background:#FFC817;color:#1A1410}
-.sp-drink-sec{padding:0 22px;margin-top:24px;margin-bottom:22px}
-.sp-drink-t{font-family:'Archivo Black',sans-serif;font-size:18px;letter-spacing:-.03em;color:#1A1410;margin-bottom:14px;line-height:1.05}
 .sp-drink-box{background:#FFF7D7;border:none;border-radius:12px;padding:14px 18px}
 .sp-drink-list{list-style:none;padding:0;margin:0}
 .sp-drink-list li{font-family:'Archivo',var(--fb);font-size:14px;color:#1A1410;padding:6px 0 6px 18px;position:relative;line-height:1.4}
@@ -1630,11 +1628,11 @@ function sD(i){
   if(s.nt&&!s.vg&&!s.gf){
     h+='<div style="font-size:11px;color:var(--tx2);margin-top:8px;font-style:italic">'+escapeHtml(s.nt)+'</div>';
   }
-  // Sección de bebidas — lista vertical estilo "Choose your drink"
+  // Sección de bebidas — mismo formato que "Choose your tapa"
   const drinks=s.drList&&s.drList.length?s.drList:(s.dr?s.dr.split(/,\s*/):[]);
   if(drinks.length){
-    h+='<div class="sp-drink-sec">';
-    h+='<div class="sp-drink-t">Choose your drink</div>';
+    h+='<div class="sp-sec"><div class="sp-sec-t">Choose your drink</div>';
+    h+='<div class="sp-sec-meta">Pick any of these — included with your tapa.</div>';
     h+='<div class="sp-drink-box"><ul class="sp-drink-list">';
     drinks.forEach(d=>{
       h+='<li>'+escapeHtml(d.trim())+'</li>';
