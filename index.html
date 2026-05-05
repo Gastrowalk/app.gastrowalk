@@ -189,7 +189,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 
 /* === SLIDE PANEL === */
 /* === STOP DETAIL — fullscreen modal === */
-.spanel{position:fixed;top:100%;left:50%;transform:translateX(-50%);width:100%;max-width:var(--mw);height:100vh;background:var(--card);box-shadow:0 -4px 24px rgba(0,0,0,.12);z-index:300;overflow-y:auto;transition:top .4s cubic-bezier(.4,0,.2,1);-webkit-overflow-scrolling:touch;padding:0 0 100px;visibility:hidden;pointer-events:none}
+.spanel{position:fixed;top:100%;left:50%;transform:translateX(-50%);width:100%;max-width:var(--mw);height:100vh;background:#fff;box-shadow:0 -4px 24px rgba(0,0,0,.12);z-index:300;overflow-y:auto;transition:top .4s cubic-bezier(.4,0,.2,1);-webkit-overflow-scrolling:touch;padding:0 0 100px;visibility:hidden;pointer-events:none}
 .spanel.open{top:0;visibility:visible;pointer-events:auto}
 .spanel::-webkit-scrollbar{width:0}
 .sp-topbar{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;padding:14px 14px 12px;background:linear-gradient(to bottom,var(--card) 70%,transparent);z-index:5}
@@ -212,14 +212,13 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-sec-t{font-family:'Archivo Black',sans-serif;font-size:18px;letter-spacing:-.03em;color:#1A1410;margin-bottom:4px;line-height:1.05}
 .sp-sec-t::after{content:" ";}
 .sp-sec-meta{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:13px;color:#5A5249;margin-bottom:14px;line-height:1.4}
-.sp-tapa{position:relative;display:flex;gap:0;align-items:stretch;background:#fff;border:1.5px solid #1A1410;border-radius:16px;margin-bottom:8px;box-shadow:none;overflow:hidden;padding:0;min-height:160px}
+.sp-tapa{position:relative;display:flex;gap:0;align-items:stretch;background:#F8F6F2;border:none;border-radius:16px;margin-bottom:8px;box-shadow:none;overflow:hidden;padding:0;min-height:160px}
 .sp-tapa-em{width:140px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:54px;background:repeating-linear-gradient(45deg,#FFF7D7 0 8px,#f8e9b8 8px 16px)}
 .sp-tapa-img{position:absolute;top:0;left:0;bottom:0;width:140px;height:100%;border-radius:0;margin:0;object-fit:cover;background:#FFF7D7;display:block}
 .sp-tapa>div:last-child,.sp-tapa-info{flex:1;min-width:0;padding:14px 16px;padding-left:156px;display:flex;flex-direction:column;gap:6px;justify-content:center}
-.sp-tapa-letter{position:absolute;top:8px;left:8px;width:30px;height:30px;background:#FFC817;border:1.5px solid #1A1410;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-weight:900;font-size:14px;color:#1A1410;text-transform:uppercase;z-index:3}
 .sp-tapa-nm{font-family:'Archivo',var(--fb);font-weight:800;font-size:15px;letter-spacing:-.02em;color:#1A1410;line-height:1.2}
 .sp-tapa-ds{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:13px;line-height:1.45;color:#5A5249}
-.sp-tapa-letter{position:absolute;top:8px;left:8px;width:30px;height:30px;background:#FFC817;border:1.5px solid #1A1410;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-weight:900;font-size:14px;color:#1A1410;text-transform:uppercase;z-index:2}
+.sp-tapa-letter{position:absolute;top:14px;left:14px;width:30px;height:30px;background:#DB4A2B;border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;color:#fff;text-transform:uppercase;z-index:3}
 .sp-or{text-align:center;font-family:'Archivo Black',sans-serif;font-size:11px;font-weight:900;color:#5A5249;letter-spacing:.2em;padding:8px 0;position:relative}
 .sp-or::before,.sp-or::after{content:'';position:absolute;top:50%;width:30%;height:1px;background:#E4DED5}
 .sp-or::before{left:0}.sp-or::after{right:0}
@@ -478,7 +477,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
   <div class="tc" id="th-greeting">Palma de Mallorca</div>
 </div>
 <div class="ti">
-<div class="tic an d1"><div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#DB4A2B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></div><div class="lb">Pace</div><div class="vl">3:00h</div></div>
+<div class="tic an d1"><div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#DB4A2B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></div><div class="lb">Duration</div><div class="vl">3:00h</div></div>
 <div class="tic an d2"><div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#DB4A2B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 7-8 13-8 13s-8-6-8-13a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="lb">Stops</div><div class="vl">5</div></div>
 <div class="tic an d3"><div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#DB4A2B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg></div><div class="lb">Finish by</div><div class="vl">10 PM</div></div>
 </div>
