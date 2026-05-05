@@ -212,7 +212,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-sec-t{font-family:'Archivo Black',sans-serif;font-size:18px;letter-spacing:-.03em;color:#1A1410;margin-bottom:4px;line-height:1.05}
 .sp-sec-t::after{content:" ";}
 .sp-sec-meta{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:13px;color:#5A5249;margin-bottom:14px;line-height:1.4}
-.sp-tapa{position:relative;display:flex;gap:0;align-items:stretch;background:#F8F6F2;border:3px solid red;border-radius:16px;margin-bottom:8px;box-shadow:none;overflow:hidden;padding:0;min-height:160px}
+.sp-tapa{position:relative;display:flex;gap:0;align-items:stretch;background:#F8F6F2;border:none;border-radius:16px;margin-bottom:8px;box-shadow:none;overflow:hidden;padding:0;min-height:160px}
 .sp-tapa-em{width:140px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:54px;background:repeating-linear-gradient(45deg,#FFF7D7 0 8px,#f8e9b8 8px 16px)}
 .sp-tapa-img{position:absolute;top:0;left:0;bottom:0;width:140px;height:100%;border-radius:0;margin:0;object-fit:cover;background:#FFF7D7;display:block}
 .sp-tapa>div:last-child,.sp-tapa-info{flex:1;min-width:0;padding:14px 16px;padding-left:156px;display:flex;flex-direction:column;gap:6px;justify-content:center}
@@ -228,7 +228,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-tag{font-family:'Archivo',var(--fb);font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;border:1.5px solid #1A1410;letter-spacing:.01em}
 .sp-tag.tv{background:#FFF7D7;color:#1A1410}
 .sp-tag.tgf{background:#FFC817;color:#1A1410}
-.sp-drink-box{background:#FFF7D7;border:3px solid green;border-radius:12px;padding:14px 18px}
+.sp-drink-box{background:#FFF7D7;border:none;border-radius:12px;padding:14px 18px}
 .sp-drink-list{list-style:none;padding:0;margin:0}
 .sp-drink-list li{font-family:'Archivo',var(--fb);font-size:14px;color:#1A1410;padding:6px 0 6px 18px;position:relative;line-height:1.4}
 .sp-drink-list li::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:#DB4A2B}
@@ -1633,7 +1633,7 @@ function sD(i){
   // Sección de bebidas — mismo formato que "Choose your tapa"
   const drinks=s.drList&&s.drList.length?s.drList:(s.dr?s.dr.split(/,\s*/):[]);
   if(drinks.length){
-    h+='<div class="sp-sec"><div class="sp-sec-t">Choose your drink</div>';
+    h+='<div class="sp-sec" style="margin-top:30px"><div class="sp-sec-t">Choose your drink</div>';
     h+='<div class="sp-sec-meta">Pick any of these — included with your tapa.</div>';
     h+='<div class="sp-drink-box"><ul class="sp-drink-list">';
     drinks.forEach(d=>{
