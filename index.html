@@ -230,10 +230,10 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-tag.tgf{background:#FFC817;color:#1A1410}
 .sp-drink-sec{padding:0 22px;margin-top:24px;margin-bottom:22px}
 .sp-drink-t{font-family:'Archivo Black',sans-serif;font-size:18px;letter-spacing:-.03em;color:#1A1410;margin-bottom:14px;line-height:1.05}
+.sp-drink-box{background:#FFF7D7;border:none;border-radius:12px;padding:14px 18px}
 .sp-drink-list{list-style:none;padding:0;margin:0}
-.sp-drink-list li{font-family:'Archivo',var(--fb);font-size:14px;color:#1A1410;padding:10px 0 10px 24px;position:relative;line-height:1.4;border-bottom:1px solid #F2EDE5}
-.sp-drink-list li:last-child{border-bottom:none}
-.sp-drink-list li::before{content:'';position:absolute;left:6px;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:#DB4A2B}
+.sp-drink-list li{font-family:'Archivo',var(--fb);font-size:14px;color:#1A1410;padding:6px 0 6px 18px;position:relative;line-height:1.4}
+.sp-drink-list li::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:#DB4A2B}
 
 /* === Lightbox para foto de tapa === */
 .tapa-lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;align-items:center;justify-content:center;padding:20px;flex-direction:column;gap:14px;animation:fadeIn .2s ease;cursor:pointer}
@@ -1635,11 +1635,11 @@ function sD(i){
   if(drinks.length){
     h+='<div class="sp-drink-sec">';
     h+='<div class="sp-drink-t">Choose your drink</div>';
-    h+='<ul class="sp-drink-list">';
+    h+='<div class="sp-drink-box"><ul class="sp-drink-list">';
     drinks.forEach(d=>{
       h+='<li>'+escapeHtml(d.trim())+'</li>';
     });
-    h+='</ul>';
+    h+='</ul></div>';
     h+='</div>';
   }
   h+='</div>';
