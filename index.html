@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Gastrowalk — Your Tour</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@1,400;1,500;1,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -98,14 +98,14 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .vtb{flex:1;padding:8px 0;border:none;border-radius:5px;background:none;font-family:var(--fb);font-size:12px;font-weight:600;color:var(--tx3);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:4px}
 .vtb.on{background:var(--card);color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.07)}
 .sl{padding:0 14px}.sl.hd{display:none}
-.sc{display:flex;gap:12px;background:var(--card);border-radius:var(--r);padding:13px;margin-bottom:9px;box-shadow:var(--sh);cursor:pointer;transition:all .15s;overflow:hidden}
-.sc:active{transform:scale(.98)}
-.sn{width:30px;height:30px;background:var(--pr);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
-.si{flex:1;min-width:0}
-.snm{font-family:var(--fs);font-weight:600;font-size:15px;margin-bottom:2px}
-.stp{font-size:11px;color:var(--tx2);margin-bottom:3px;line-height:1.4}
-.sad{font-size:10px;color:var(--tx3)}
-.sar{display:flex;align-items:center;color:var(--pr);font-size:16px}
+.sc{display:flex;gap:14px;align-items:flex-start;background:var(--gw-white,#fff);border:1.5px solid var(--gw-ink,#1A1410);border-radius:18px;padding:16px 18px;margin-bottom:14px;box-shadow:3px 3px 0 var(--gw-ink,#1A1410);cursor:pointer;transition:transform .15s cubic-bezier(.2,.6,.2,1),box-shadow .15s cubic-bezier(.2,.6,.2,1);overflow:hidden;font-family:'Archivo',var(--fb)}
+.sc:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--gw-ink,#1A1410)}
+.sn{width:36px;height:36px;background:#FFC817;color:#1A1410;border:1.5px solid #1A1410;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-weight:900;font-size:16px;flex-shrink:0;letter-spacing:-.02em}
+.si{flex:1;min-width:0;padding-top:2px}
+.snm{font-family:'Archivo Black',sans-serif;font-weight:900;font-size:18px;letter-spacing:-.03em;line-height:1.05;color:#1A1410;margin-bottom:6px}
+.stp{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:13px;color:#5A5249;margin-bottom:6px;line-height:1.4}
+.sad{font-family:'Archivo',var(--fb);font-size:11px;color:#5A5249;letter-spacing:.01em}
+.sar{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:#FFC817;border:1.5px solid #1A1410;color:#1A1410;font-size:16px;font-weight:700;flex-shrink:0;align-self:center}
 @keyframes hlflash{0%{background:var(--prl);box-shadow:0 0 0 3px var(--pr),var(--shl)}100%{background:var(--card);box-shadow:var(--sh)}}
 .sc.hl-flash{animation:hlflash 1.5s ease-out}
 .gp{background:var(--pr);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;font-family:var(--fb);box-shadow:0 2px 6px rgba(219,74,43,.35);border:2px solid #fff}
@@ -193,15 +193,33 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .sp-gmaps-arrow{font-weight:400;opacity:.7;margin-left:1px}
 .sp-dist{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--tx2);margin-top:5px}
 .sp-sec{padding:0 22px;margin-bottom:22px}
-.sp-sec-t{font-family:var(--fd);font-size:15px;margin-bottom:10px}
-.sp-tapa{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--bg);border-radius:12px;margin-bottom:6px}
-.sp-tapa-em{font-size:28px;flex-shrink:0}
-.sp-tapa-nm{font-size:14px;font-weight:600;color:var(--tx)}
-.sp-tapa-ds{font-size:12px;color:var(--tx2);line-height:1.5}
-.sp-or{text-align:center;font-size:10px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;padding:4px 0}
+.sp-sec-t{font-family:'Archivo Black',sans-serif;font-size:18px;letter-spacing:-.03em;color:#1A1410;margin-bottom:4px;line-height:1.05}
+.sp-sec-t::after{content:" ";}
+.sp-sec-meta{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:13px;color:#5A5249;margin-bottom:14px;line-height:1.4}
+.sp-tapa{position:relative;display:flex;gap:0;align-items:stretch;background:#fff;border:1.5px solid #1A1410;border-radius:16px;margin-bottom:8px;box-shadow:2px 2px 0 #1A1410;overflow:hidden;padding:0}
+.sp-tapa-em{width:110px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:54px;background:repeating-linear-gradient(45deg,#FFF7D7 0 8px,#f8e9b8 8px 16px)}
+.sp-tapa-img{width:110px;height:auto;min-height:100px;align-self:stretch;border-radius:0;object-fit:cover;flex-shrink:0;background:#FFF7D7;cursor:pointer;display:block}
+.sp-tapa-img:active{opacity:.85}
+.sp-tapa>div:last-child,.sp-tapa-info{flex:1;min-width:0;padding:12px 14px;display:flex;flex-direction:column;gap:6px;justify-content:center}
+.sp-tapa-nm{font-family:'Archivo',var(--fb);font-weight:800;font-size:15px;letter-spacing:-.02em;color:#1A1410;line-height:1.2}
+.sp-tapa-ds{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:13px;line-height:1.45;color:#5A5249}
+.sp-tapa-letter{position:absolute;top:8px;left:8px;width:28px;height:28px;background:#FFC817;border:1.5px solid #1A1410;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-weight:900;font-size:13px;color:#1A1410;text-transform:uppercase;z-index:2}
+.sp-or{text-align:center;font-family:'Archivo Black',sans-serif;font-size:11px;font-weight:900;color:#5A5249;letter-spacing:.2em;padding:8px 0;position:relative}
+.sp-or::before,.sp-or::after{content:'';position:absolute;top:50%;width:30%;height:1px;background:#E4DED5}
+.sp-or::before{left:0}.sp-or::after{right:0}
 .sp-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.sp-tag{font-size:10px;padding:3px 10px;border-radius:14px}
-.sp-drink{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--pr);font-weight:600;margin-top:12px;padding:10px 14px;background:var(--prl);border-radius:10px}
+.sp-tag{font-family:'Archivo',var(--fb);font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;border:1.5px solid #1A1410;letter-spacing:.01em}
+.sp-tag.tv{background:#FFF7D7;color:#1A1410}
+.sp-tag.tgf{background:#FFC817;color:#1A1410}
+.sp-drink{display:flex;align-items:center;gap:8px;font-family:'Archivo',var(--fb);font-size:13px;color:#1A1410;font-weight:600;margin-top:14px;padding:12px 14px;background:#FFF7D7;border:1.5px solid #1A1410;border-radius:12px;line-height:1.4}
+
+/* === Lightbox para foto de tapa === */
+.tapa-lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;align-items:center;justify-content:center;padding:20px;flex-direction:column;gap:14px;animation:fadeIn .2s ease;cursor:pointer}
+.tapa-lb.show{display:flex}
+.tapa-lb img{max-width:100%;max-height:80vh;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,.4);object-fit:contain}
+.tapa-lb-cap{color:#fff;font-size:14px;font-weight:600;text-align:center;font-family:var(--fb);text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.tapa-lb-cl{position:absolute;top:18px;right:18px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);user-select:none}
+.sp-tapa-em-fallback{font-size:28px;flex-shrink:0}
 .sp-photo{width:100%;height:180px;background:linear-gradient(135deg,#E8E3DC,#D6D3CD);border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--tx3);margin-bottom:10px}
 .sp-hist{font-family:var(--fs);font-style:italic;font-size:13px;color:var(--tx2);line-height:1.7}
 .sp-overlay{display:none}
@@ -850,24 +868,51 @@ function applyTourData(payload){
   }
   window._booking=payload.booking||null;
   S=payload.stops.map((s,idx)=>{
-    const tapas=parseTapas(s.tapas);
     const drinks=parseDrinks(s.drinks);
     const order=Number(s.order)||(idx+1);
+
+    // Nueva estructura: s.tapas es un ARRAY de objetos estructurados
+    // [{nombre, orden, veggie, gluten_free, descripcion, foto_small, foto_large, ...}]
+    // Compatibilidad hacia atrás: si llega como string (formato viejo), parsear.
+    let tapasArr=[];
+    if(Array.isArray(s.tapas)){
+      tapasArr=s.tapas.slice().sort((a,b)=>(a.orden||0)-(b.orden||0)).map(t=>({
+        nm:t.nombre||'Tapa',
+        em:pickTapaEmoji(t.nombre),
+        ds:t.descripcion||'',
+        vg:t.veggie===true,
+        gf:t.gluten_free===true,
+        fs:t.foto_small||'',
+        fl:t.foto_large||''
+      }));
+    }else if(typeof s.tapas==='string'&&s.tapas.trim()){
+      // Fallback al formato viejo (string con Option A/B)
+      const old=parseTapas(s.tapas);
+      tapasArr=[
+        {nm:old.optA||'Chef\'s pick',em:pickTapaEmoji(old.optA),ds:'',vg:!!old.veg,gf:!!old.gf,fs:'',fl:''},
+        {nm:old.optB||'Alternative tapa',em:pickTapaEmoji(old.optB),ds:'',vg:!!old.veg,gf:!!old.gf,fs:'',fl:''}
+      ];
+    }
+
+    // Flags globales de la parada (true si CUALQUIER tapa es veggie/gf)
+    const anyVeggie=tapasArr.some(t=>t.vg);
+    const anyGF=tapasArr.some(t=>t.gf);
+
+    // Para el emoji de la parada, usamos los nombres concatenados de las tapas
+    const tapasText=tapasArr.map(t=>t.nm).join(' ');
+
     return {
       n:order,
       nm:s.name||('Stop '+order),
       ad:s.maps_url?extractAddrFromMapsUrl(s.maps_url):'',
-      em:pickEmoji(s.name,s.tapas),
+      em:pickEmoji(s.name,tapasText),
       lt:Number(s.lat)||0,
       ln:Number(s.lng)||0,
       mu:s.maps_url||'',
-      tp:[
-        {nm:tapas.optA||'Chef\'s pick',em:pickTapaEmoji(tapas.optA),ds:''},
-        {nm:tapas.optB||'Alternative tapa',em:pickTapaEmoji(tapas.optB),ds:''}
-      ],
-      vg:tapas.veg,
-      gf:tapas.gf,
-      nt:tapas.note,
+      tp:tapasArr,
+      vg:anyVeggie,
+      gf:anyGF,
+      nt:'',
       dr:drinks.length?drinks.join(', '):'Local wine, sangría, beer, soft drink, water or coffee',
       drList:drinks,
       hi:'',
@@ -1451,15 +1496,34 @@ function sD(i){
   if(gmapsName)gmapsName.textContent=s.nm;
 
   let h='';
-  h+='<div class="sp-sec"><div class="sp-sec-t">Your tapa &amp; drink</div>';
-  h+='<div class="sp-tapa"><div class="sp-tapa-em">'+s.tp[0].em+'</div><div><div class="sp-tapa-nm">a) '+escapeHtml(s.tp[0].nm)+'</div></div></div>';
-  if(s.tp[1]&&s.tp[1].nm&&s.tp[1].nm!=='Alternative tapa'){
-    h+='<div class="sp-or">— or —</div>';
-    h+='<div class="sp-tapa"><div class="sp-tapa-em">'+s.tp[1].em+'</div><div><div class="sp-tapa-nm">b) '+escapeHtml(s.tp[1].nm)+'</div></div></div>';
-  }
+  h+='<div class="sp-sec"><div class="sp-sec-t">Choose your tapa</div>';
+  h+='<div class="sp-sec-meta">Pick one of the options — vegetarian and gluten-free alternatives noted below.</div>';
+
+  // Render N tapas (1, 2, 3+) — letra A/B/C en círculo amarillo encima de la foto
+  const tapas=Array.isArray(s.tp)?s.tp.filter(t=>t&&t.nm&&t.nm!=='Alternative tapa'):[];
+  const labels=['A','B','C','D','E'];
+  tapas.forEach((t,i)=>{
+    if(i>0)h+='<div class="sp-or">— OR —</div>';
+    // Si la tapa tiene foto, la mostramos; si no, fallback al emoji con fondo de patrón
+    const visual=t.fs
+      ? '<img class="sp-tapa-img" src="'+escapeHtml(t.fs)+'" alt="" loading="lazy" onclick="openTapaPhoto(\''+escapeHtml(t.fl||t.fs)+'\',\''+escapeHtml(t.nm).replace(/'/g,"\\'")+'\')">'
+      : '<div class="sp-tapa-em">'+t.em+'</div>';
+    const letter=labels[i]||String(i+1);
+    const desc=t.ds?'<div class="sp-tapa-ds">'+escapeHtml(t.ds)+'</div>':'';
+    h+='<div class="sp-tapa">'+
+         '<div class="sp-tapa-letter">'+letter+'</div>'+
+         visual+
+         '<div class="sp-tapa-info"><div class="sp-tapa-nm">'+escapeHtml(t.nm)+'</div>'+desc+'</div>'+
+       '</div>';
+  });
+
+  // Etiquetas globales veggie / gluten free (a nivel parada).
+  // Con la nueva estructura s.vg y s.gf son booleans (true si alguna tapa lo es).
   let tg='';
-  if(s.vg)tg+='<span class="sp-tag tv">🌿 Veg: '+escapeHtml(s.vg)+'</span>';
-  if(s.gf)tg+='<span class="sp-tag tgf">🌾 GF: '+escapeHtml(s.gf)+'</span>';
+  if(s.vg===true)tg+='<span class="sp-tag tv">🌱 Veggie option</span>';
+  else if(typeof s.vg==='string'&&s.vg)tg+='<span class="sp-tag tv">🌱 Veg: '+escapeHtml(s.vg)+'</span>';
+  if(s.gf===true)tg+='<span class="sp-tag tgf">GF option</span>';
+  else if(typeof s.gf==='string'&&s.gf)tg+='<span class="sp-tag tgf">GF: '+escapeHtml(s.gf)+'</span>';
   if(tg)h+='<div class="sp-tags">'+tg+'</div>';
   if(s.nt&&!s.vg&&!s.gf){
     h+='<div style="font-size:11px;color:var(--tx2);margin-top:8px;font-style:italic">'+escapeHtml(s.nt)+'</div>';
@@ -1531,6 +1595,27 @@ function viewStopOnMap(){
 // ========================================================================
 // QR MODAL — embebe la página de FareHarbor (genera N QRs por pax)
 // ========================================================================
+// Lightbox para abrir la foto de una tapa a tamaño grande
+function openTapaPhoto(largeUrl,name){
+  if(!largeUrl)return;
+  let lb=document.getElementById('tapa-lb');
+  if(!lb){
+    lb=document.createElement('div');
+    lb.id='tapa-lb';
+    lb.className='tapa-lb';
+    lb.onclick=closeTapaPhoto;
+    document.body.appendChild(lb);
+  }
+  lb.innerHTML='<div class="tapa-lb-cl" onclick="closeTapaPhoto()" aria-label="Close">×</div>'+
+    '<img src="'+largeUrl+'" alt="'+(name||'')+'">'+
+    (name?'<div class="tapa-lb-cap">'+name+'</div>':'');
+  lb.classList.add('show');
+}
+function closeTapaPhoto(){
+  const lb=document.getElementById('tapa-lb');
+  if(lb)lb.classList.remove('show');
+}
+
 function openQR(){
   const b=window._booking;
   let qrUrl='';
