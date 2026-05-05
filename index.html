@@ -97,8 +97,8 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .mini-pop-btn:active{transform:scale(.97)}
 .th{position:relative;min-height:320px;background:linear-gradient(165deg,#E55D3F 0%,#DB4A2B 50%,#B33A21 100%);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;padding:74px 22px 52px;margin-bottom:-40px}
 .th::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 12% 38%,rgba(255,200,23,.07) 1.5px,transparent 1.5px),radial-gradient(circle at 78% 22%,rgba(255,255,255,.05) 1px,transparent 1px),radial-gradient(circle at 88% 75%,rgba(255,200,23,.05) 1.5px,transparent 1.5px),radial-gradient(circle at 32% 78%,rgba(255,255,255,.04) 1px,transparent 1px);background-size:55px 55px,30px 30px,70px 70px,40px 40px}
-.th-top{position:absolute;top:18px;left:22px;right:22px;display:flex;align-items:center;justify-content:space-between;z-index:2}
-.th-eyebrow{font-family:'Archivo',sans-serif;font-size:11px;font-weight:800;color:#FFC817;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;position:relative;z-index:2}
+.th-top{position:absolute;top:18px;left:22px;right:22px;display:flex;align-items:center;justify-content:flex-end;z-index:2}
+.th-eyebrow{font-family:'Archivo',sans-serif;font-size:11px;font-weight:800;color:#FFC817;letter-spacing:.14em;text-transform:uppercase;position:relative;z-index:2}
 .tb{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1.5px solid #1A1410;border-radius:999px;padding:6px 14px;font-family:'Archivo',sans-serif;font-size:12px;color:#1A1410;font-weight:700;width:fit-content;letter-spacing:.01em}
 .th1{font-family:'Archivo Black',sans-serif;font-size:42px;color:#fff;line-height:.95;letter-spacing:-.04em;position:relative;z-index:2;margin-bottom:14px}
 .th1 em,.th1 .gw-italic{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;letter-spacing:-.01em;color:#FFC817}
@@ -107,7 +107,11 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .vtb{flex:1;padding:8px 0;border:none;border-radius:5px;background:none;font-family:var(--fb);font-size:12px;font-weight:600;color:var(--tx3);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:4px}
 .vtb.on{background:var(--card);color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.07)}
 .sl{padding:0 14px}.sl.hd{display:none}
-.sc{display:flex;gap:14px;align-items:flex-start;background:var(--gw-white,#fff);border:1.5px solid var(--gw-ink,#1A1410);border-radius:18px;padding:18px 20px;margin-bottom:14px;box-shadow:none;cursor:pointer;transition:transform .15s cubic-bezier(.2,.6,.2,1),box-shadow .15s cubic-bezier(.2,.6,.2,1);overflow:hidden;font-family:'Archivo',var(--fb)}
+/* Lista de stops con línea de ruta */
+.sl{position:relative;padding:0 16px}
+.sl::before{content:'';position:absolute;left:39px;top:30px;bottom:30px;width:2px;background-image:repeating-linear-gradient(to bottom,#DB4A2B 0,#DB4A2B 4px,transparent 4px,transparent 9px);z-index:0}
+.sc{position:relative;z-index:1;display:flex;gap:14px;align-items:flex-start;background:#fff;border:1.5px solid #1A1410;border-radius:18px;padding:18px 20px;margin-bottom:14px;box-shadow:none;cursor:pointer;transition:transform .15s cubic-bezier(.2,.6,.2,1),box-shadow .15s cubic-bezier(.2,.6,.2,1);font-family:'Archivo',var(--fb)}
+.sc .sn{position:relative;z-index:2;box-shadow:0 0 0 4px #FFF7D7}
 .sc:active{transform:scale(.99);box-shadow:0 2px 8px rgba(26,20,16,.08)}
 .sn{width:38px;height:38px;background:#DB4A2B;color:#fff;border:1.5px solid #1A1410;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-weight:900;font-size:17px;flex-shrink:0;letter-spacing:-.02em}
 .si{flex:1;min-width:0;padding-top:0}
@@ -115,7 +119,7 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .snm em,.snm .gw-italic{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;letter-spacing:-.01em;color:#DB4A2B}
 .stp{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:500;font-size:14px;color:#5A5249;margin-bottom:8px;line-height:1.4}
 .sad{font-family:'Archivo',var(--fb);font-size:12px;color:#5A5249;letter-spacing:.01em;display:flex;align-items:center;gap:5px}
-.sar{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:#F2EDE5;border:1.5px solid #1A1410;color:#5A5249;font-size:18px;font-weight:700;flex-shrink:0;align-self:center}
+.sar{display:flex;align-items:center;justify-content:center;width:24px;height:24px;background:transparent;border:none;color:#A39A8E;font-size:22px;font-weight:400;flex-shrink:0;align-self:center}
 @keyframes hlflash{0%{background:var(--prl);box-shadow:0 0 0 3px var(--pr),var(--shl)}100%{background:var(--card);box-shadow:var(--sh)}}
 .sc.hl-flash{animation:hlflash 1.5s ease-out}
 .gp{background:var(--pr);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;font-family:var(--fb);box-shadow:0 2px 6px rgba(219,74,43,.35);border:2px solid #fff}
@@ -467,15 +471,14 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 <div class="th">
   <div class="th-top">
     <div class="th-eyebrow" id="th-eyebrow">Your tour</div>
-    <div class="tb">🍷 Self-guided</div>
   </div>
   <div class="th1" id="th-title-wrap">Gourmet Tapas Tour</div>
   <div class="tc" id="th-greeting">Palma de Mallorca</div>
 </div>
 <div class="ti">
-<div class="tic an d1"><div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A1410" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></div><div class="lb">Pace</div><div class="vl">3–4h</div><div class="sb">self-paced</div></div>
-<div class="tic an d2"><div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A1410" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 7-8 13-8 13s-8-6-8-13a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="lb">Stops</div><div class="vl">5</div><div class="sb">tapas + drinks</div></div>
-<div class="tic an d3"><div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1A1410" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div><div class="lb">Finish by</div><div class="vl">10 PM</div><div class="sb">kitchens close</div></div>
+<div class="tic an d1"><div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#DB4A2B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></div><div class="lb">Pace</div><div class="vl">3–4h</div></div>
+<div class="tic an d2"><div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#DB4A2B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 7-8 13-8 13s-8-6-8-13a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="lb">Stops</div><div class="vl">5</div></div>
+<div class="tic an d3"><div class="ic"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#DB4A2B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div><div class="lb">Finish by</div><div class="vl">10 PM</div></div>
 </div>
 <div class="tst">Your stops</div>
 <div class="sl" id="lv"></div>
