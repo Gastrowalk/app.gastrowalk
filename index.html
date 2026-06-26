@@ -2470,12 +2470,18 @@ function linkBooking(){
       go('st');
     }
 
-    // IMPORTANTE: el flujo de "link_booking" del backend NO incluye las fotos de
-    // las tapas (no consulta la tabla Tapas). El flujo "load_tour" sí. Por eso, si
-    // tenemos el uuid del booking, recargamos por load_tour para que las fotos
-    // aparezcan ya la PRIMERA vez. Si falla, usamos la respuesta del link.
+    // ¿La respuesta del link YA trae fotos de tapas? (backend actualizado)
+    function tourHasPhotos(d){
+      return !!(d&&Array.isArray(d.stops)&&d.stops.some(s=>Array.isArray(s.tapas)&&s.tapas.some(t=>t&&(t.foto_large||t.foto_small))));
+    }
+
+    // Si el backend ya devuelve fotos -> una sola llamada.
+    // Si NO (backend antiguo o sin fotos) -> recargamos por load_tour, que sí las
+    // trae, para que aparezcan a la PRIMERA. Si esa recarga falla, usamos el link.
     const newUuid=data.booking&&data.booking.uuid;
-    if(newUuid){
+    if(tourHasPhotos(data)||!newUuid){
+      showTour(data);
+    }else{
       fetch(WEBHOOK_URL,{
         method:'POST',
         headers:{'Content-Type':'application/json'},
@@ -2487,8 +2493,6 @@ function linkBooking(){
         showTour(d2&&d2.status==='ok'&&Array.isArray(d2.stops)&&d2.stops.length?d2:data);
       })
       .catch(()=>showTour(data));
-    }else{
-      showTour(data);
     }
   })
   .catch(err=>{
