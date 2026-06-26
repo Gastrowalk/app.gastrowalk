@@ -1684,7 +1684,7 @@ function sD(i){
     // al renderizarse a 140px, sobre todo en pantallas retina del móvil.
     const photoSrc=t.fl||t.fs;
     const visual=photoSrc
-      ? '<img class="sp-tapa-img" src="'+escapeHtml(photoSrc)+'" alt="" loading="lazy">'
+      ? '<img class="sp-tapa-img" src="'+escapeHtml(photoSrc)+'" alt="" decoding="async">'
       : '<div class="sp-tapa-em">'+t.em+'</div>';
     const letter=labels[i]||String(i+1);
     // Truncado de seguridad para que la card mantenga su forma
@@ -2447,27 +2447,49 @@ function linkBooking(){
       }
       return;
     }
-    const ok=applyTourData(data);
-    if(!ok){
+    // Validar que el link trae paradas
+    if(!applyTourData(data)){
       showBookingError({title:'No stops available',body:'Your booking was found but no stops are configured yet. Please contact support.'});
       return;
     }
-    // Éxito
-    saveSession();
-    renderTourScreen();
-    // Reset de mapa por si vino de una sesión anterior
-    if(window._m){try{window._m.remove()}catch(e){}window._m=null}
-    if(btn){btn.disabled=false;btn.textContent='Access my tour'}
-    // Si el usuario está logueado con email → marcar que viene de lista y refrescar bookings
-    if(window._user&&window._user.email){
-      window._cameFromList=true;
+    const cameFromList=!!(window._user&&window._user.email);
+    window._addingNewBooking=false;
+    if(cameFromList){
       // Refrescar lista en background para que cuando vuelva atrás vea el nuevo booking
       refreshUserBookings();
-    }else{
-      window._cameFromList=false;
     }
-    window._addingNewBooking=false;
-    go('st');
+
+    // Pinta el tour y entra. Reutilizable para los dos casos (link / reload).
+    function showTour(tourData){
+      applyTourData(tourData);
+      saveSession();
+      window._cameFromList=cameFromList;
+      renderTourScreen();
+      if(window._m){try{window._m.remove()}catch(e){}window._m=null}
+      if(btn){btn.disabled=false;btn.textContent='Access my tour'}
+      go('st');
+    }
+
+    // IMPORTANTE: el flujo de "link_booking" del backend NO incluye las fotos de
+    // las tapas (no consulta la tabla Tapas). El flujo "load_tour" sí. Por eso, si
+    // tenemos el uuid del booking, recargamos por load_tour para que las fotos
+    // aparezcan ya la PRIMERA vez. Si falla, usamos la respuesta del link.
+    const newUuid=data.booking&&data.booking.uuid;
+    if(newUuid){
+      fetch(WEBHOOK_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({action:'load_tour',booking_uuid:newUuid,email:(window._user&&window._user.email)||''})
+      })
+      .then(r=>r.ok?r.json():Promise.reject('HTTP '+r.status))
+      .then(raw2=>{
+        const d2=normalizeResponse(raw2);
+        showTour(d2&&d2.status==='ok'&&Array.isArray(d2.stops)&&d2.stops.length?d2:data);
+      })
+      .catch(()=>showTour(data));
+    }else{
+      showTour(data);
+    }
   })
   .catch(err=>{
     console.error('Booking webhook error:',err);
