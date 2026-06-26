@@ -459,8 +459,8 @@ img,svg,iframe{max-width:100%}
    Esta línea (sin media query, y al final del CSS) SUSTITUYE al tope
    fijo de 430/560/620px de más arriba: ahora la app llena la pantalla
    a cualquier ancho —sin franjas grises— hasta un máximo amplio.
-   En móvil min(100%,…) = 100% = a pantalla completa, igual que antes. */
-:root{--mw:min(100%,1700px)}
+   Sin tope: la app llena el ancho completo en cualquier monitor. */
+:root{--mw:100%}
 
 /* 6) A PARTIR DE PANTALLAS MEDIANAS (≥600px): las listas de tarjetas
    pasan a cuadrícula y el contenido tipo formulario se centra legible,
