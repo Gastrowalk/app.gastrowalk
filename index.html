@@ -405,6 +405,86 @@ body{font-family:var(--fb);background:#D6D3CD;color:var(--tx);display:flex;justi
 .tour-back{position:fixed;top:14px;left:50%;transform:translateX(calc(-1 * (var(--mw) / 2 - 14px)));width:38px;height:38px;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shl);font-size:18px;z-index:230;color:var(--tx);font-weight:700;font-family:var(--fb)}
 .tour-back:active{transform:translateX(calc(-1 * (var(--mw) / 2 - 14px))) scale(.9)}
 @media(max-width:430px){.tour-back{left:14px;transform:none}.tour-back:active{transform:scale(.9)}}
+
+/* ============================================================
+   RESPONSIVE HARDENING — cobertura en todos los dispositivos
+   (Se añade al final para que sobrescriba sin tocar lo de arriba.
+    Los navegadores antiguos sin soporte de dvh ignoran estas
+    líneas y siguen usando el 100vh original como fallback.)
+   ============================================================ */
+
+/* 1) ALTURA DINÁMICA (dvh): evita que la barra del navegador en
+   móvil "coma" el 100vh y corte la navbar, los botones o el mapa. */
+body{min-height:100dvh}
+.f{min-height:100dvh}
+.wel,.ls,.bs,.ms,.rs,.txs,.bls{min-height:100dvh}
+#lm{height:100dvh}
+.spanel,.qrm-card{height:100dvh}
+.sup-scr{min-height:100dvh}
+
+/* 2) Sin scroll horizontal accidental en ninguna pantalla */
+body{overflow-x:hidden}
+img,svg,iframe{max-width:100%}
+
+/* 3) TELÉFONOS PEQUEÑOS (≤360px): reducimos un punto los tamaños
+   grandes y el padding para que nada se desborde (Galaxy S8, SE…). */
+@media(max-width:360px){
+  .wel-h{padding-left:20px;padding-right:20px}
+  .wel-logo{font-size:30px}
+  .wel-t{font-size:23px}
+  .th{padding-left:18px;padding-right:18px}
+  .th1{font-size:36px}
+  .tc{font-size:16px}
+  .ti{gap:8px;padding:0 12px}
+  .tic{padding:16px 8px 14px}
+  .tic .vl{font-size:16px}
+  .tst{padding-left:14px;padding-right:14px}
+  .ls,.bs,.rs,.bls{padding-left:16px;padding-right:16px}
+  .sl{padding-left:12px;padding-right:12px}
+  .sc{padding:16px 14px;gap:12px}
+  .sp-head,.sp-sec{padding-left:16px;padding-right:16px}
+  .sp-tapa-em,.sp-tapa-img{width:112px}
+  .sp-tapa>div:last-child,.sp-tapa-info{padding-left:128px}
+}
+
+/* 4) HORIZONTAL / pantallas muy bajas: dejar que las pantallas
+   centradas hagan scroll en lugar de cortar el contenido. */
+@media(max-height:560px) and (orientation:landscape){
+  .wel,.ls,.bs,.rs,.txs,.bls{min-height:auto}
+  .wel-h{justify-content:flex-start;padding-top:36px}
+  .txs{justify-content:flex-start;padding-top:48px}
+}
+
+/* 5) CONTENEDOR FLUIDO EN TODOS LOS ANCHOS.
+   Esta línea (sin media query, y al final del CSS) SUSTITUYE al tope
+   fijo de 430/560/620px de más arriba: ahora la app llena la pantalla
+   a cualquier ancho —sin franjas grises— hasta un máximo amplio.
+   En móvil min(100%,…) = 100% = a pantalla completa, igual que antes. */
+:root{--mw:min(100%,1700px)}
+
+/* 6) A PARTIR DE PANTALLAS MEDIANAS (≥600px): las listas de tarjetas
+   pasan a cuadrícula y el contenido tipo formulario se centra legible,
+   para que nada se estire de forma fea al ensanchar. */
+@media(min-width:600px){
+  .f{box-shadow:0 0 0 1px rgba(0,0,0,.04),0 10px 50px rgba(0,0,0,.12)}
+
+  /* LISTAS DE TARJETAS -> cuadrícula fluida (auto-rellena columnas) */
+  .bls-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;margin-top:10px}
+  .sl{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;padding-top:10px}
+  .sl::before{display:none}            /* la línea de ruta no aplica en cuadrícula */
+  .sc{margin-bottom:0}
+
+  /* CONTENIDO TIPO FORMULARIO centrado y legible (no estirado) */
+  .ls,.bs,.rs,.txs,.sup-scr{max-width:680px;margin-left:auto;margin-right:auto}
+  .wel-b{max-width:420px;margin-left:auto;margin-right:auto;width:100%}
+
+  /* ELEMENTOS FIJOS que no deben estirarse a todo el ancho */
+  .nav-items{max-width:560px;margin:0 auto}
+  .spanel{max-width:min(var(--mw),760px)}
+  .qrm-card{max-width:min(var(--mw),560px)}
+  .mini-pop{max-width:min(calc(var(--mw) - 24px),520px)}
+  .dbt{max-width:min(calc(var(--mw) - 36px),480px)}
+}
 </style>
 </head>
 <body>
